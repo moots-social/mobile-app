@@ -1,10 +1,12 @@
 import { StyledProvider } from "@gluestack-style/react";
 import { OverlayProvider } from "@gluestack-ui/overlay";
 import { ToastProvider } from "@gluestack-ui/toast";
-import { config, createProvider } from "@gluestack-ui/themed-native-base";
+import { config } from "./src/Components/gluestack-ui.config";
+import { createProvider } from "@gluestack-ui/provider";
 import Routes from "./src/routes/index";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
+
 const GluestackUIStyledProvider = createProvider({
   StyledProvider,
 });
@@ -13,7 +15,7 @@ export default function App() {
     <GluestackUIStyledProvider config={config}>
       <OverlayProvider>
         <ToastProvider>
-          <StatusBar style="auto" />
+        <StatusBar backgroundColor={config.tokens.colorsProject.dark.dois}/>
           <Routes />
         </ToastProvider>
       </OverlayProvider>

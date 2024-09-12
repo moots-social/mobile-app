@@ -5,7 +5,7 @@ const { Screen, Navigator } = createStackNavigator();
 export default function Stack() {
   return (
     <Navigator>
-      <Screen name="login" component={Login} />
+      <Screen name="login" component={Login} options={{headerShown: false}}/>
     </Navigator>
   );
 }

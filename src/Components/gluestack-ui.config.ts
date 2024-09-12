@@ -25,6 +25,26 @@ export const gluestackUIConfig = createConfig({
     rounded: 'borderRadius',
   } as const,
   tokens: {
+    colorsProject: {
+      dark: {
+        um: "#AF75BF",
+        dois: "#8F60BF",
+        tres: "#4F5E8C",
+        quatro: "#A3B0D9",
+        cinco: "#C9D3F2"
+      },
+      
+      light: {
+        um: "F7F3CF",
+        dois: "#C2E4CB",
+        tres: "36CECC",
+        quatro: "27B1BF",
+        cinco: "17685"
+      },
+    },
+    fontProject: {
+      default: "poppins"
+    },
     colors: {
       rose50: '#fff1f2',
       rose100: '#ffe4e6',
@@ -539,25 +559,6 @@ export const gluestackUIConfig = createConfig({
       95: 0.95,
       100: 1,
     },
-    colorsProject: {
-      dark: {
-        um: "#AF75BF",
-        dois: "#8F60BF",
-        tres: "#4F5E8C",
-        quatro: "#A3B0D9",
-        cinco: "#C9D3F2"
-      },
-      light: {
-        um: "F7F3CF",
-        dois: "#C2E4CB",
-        tres: "36CECC",
-        quatro: "27B1BF",
-        cinco: "17685"
-      }
-    },
-    fontProject: {
-      default: "poppins"
-    }
   } as const,
   globalStyle: {
     variants: {
