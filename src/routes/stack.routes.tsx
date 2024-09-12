@@ -1,9 +1,11 @@
-import { createStackNavigator } from "@react-navigation/stack"
-import Login from "../screen/login/Login"
-const {Screen, Navigator} = createStackNavigator()
+import { createStackNavigator } from "@react-navigation/stack";
+import Login from "../screen/login/Login";
 
-export default function Stack(){
-    return <Navigator>
-                <Screen name='login' component={Login}/>
-            </Navigator>
+const { Screen, Navigator } = createStackNavigator();
+export default function Stack() {
+  return (
+    <Navigator>
+      <Screen name="login" component={Login} />
+    </Navigator>
+  );
 }
