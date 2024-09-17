@@ -729,7 +729,7 @@ export const gluestackUIConfig = createConfig({
   plugins: [new AnimationResolver(MotionAnimationDriver)],
 });
 
-export const config = {
+export const configer = {
   ...gluestackUIConfig,
 };
 

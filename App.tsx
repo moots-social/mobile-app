@@ -1,7 +1,7 @@
 import { StyledProvider } from "@gluestack-style/react";
 import { OverlayProvider } from "@gluestack-ui/overlay";
 import { ToastProvider } from "@gluestack-ui/toast";
-import { config } from "./src/Config/gluestack-ui.config";
+import { configer } from "./src/Config/gluestack-ui.config";
 import { createProvider } from "@gluestack-ui/provider";
 import Routes from "./src/routes/index";
 import React from "react";
@@ -12,10 +12,10 @@ const GluestackUIStyledProvider = createProvider({
 });
 export default function App() {
   return (
-    <GluestackUIStyledProvider config={config}>
+    <GluestackUIStyledProvider config={configer}>
       <OverlayProvider>
         <ToastProvider>
-          <StatusBar/>
+          <StatusBar />
           <Routes />
         </ToastProvider>
       </OverlayProvider>
