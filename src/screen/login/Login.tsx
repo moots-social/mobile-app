@@ -1,8 +1,8 @@
-import { Box, FormControl, Input, Text, VStack } from "@gluestack-ui/themed-native-base";
-import React from "react";
+import { Box, FormControl, Input, Link, Text, VStack } from "@gluestack-ui/themed-native-base";
 import { styled } from "@gluestack-style/react";
 import { ButtonText, Button } from "@gluestack-ui/themed";
-import { Titulo, Texto, TextoNegrito } from "../../components/Texto";
+import { Titulo, TextoNegrito } from "../../components/Texto";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const StyledVStack = styled(VStack, {
   display: "flex",
@@ -19,27 +19,40 @@ const Input1 = styled(Input, {
   borderBottomRightRadius: ({borderRadius}) => borderRadius || 50,
 });
 
-export default function Login() {
+export default function Login({navigation}) {
   
   return (
     <StyledVStack>
       <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
         <Titulo mt={5} mg={5}>Realize o login e aproveite</Titulo>
+        <Box alignItems="center" mb={30} w="80%">
+          <FormControl w="100%">
+            <Input1 placeholder="Digite seu email" borderRadius={30} textAlign="center" fontFamily="Poppins_500Medium"/>
 
-        <FormControl w="80%">
-          <Input1 placeholder="Digite seu email" borderRadius={30} textAlign="center"/>
+            <Box flexDirection="row" mt={5} mb={5}>
+            <TextoNegrito>Não tem uma conta? </TextoNegrito>
+            <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
+              <TextoNegrito color='#AF75BF'>Realizar cadastro</TextoNegrito>
+            </TouchableOpacity>
+            </Box>
 
-          <TextoNegrito mt={5} mb={5}>Não tem uma conta? <Text color='#AF75BF'>Cadastre-se</Text> </TextoNegrito >
+            <Input1 placeholder="Digite sua senha" borderRadius={30} textAlign="center" fontFamily="Poppins_500Medium"/>
 
-          <Input1 placeholder="Digite sua senha" borderRadius={30} textAlign="center" p={5}/>
+            <Box flexDirection="row" mt={5} mb={5}>
+            <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
+            <TouchableOpacity>
+              <TextoNegrito color='#AF75BF'>Redefinir senha</TextoNegrito>
+            </TouchableOpacity>
+            </Box>
 
-          <TextoNegrito mt={5} mb={5}>Esqueceu sua senha? <Text color='#AF75BF'>Clique aqui</Text> </TextoNegrito>
-        </FormControl>
+          </FormControl>
+        </Box>
 
-        <Button>
-          <ButtonText>Iniciar Sessão</ButtonText>
-        </Button>
-
+        <Box alignItems="center" w="80%">
+          <Button w="100%" borderStyled="solid" borderWidth={1} borderColor="black" bg="#AF75BFBA" h={50} borderRadius={40}>
+            <ButtonText fontFamily="Poppins_700Bold">Iniciar Sessão</ButtonText>
+          </Button>
+        </Box>
       </Box>
     </StyledVStack>
   );
