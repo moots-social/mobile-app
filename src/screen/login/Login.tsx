@@ -41,7 +41,8 @@ export default function Login({ navigation }) {
         </Box>
 
         <Box alignItems="center" w="80%">
-          <Button  w="100%" borderStyled="solid"  borderWidth={1}  borderColor="black"  bg="#AF75BFBA"  h={50}  borderRadius={40}>
+          <Button  w="100%" borderStyled="solid"  borderWidth={1}  borderColor="black"  bg="#AF75BFBA"  h={50}  borderRadius={40}
+          onPress={()=>navigation.navigate('contatos')}>
             <ButtonText fontFamily="Poppins_700Bold">Iniciar Sessão</ButtonText>
           </Button>
         </Box>
