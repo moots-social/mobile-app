@@ -16,7 +16,7 @@ export default function CabecalhoUsuario({paginaContatos}: props) {
                 <Text fontFamily="Poppins_500Medium" mt={10}>Você</Text>
             </Box>
             <Box justifyContent="center" >
-                {!paginaContatos?<Image source={BackButton} alt="voltar" size='2xs'}
+                
             </Box>
         </Box>
 }
