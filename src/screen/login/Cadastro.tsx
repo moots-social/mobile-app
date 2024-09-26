@@ -14,7 +14,7 @@ export const StyledVStack = styled(VStack, {
   height: "100%",
 });
 
-const StyledShadowBox = styled(Box, {
+export const StyledShadowBox = styled(Box, {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25, // 40% de opacidade

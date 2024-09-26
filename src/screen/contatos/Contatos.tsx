@@ -2,11 +2,11 @@
 import { Box, Text } from '@gluestack-ui/themed'
 import CabecalhoUsuario from '../../components/CabecalhoUsuario'
 import Contato from '../../components/Contato'
-import Navbar from '../../components/Navbar'
+import { Titulo } from '../../components/Texto'
 
 export default function Contatos() {
   return <Box alignItems="center">
-    <Text>Seus contatos</Text>
-    <Contato nome="Gabriel" />
+    <Titulo>Seus contatos</Titulo>
+    <Contato nome="Gabriel" conteudo="jsjahd" timestamp="11:20"/>
   </Box>
 }
