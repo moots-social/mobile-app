@@ -22,6 +22,7 @@ import {
   Poppins_900Black_Italic
 } from '@expo-google-fonts/poppins';
 import { Text } from "@gluestack-ui/themed-native-base";
+import Bottom from "./bottom.routes";
 
 export default function Routes() {
   const [fontsLoaded] = useFonts({

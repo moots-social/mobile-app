@@ -1,13 +1,13 @@
 import { Box, FormControl, Image, Input, ScrollView, Text, VStack,} from "@gluestack-ui/themed-native-base";
 import { styled } from "@gluestack-style/react";
-import { LinearGradient as ExpoLinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import { TextoNegrito, Titulo } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 
 const image = require("../../assets/vectorizedGreenAttempt.png");
 
-const StyledVStack = styled(VStack, {
+export const StyledVStack = styled(VStack, {
   display: "flex",
   justifyContent: "flex-end",
   width: "100%",
@@ -24,10 +24,10 @@ const StyledShadowBox = styled(Box, {
     overflow: "hidden", // Para que o Input fique dentro da borda arredondada
 });
 
-export default function Cadastro() {
+export default function Cadastro({ navigation }) {
   return (
     <Box flex={1}>
-      <ExpoLinearGradient
+      <LinearGradient
         colors={["#FFFABB", "#E0F5FF", "#F4E5FF", "#E2FCFF"]}
         locations={[0, 0.3856, 0.6845, 1]}
         start={{ x: 0, y: 0 }}
@@ -116,13 +116,14 @@ export default function Cadastro() {
                 borderColor="#fff"
                 bg="#468B51"
                 borderRadius={15}
+                onPress={() => navigation.navigate("info")}
                 >
                 <ButtonText fontFamily="Poppins_700Bold">Confirmar</ButtonText>
               </Button>
             </Box>
           </Box>
         </StyledVStack>
-      </ExpoLinearGradient>
+      </LinearGradient>
     </Box>
   );
 }

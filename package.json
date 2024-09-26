@@ -12,6 +12,7 @@
     "@expo-google-fonts/poppins": "^0.2.3",
     "@gluestack-ui/config": "^1.1.20",
     "@gluestack-ui/themed-native-base": "^0.1.108",
+    "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "expo": "~51.0.28",
