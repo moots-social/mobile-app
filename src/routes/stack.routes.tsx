@@ -11,6 +11,7 @@ export default function Stack() {
   return (
     <Navigator>
       <Screen name="login" component={Login} options={{headerShown: false}}/>
+      <Screen name="cadastro" component={Cadastro} options={{headerShown: false}}/>
       <Screen name="tabs" component={Bottom} options={{ headerShown: false }}/>
       <Screen name="chat" component={Chat} options={{headerShown: false}}/>
       <Screen name="contatos" component={Contatos} options={{headerShown: false}}/>

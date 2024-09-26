@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StyledVStack } from "./Cadastro";
 import { Button, ButtonText } from "@gluestack-ui/themed";
 
-export default function Info(){
+export default function Info({navigation}){
     return (
       <Box flex={1}>
         <LinearGradient
@@ -37,7 +37,7 @@ export default function Info(){
                   borderColor="#fff"
                   bg="#468B51"
                   borderRadius={15}
-                  onPress={() => navigation.navigate("info")}
+                  onPress={() => navigation.navigate("tabs")}
                 >
                   <ButtonText fontFamily="Poppins_700Bold">
                     Confirmar
