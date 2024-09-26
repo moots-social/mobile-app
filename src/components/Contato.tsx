@@ -14,7 +14,7 @@ export default function Contato({nome, conteudo, timestamp}: propsType) {
             <Box px={20}>
                 <Box w={50} h={50} bg='$white' rounded={30}></Box>
             </Box>
-            <Box w="80%">
+            <Box  w="80%">
                 <Box flexDirection="row" >
                     <Text fontFamily="Poppins_500Medium" color="$black">{nome}  </Text>
                     <TextoNegrito fontFamily="Poppins_500Medium" fontSize={8}>{timestamp}</TextoNegrito>

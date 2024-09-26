@@ -5,11 +5,13 @@ import NovoPost from "../screen/novoPost/NovoPost"
 import Pesquisa from "../screen/pesquisa/Pesquisa"
 import { Image } from "@gluestack-ui/themed"
 import Feed from "../screen/feed/Feed"
+import PerfilUsuario from "../screen/perfilUsuario/PerfilUsuario"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const contatoIcon = require('../assets/ChatIcon.png')
 const novoPostIcon = require('../assets/NovoPostIcon.png')
 const pesquisaIcon = require('../assets/PesquisaIcon.png')
+const perfilIcon = require('../assets/userDefault.png')
 
 const {Screen, Navigator} = createBottomTabNavigator()
 const tabs = [
@@ -32,6 +34,11 @@ const tabs = [
         name: 'pesquisa',
         component: Pesquisa,
         icon: pesquisaIcon
+    },
+    {
+        name: 'perfil',
+        component: PerfilUsuario,
+        icon: perfilIcon
     }
 ]
 

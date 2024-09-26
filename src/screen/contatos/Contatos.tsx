@@ -7,6 +7,6 @@ import Navbar from '../../components/Navbar'
 export default function Contatos() {
   return <Box alignItems="center">
     <Text>Seus contatos</Text>
-    <Contato nome="Gabriel" />
+    <Contato nome="Gabriel" conteudo="teste" timestamp="11:20"/>
   </Box>
 }
