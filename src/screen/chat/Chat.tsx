@@ -1,15 +1,32 @@
 
 import { useRoute } from '@react-navigation/native'
-import { Box, Text } from '@gluestack-ui/themed'
+import { Box, ScrollView} from '@gluestack-ui/themed'
 import CabecalhoUsuario from '../../components/CabecalhoUsuario'
 import { MensagemEnviada, MensagemRecebida } from '../../components/Mensagem'
+import BarraEnviarMensagem from '../../components/BarraEnviarMensagem'
 
 export default function Chat({navigation}) {
   return (
     <Box bg="$darkQuatro" h="100%">
       <CabecalhoUsuario paginaContatos={false} navigation={navigation} nome="João Paulo"/>
-      <Box px={10} py={10}>
-        <MensagemEnviada conteudo="oi estou testando tudotudo tudo tudo tudo aaaaaaaaaaa" timestamp="9:27" />
+      <ScrollView>
+        <Box px={20} pt={20} pb={15}>
+          <MensagemEnviada conteudo="Bom dia!" timestamp="9:27" />
+        </Box>
+        <Box px={20} pb={15}>
+          <MensagemEnviada conteudo="Tudo bem?" timestamp="9:27" />
+        </Box>
+        <Box px={20} pb={15}>
+          <MensagemEnviada conteudo="Você poderia fazer aquela coisa que eu te pedi mais cedo?" timestamp="9:28" />
+        </Box>
+        <Box px={20} pb={15}>
+          <MensagemRecebida conteudo="fica c um aspecto esquisito mas funciona" timestamp="9:34" />
+        </Box>
+        <Box>
+        </Box>
+      </ScrollView>
+      <Box py={5}>
+          <BarraEnviarMensagem/>
       </Box>
     </Box>
   )

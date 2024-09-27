@@ -96,7 +96,7 @@ export default function Cadastro({ navigation }) {
               
               <Box flexDirection="row" mt="5" mb="5">
                 <TextoNegrito>Já tem uma conta?</TextoNegrito>
-                <TextoNegrito color="#468B51"> Realizar login</TextoNegrito>
+                <TextoNegrito color="#468B51" onPress={()=>navigation.navigate('login')}> Realizar login</TextoNegrito>
               </Box>
             </Box>
 

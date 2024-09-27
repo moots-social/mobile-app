@@ -12,7 +12,7 @@ type props = {
 }
 
 export default function CabecalhoUsuario({nome='Você', paginaContatos=true, navigation}: props) {
-  return <Box bg="$white" flexDirection="row"  w="100%" h={120}>
+  return <Box bg="$white" flexDirection="row"  w="100%" h={110}>
             <Box w="33.3%" justifyContent="center" pl={20}>
                 {!paginaContatos && (
                     <Pressable onPress={()=>navigation.navigate('tabs')}>
