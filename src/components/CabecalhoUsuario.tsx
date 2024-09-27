@@ -1,22 +1,29 @@
 import { Box, Text, Image } from "@gluestack-ui/themed"
-import Leo from '../assets/leo.png'
-import BackButton from '../assets/backButton.png'
+import { Pressable } from "react-native"
+
+const perfilIcon = require('../assets/userDefault.png')
+const BackButton =  require('../assets/backButton.png')
 
 type props = {
-    paginaContatos: boolean
+    nome?: string,
+    paginaContatos?: boolean,
+    navigation?: any
 }
 
-export default function CabecalhoUsuario({paginaContatos}: props) {
-  return <Box bg="$white" flexDirection="row" justifyContent="space-between" px={20} h={150}>
-            <Box justifyContent="center">
-                <Image source={BackButton} alt="voltar" size='2xs'/>
+export default function CabecalhoUsuario({nome='Você', paginaContatos=true, navigation}: props) {
+  return <Box bg="$white" flexDirection="row"  w="100%" h={90}>
+            <Box justifyContent="center" pl={20} w="33.3%">
+                {!paginaContatos && (
+                    <Pressable onPress={()=>navigation.navigate('tabs')}>
+                        <Image source={BackButton} size="2xs"/>
+                    </Pressable>
+                )}
             </Box>
-            <Box alignSelf="center" alignItems="center">
-                <Image source={Leo} size="xs"/>
-                <Text fontFamily="Poppins_500Medium" mt={10}>Você</Text>
+            <Box w="33.3%" justifyContent="center" alignItems="center">
+                <Image source={perfilIcon} size="xs"/>
+                <Text fontFamily="Poppins_500Medium" mt={10}>{nome}</Text>
             </Box>
-            <Box justifyContent="center" >
-                
+            <Box  w="33.3%" justifyContent="center" alignItems="flex-end">
             </Box>
         </Box>
 }

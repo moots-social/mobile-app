@@ -16,7 +16,7 @@ export default function App() {
     <GluestackUIStyledProvider config={config}>
       <OverlayProvider>
         <ToastProvider>
-          <StatusBar translucent={false}/>
+          <StatusBar translucent={false} backgroundColor="white"/>
           <Routes />
         </ToastProvider>
       </OverlayProvider>

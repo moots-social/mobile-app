@@ -1,19 +1,22 @@
-import { Box, Text } from "@gluestack-ui/themed";
+import { Box, Button, Text, Avatar, AvatarFallbackText, AvatarBadge, AvatarImage } from "@gluestack-ui/themed";
 import { TextoNegrito } from "./Texto";
+const perfilIcon = require('../assets/userDefault.png')
 
 type propsType = {
     nome: string,
+    navigation: any,
     conteudo?: string,
     timestamp?: string
 }
 
-export default function Contato({nome, conteudo, timestamp}: propsType) {
+export default function Contato({nome, navigation, conteudo, timestamp}: propsType) {
   return (
-    <Box h={100} w="95%" bg="$darkCinco" rounded={20} justifyContent="center">
+    <Button h={100} w="95%" bg="$darkCinco" rounded={20} justifyContent="center" my={10} onPress={()=>navigation.navigate('chat', {id: '1_2'})}>
         <Box flexDirection="row" alignItems="center">
-            <Box px={20}>
-                <Box w={50} h={50} bg='$white' rounded={30}></Box>
-            </Box>
+            <Avatar mr={15}>
+                <AvatarImage source={perfilIcon}/>
+                <AvatarBadge bg="$green"/>
+            </Avatar>
             <Box  w="80%">
                 <Box flexDirection="row" >
                     <Text fontFamily="Poppins_500Medium" color="$black">{nome}  </Text>
@@ -24,6 +27,6 @@ export default function Contato({nome, conteudo, timestamp}: propsType) {
                 </Box>
             </Box>
         </Box>
-    </Box>
+    </Button>
   )
 }

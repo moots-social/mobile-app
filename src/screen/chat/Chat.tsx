@@ -1,10 +1,14 @@
-import { View, Text } from 'react-native'
-import React from 'react'
 
-export default function Chat() {
+import { useRoute } from '@react-navigation/native'
+import { Box, Text } from '@gluestack-ui/themed'
+import CabecalhoUsuario from '../../components/CabecalhoUsuario'
+
+export default function Chat({navigation}) {
+  const {id} = useRoute().params
   return (
-    <View>
-      <Text>Chat</Text>
-    </View>
+    <Box>
+      <CabecalhoUsuario paginaContatos={false} navigation={navigation}/>
+      <Text>{id}</Text>
+    </Box>
   )
 }
