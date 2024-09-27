@@ -34,7 +34,7 @@ export default function CabecalhoUsuario({nome='Você', paginaContatos=true, nav
                             </Button>
                         )
                     }}>
-                        <MenuItem key="VerPerfil" textValue="VerPerfil">
+                        <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={()=>navigation.navigate('perfil')}>
                             <MenuItemLabel>Visitar perfil</MenuItemLabel>
                         </MenuItem>
                         <MenuItem key="Pesquisar" textValue="Pesquisar">

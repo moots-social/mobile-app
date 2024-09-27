@@ -16,26 +16,31 @@ const perfilIcon = require('../assets/userDefault.png')
 const {Screen, Navigator} = createBottomTabNavigator()
 const tabs = [
     {
+        id: 0,
         name: 'feed',
         component: Feed,
         icon: homeIcon
     },
     {
+        id: 1,
         name: 'contatos',
         component: Contatos,
         icon: contatoIcon
     },
     {
+        id: 2,
         name: 'novopost',
         component: NovoPost,
         icon: novoPostIcon
     },
     {
+        id: 3,
         name: 'pesquisa',
         component: Pesquisa,
         icon: pesquisaIcon
     },
     {
+        id: 4,
         name: 'perfil',
         component: PerfilUsuario,
         icon: perfilIcon
@@ -47,13 +52,12 @@ export default function Bottom(){
         <Navigator>
             
             {tabs.map((tab) => (
-              <Screen key={tab.name} name={tab.name} component={tab.component} options={{
+              <Screen key={tab.id} name={tab.name} component={tab.component} options={{
                 headerShown: false, 
                 tabBarIcon: () => (
                 <Image source={tab.icon} size="2xs"/>
                 ), 
                 tabBarShowLabel: false,
-                
                 }}
                />  
  

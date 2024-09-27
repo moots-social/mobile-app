@@ -5,7 +5,7 @@ import CabecalhoUsuario from '../../components/CabecalhoUsuario'
 import { MensagemEnviada, MensagemRecebida } from '../../components/Mensagem'
 import BarraEnviarMensagem from '../../components/BarraEnviarMensagem'
 
-export default function Chat({navigation}) {
+export default function Chat({navigation}: any) {
   return (
     <Box bg="$darkQuatro" h="100%">
       <CabecalhoUsuario paginaContatos={false} navigation={navigation} nome="João Paulo"/>
