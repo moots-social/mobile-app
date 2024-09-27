@@ -1,11 +1,15 @@
-import { Box, Text, Avatar, AvatarFallbackText, AvatarImage, AvatarBadge, styled } from "@gluestack-ui/themed";
+import { Box, Button, Text, Avatar, AvatarFallbackText, AvatarBadge, AvatarImage,  styled } from "@gluestack-ui/themed";
 import { TextoNegrito } from "./Texto";
+import { Pressable } from "react-native";
+const perfilIcon = require('../assets/userDefault.png')
 
 type propsType = {
     nome: string,
+    navigation: any,
     conteudo?: string,
     timestamp?: string
 }
+
 
 export const StyledShadowBox = styled(Box, {
     shadowColor: "#000",
@@ -17,34 +21,36 @@ export const StyledShadowBox = styled(Box, {
     overflow: "hidden",
 });
 
-export default function Contato({nome, conteudo, timestamp}: propsType) {
+export default function Contato({nome, navigation, conteudo, timestamp}: propsType) {
   return (
-    <StyledShadowBox w="95%">
-        <Box h={100} bg="$darkCinco" rounded={20} justifyContent="center">
-            <Box flexDirection="row" alignItems="center" w="80%" >
-                <Box px={20}>
-                    <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                        <AvatarFallbackText>Gabriel</AvatarFallbackText>
-                        <AvatarBadge bg="$green" borderColor="$green"/>
-                    </Avatar>
-                </Box>
-                <Box justifyContent="space-between" flexDirection="row" width="86%">
-                    <Box flexDirection="column">
-                        <Box flexDirection="row">
-                            <Text fontFamily="Poppins_500Medium" color="$black">{nome}  </Text>
-                        </Box>
-                        <Box>
-                            <Text fontFamily="Poppins_500Medium" >{conteudo}</Text>
-                        </Box>
+    <Pressable onPress={()=>navigation.navigate('chat', {id: '1_2'})} style={{marginTop: 10}}>
+        <StyledShadowBox>
+            <Box h={100} bg="$darkCinco" justifyContent="center" rounded={20}>
+                <Box flexDirection="row" alignItems="flex-start" w="80%" >
+                    <Box px={20}>
+                        <Avatar bgColor="$amber600" size="md" borderRadius="$full">
+                            <AvatarImage source={perfilIcon}/>
+                            <AvatarBadge bg="$green" borderColor="$green"/>
+                        </Avatar>
                     </Box>
-                    <Box>
+                    <Box justifyContent="space-between" flexDirection="row" width="86%">
+                        <Box flexDirection="column">
+                            <Box flexDirection="row">
+                                <Text fontFamily="Poppins_500Medium" color="$black">{nome}</Text>
+                            </Box>
+                            <Box>
+                                <Text fontFamily="Poppins_500Medium" >{conteudo}</Text>
+                            </Box>
+                        </Box>
                         <Box>
-                            <Text fontFamily="Poppins_700Bold" fontSize="$2xs" >11:20</Text>
+                            <Box>
+                                <Text fontFamily="Poppins_700Bold" fontSize="$2xs" >{timestamp}</Text>
+                            </Box>
                         </Box>
                     </Box>
                 </Box>
             </Box>
-        </Box>
-    </StyledShadowBox>
+        </StyledShadowBox>
+    </Pressable>
   )
 }
