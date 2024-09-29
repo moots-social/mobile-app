@@ -4,6 +4,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { TextoNegrito, Titulo } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ButtonText, Button } from "@gluestack-ui/themed";
+import LinearGradientMoots from "../../components/LinearGradientMoots";
+import BotaoSecao from "../../components/BotaoSecao";
 
 const image = require("../../assets/vectorizedGreenAttempt.png");
 
@@ -27,13 +29,7 @@ export const StyledShadowBox = styled(Box, {
 export default function Cadastro({ navigation }) {
   return (
     <Box flex={1}>
-      <LinearGradient
-        colors={["#FFFABB", "#E0F5FF", "#F4E5FF", "#E2FCFF"]}
-        locations={[0, 0.3856, 0.6845, 1]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }} // ajuste conforme necessário
-        style={{ flex: 1 }}
-      >
+      <LinearGradientMoots>
         <StyledVStack>
          <Box display="flex" alignItems="center" h="40%" justifyContent="center">
          <Image source={image} h={200} w={200}/>
@@ -50,6 +46,7 @@ export default function Cadastro({ navigation }) {
             <Titulo mt={5} mg={5}>
               Faça parte agora.
             </Titulo>
+            
             <Box alignItems="center" w="80%">
               <FormControl w="100%">
                 <FormControl.Label ml={2} mt={3}>
@@ -101,29 +98,13 @@ export default function Cadastro({ navigation }) {
             </Box>
 
             <Box alignItems="center" w="100%">
-              <Button
-                style={{
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 4,
-                  elevation: 5,
-                }}
-                w="80%"
-                h={50}
-                borderStyled="solid"
-                borderWidth={3}
-                borderColor="#fff"
-                bg="#468B51"
-                borderRadius={15}
-                onPress={() => navigation.navigate("info")}
-                >
-                <ButtonText fontFamily="Poppins_700Bold">Confirmar</ButtonText>
-              </Button>
+              <BotaoSecao onPress={() => navigation.navigate("info")}>
+                Confirmar
+              </BotaoSecao>
             </Box>
           </Box>
         </StyledVStack>
-      </LinearGradient>
+      </LinearGradientMoots>
     </Box>
   );
 }
