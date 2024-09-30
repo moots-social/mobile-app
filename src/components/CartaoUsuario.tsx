@@ -1,5 +1,6 @@
-import { Box, Text, Avatar, AvatarImage } from "@gluestack-ui/themed";
+import { Box, Text, Avatar, AvatarImage, IButtonProps, Button } from "@gluestack-ui/themed";
 import { BotaoSeguir, BotaoListaSeguidores } from "./BotoesPerfil";
+import { ReactNode } from "react";
 const perfilIcon = require('../assets/userDefault.png')
 
 
@@ -10,7 +11,7 @@ export default function CartaoUsuario(){
             <Avatar borderWidth={3} borderColor="$lightSete">
                 <AvatarImage source={perfilIcon}/>
             </Avatar>
-            <Text color="$white" fontFamily="Poppins_700Bold">Yesd</Text>
+            <Text color="$white" fontFamily="Poppins_700Bold">Usuario</Text>
         </Box>
         <Box flexDirection="row" bg="$lightSete" rounded={15}>
             <Box m={5} mr={2.5}><BotaoSeguir/></Box>

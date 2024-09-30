@@ -20,7 +20,13 @@ export default function Chat({navigation}: any) {
           <MensagemEnviada conteudo="Você poderia fazer aquela coisa que eu te pedi mais cedo?" timestamp="9:28" />
         </Box>
         <Box px={20} pb={15}>
+          <MensagemEnviada conteudo="Você poderia fazer aquela coisa que eu te pedi mais cedo?" timestamp="9:28" />
+        </Box>
+        <Box px={20} pb={15}>
           <MensagemRecebida conteudo="fica c um aspecto esquisito mas funciona" timestamp="9:34" />
+        </Box>
+        <Box px={20} pb={15}>
+          <MensagemRecebida conteudo="testa" timestamp="9:34" />
         </Box>
         <Box>
         </Box>
