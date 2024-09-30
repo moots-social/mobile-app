@@ -1,15 +1,26 @@
-import { VStack, Text, Box, FormControl, Input } from "@gluestack-ui/themed-native-base";
+import { VStack, Text, Box, FormControl, Input, Image } from "@gluestack-ui/themed-native-base";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyledVStack } from "./Cadastro";
-import { Button, ButtonText } from "@gluestack-ui/themed";
+import { AlertCircleIcon, Button, ButtonText, ChevronDownIcon, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlLabel, FormControlLabelText, Icon, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger, styled } from "@gluestack-ui/themed";
 import { useState } from "react";
 import { TextoNegrito } from "../../components/Texto";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
+import Antdesign from "react-native-vector-icons/AntDesign";
+import { Select } from '@gluestack-ui/themed';
 
 const imagemPerfil = require("../../assets/userDefault.png");
 const imagemCurso = require("../../assets/vectorizedDesenvolvimento.png")
+
+const StyledShadowBox = styled(Box, {
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.25, // 40% de opacidade
+  shadowRadius: 4,
+  elevation: 5, // Para Android
+  borderRadius: 15, // Para manter a borda arredondada
+  overflow: "hidden", // Para que o Input fique dentro da borda arredondada
+})
 
 const secoes = [
   {
@@ -30,7 +41,7 @@ const secoes = [
     subTitle: "Você pode pular essa parte se desejar.", 
     perfil: [
       {
-        image: imagemPerfil,
+        imagem: imagemPerfil,
         buttonText: "Adicionar foto"
       }
     ]
@@ -44,10 +55,11 @@ const secoes = [
         image: imagemCurso,
         describe: "Seu curso",
         picking: {
-          dev: "desenvolvimento",
-          qual: "qualidade",
-          fic: "fic",
-          mec: "mecanica"
+          dev: "Desenvolvimento",
+          qual: "Qualidade",
+          fic: "FIC",
+          mec: "Mecânica",
+          rede: "Redes"
         }
       }
     ]
@@ -96,14 +108,54 @@ export default function Info({navigation}){
             ))}
 
             {secoes[numSecao]?.perfil?.map((obj) => (
-              <Box borderColor="blue" borderWidth={2} h="70%" alignItems="center">
-                  <Text>eu amo</Text>
+              <Box h="70%" alignItems="center" w="90%">
+                  <Image source={obj.imagem} size={180} mb={30}/>
+                  <StyledShadowBox w="90%" borderWidth={3} borderRadius={15} bg="white" flexDirection="row">
+                    <Box borderColor="black" h={10} justifyContent="center" alignItems="center" w="80%" pl={12}>
+                        <TextoNegrito fontSize={20}>{obj.buttonText}</TextoNegrito>
+                    </Box>
+                    <Box w="20%" justifyContent="center" alignItems="center">
+                      <Antdesign name="camerao" size={30}/>
+                    </Box>
+                  </StyledShadowBox>
               </Box>
             ))}
 
             {secoes[numSecao]?.curso?.map((obj) => (
-              <Box borderColor="blue" borderWidth={2} h="70%" alignItems="center">
-                  <Text>naruto</Text>
+              <Box h="70%" alignItems="center" w="90%">
+                <Image source={obj.image} size={160} mb={10}/>
+                <FormControl w="100%">
+                <FormControlLabel justifyContent="center">
+                  <FormControlLabelText color="#7D7D7D" fontFamily="$fontProjectTitle" fontSize={15}>{obj.describe}</FormControlLabelText>
+                </FormControlLabel>
+                  <StyledShadowBox w="100%">
+                    <Select>
+                      <SelectTrigger variant="rounded" size="lg" bg="white">
+                        <SelectInput placeholder="Selecione seu curso" />
+                        <SelectIcon mr={20}>
+                          <Antdesign name="caretdown"/>
+                        </SelectIcon>
+                      </SelectTrigger>
+                      <SelectPortal>
+                        <SelectBackdrop />
+                        <SelectContent>
+                          <SelectDragIndicatorWrapper>
+                            <SelectDragIndicator />
+                          </SelectDragIndicatorWrapper>
+                          <SelectItem label={obj.picking.dev} value="Desenvolvimento" />
+                          <SelectItem label={obj.picking.mec} value="Mecânica" />
+                          <SelectItem label={obj.picking.rede}  value="Redes"/>
+                          <SelectItem label={obj.picking.fic} value="FIC" />
+                          <SelectItem label={obj.picking.qual} value="Qualidade" />
+                        </SelectContent>
+                      </SelectPortal>
+                    </Select>
+                  </StyledShadowBox>
+                <FormControlError>
+                  <FormControlErrorIcon as={AlertCircleIcon} />
+                  <FormControlErrorText>Campo obrigatório</FormControlErrorText>
+                </FormControlError>
+                </FormControl>
               </Box>
             ))}
           </Box>
@@ -112,13 +164,15 @@ export default function Info({navigation}){
 
             <Box  h="30%" justifyContent="center">
               <Box w="100%" alignItems="center">
-                <BotaoSecao onPress={() => avancarSecao()}>
                   {numSecao == 0 || numSecao == 1 ?
-                    "Continuar"
+                    <BotaoSecao onPress={() => avancarSecao()}>
+                      Continuar
+                    </BotaoSecao>
                   :
-                    "Confirmar"
+                  <BotaoSecao onPress={() => navigation.navigate("tabs")}>
+                    Confirmar
+                  </BotaoSecao>
                   }
-                </BotaoSecao>
 
                 {numSecao > 0 && <TextoNegrito color="#468B51" mt={3} onPress={() => voltarSecao()}>Voltar</TextoNegrito>}
               </Box>
