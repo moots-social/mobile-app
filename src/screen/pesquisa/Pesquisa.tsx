@@ -1,10 +1,10 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { Box } from '@gluestack-ui/themed'
+import CartaoUsuario from '../../components/CartaoUsuario'
 
 export default function Pesquisa() {
   return (
-    <View>
-      <Text>Pesquisa</Text>
-    </View>
+    <Box>
+      <CartaoUsuario />
+    </Box>
   )
 }

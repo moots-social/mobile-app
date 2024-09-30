@@ -1,3 +1,5 @@
+const splashScreen = require('../assets/splashScreenLight.png')
+
 import { NavigationContainer } from "@react-navigation/native";
 import Stack from "./stack.routes";
 import { useFonts } from 'expo-font'; 
@@ -21,8 +23,10 @@ import {
   Poppins_900Black,
   Poppins_900Black_Italic
 } from '@expo-google-fonts/poppins';
-import { Text } from "@gluestack-ui/themed-native-base";
+import { Image } from "@gluestack-ui/themed-native-base";
 import Bottom from "./bottom.routes";
+import { StatusBar } from "expo-status-bar";
+import { Box } from "@gluestack-ui/themed";
 
 export default function Routes() {
   const [fontsLoaded] = useFonts({
@@ -47,7 +51,12 @@ export default function Routes() {
   });
 
   if (!fontsLoaded) {
-    return <Text>Olá</Text>; // Ou um componente de carregamento
+    return (
+      <Box>
+        <StatusBar />
+        <Image source={splashScreen} w="100%" h="100%"/>
+      </Box>
+  ) //splash screen
   }
 
   return (

@@ -1,11 +1,26 @@
 
-import { Box, ScrollView } from '@gluestack-ui/themed'
+import { Box, FlatList, ScrollView } from '@gluestack-ui/themed'
 import { Titulo } from '../../components/Texto'
 
 import Contato from '../../components/Contato'
 import CabecalhoUsuario from '../../components/CabecalhoUsuario'
 import BotaoNovoChat from '../../components/BotaoNovoChat'
-import { Pressable } from 'react-native'
+
+const users = [
+  {
+    id: '1',
+    nome: "Gabriel",
+    conteudo: "Bom dia!",
+    timestamp: "10:54"
+  },
+  {
+    id: '2',
+    nome: "Gabriel",
+    conteudo: "Bom dia!",
+    timestamp: "10:54"
+  },
+  
+]
 
 export default function Contatos({navigation}) {
   return(
@@ -13,9 +28,8 @@ export default function Contatos({navigation}) {
     <CabecalhoUsuario />
     <Titulo>Seus contatos</Titulo>
     <Box>
-      <Contato nome="Gabriel Medeiros" navigation={navigation} conteudo="teste" timestamp="11:20"/>
-      <Contato nome="Julia Almeida" navigation={navigation} conteudo="oiiiii" timestamp="10:02"/>
-      <Contato nome="Julia Almeida" navigation={navigation} conteudo="oiiiii" timestamp="10:02"/>
+      <FlatList data={users}
+                renderItem={({item})=> <Contato navigation={navigation} nome={item.nome} conteudo={item.conteudo} timestamp={item.timestamp}/>}/>
     </Box>
     <Box position="absolute" top="85%" right="5%">
       <BotaoNovoChat />

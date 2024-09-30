@@ -35,11 +35,13 @@ export const gluestackUIConfig = createConfig({
       darkCinco: "#C9D3F2",
       darkSeis: "#4F5E8C",
 
-      lightUm: "F7F3CF",
+      lightUm: "#F7F3CF",
       lightDois: "#C2E4CB",
-      lightTres: "36CECC",
-      lightQuatro: "27B1BF",
-      lightCinco: "17685",
+      lightTres: "#36CECC",
+      lightQuatro: "#27B1BF",
+      lightCinco: "#17685",
+      lightSeis: "#5AD466",
+      lightSete: "#468B51",
       //
 
       rose50: '#fff1f2',
