@@ -1,10 +1,10 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { Box, Text } from '@gluestack-ui/themed'
+import LinearGradientMoots from '../../components/LinearGradientMoots'
 
 export default function Feed() {
   return (
-    <View>
-      
-    </View>
+    <LinearGradientMoots>
+      <Text>OI</Text>
+    </LinearGradientMoots>
   )
 }
