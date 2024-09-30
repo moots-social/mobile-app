@@ -23,6 +23,7 @@ export default function BotaoSecao({children, ...props} : botaoSecao){
         borderColor="#fff"
         bg="#468B51"
         borderRadius={15}
+        
         {...props}
     >
         <ButtonText fontFamily="Poppins_700Bold">{children}</ButtonText>
