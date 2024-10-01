@@ -1,4 +1,4 @@
-import { Box, Image, Modal, ModalBackdrop, ModalContent, ModalHeader, Pressable, Divider, ModalBody, Select, Radio, Checkbox, RadioGroup, RadioIndicator, RadioIcon, RadioLabel, CircleIcon, CheckboxGroup, CheckboxIndicator, CheckboxIcon, CheckIcon, CheckboxLabel, ModalFooter, SelectInput, SelectIcon, Icon, ChevronDownIcon, SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicatorWrapper, SelectDragIndicator, SelectItem, ModalCloseButton, CloseIcon } from "@gluestack-ui/themed";
+import { Box, Image, Modal, ModalBackdrop, ModalContent, ModalHeader, Pressable, Divider, ModalBody, Select, Radio, Checkbox, RadioGroup, RadioIndicator, RadioIcon, RadioLabel, CircleIcon, CheckboxIndicator, CheckboxIcon, CheckIcon, CheckboxLabel, ModalFooter, SelectInput, SelectIcon, Icon, ChevronDownIcon, SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicatorWrapper, SelectDragIndicator, SelectItem} from "@gluestack-ui/themed";
 import React, { useState, useEffect } from "react";
 import { TextoNegrito, Titulo } from "./Texto";
 import BotaoSecao from "./BotaoSecao";
@@ -66,7 +66,7 @@ export default function FiltrosModal(){
         <Box>
 
             <Pressable onPress={()=>{handleAbrir('Carregando...')}} ref={ref}>
-                <Image source={filtroIcon} size="2xs"/>
+                <Image source={filtroIcon} w={30} h={30}/>
             </Pressable>
 
             <Modal isOpen={modalVisivel} onClose={()=>{
