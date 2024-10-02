@@ -4,9 +4,9 @@ import { ReactNode } from "react";
 const perfilIcon = require('../assets/userDefault.png')
 
 
-export default function CartaoUsuario(){
+export default function CartaoUsuario({...rest}){
     return(
-    <Box w={100} h={120} bg="$lightSeis" rounded={15} alignItems="center">
+    <Box w={100} h={120} bg="$lightSeis" rounded={15} alignItems="center"{...rest}>
         <Box alignItems="center" mt={5}>
             <Avatar borderWidth={3} borderColor="$lightSete">
                 <AvatarImage source={perfilIcon}/>

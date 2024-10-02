@@ -5,7 +5,7 @@ import BotaoSecao from "./BotaoSecao";
 
 const filtroIcon = require('../assets/filtroIcon.png')
 
-export default function FiltrosModal(){
+export default function FiltrosModal({...rest}){
 
     const [textoBotaoAcao, setTextoBotaoAcao] = useState('Confirmando...')
 
@@ -63,7 +63,7 @@ export default function FiltrosModal(){
 
 
     return(
-        <Box>
+        <Box {...rest}>
 
             <Pressable onPress={()=>{handleAbrir('Carregando...')}} ref={ref}>
                 <Image source={filtroIcon} w={30} h={30}/>
