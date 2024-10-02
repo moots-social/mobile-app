@@ -3,6 +3,7 @@ import { styled } from "@gluestack-style/react";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useState } from "react";
 
 const StyledVStack = styled(VStack, {
   display: "flex",
@@ -11,6 +12,9 @@ const StyledVStack = styled(VStack, {
   width: "100%",
   height: "100%",
 });
+
+const [nome, setNome] = useState(28);
+const [email, setEmail] = useState();
 
 export default function Login({ navigation }) {
   return (
@@ -25,7 +29,7 @@ export default function Login({ navigation }) {
             <Box flexDirection="row" mt={5} mb={5}>
               <TextoNegrito>Não tem uma conta? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
-                <TextoNegrito color="#AF75BF">Realizar cadastro</TextoNegrito>
+                <TextoNegrito color="#AF75BF">Realizar caddastro</TextoNegrito>
               </TouchableOpacity>
             </Box>
 
