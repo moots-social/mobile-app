@@ -44,6 +44,8 @@ export const gluestackUIConfig = createConfig({
       lightSete: "#468B51",
       //
 
+      add1: "#1C2B21",
+
       rose50: '#fff1f2',
       rose100: '#ffe4e6',
       rose200: '#fecdd3',
@@ -239,7 +241,8 @@ export const gluestackUIConfig = createConfig({
       trueGray200: '#e5e5e5',
       trueGray300: '#d4d4d4',
       trueGray400: '#a3a3a3',
-      trueGray500: '#737373',
+      trueGray450: '#cacaca',
+      trueGray500: '#939393',
       trueGray600: '#525252',
       trueGray700: '#404040',
       trueGray800: '#262626',
