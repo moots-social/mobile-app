@@ -1,7 +1,7 @@
 import { Box, Button, Text, Avatar, AvatarFallbackText, AvatarBadge, AvatarImage,  styled } from "@gluestack-ui/themed";
 import { TextoNegrito } from "./Texto";
 import { Pressable } from "react-native";
-const perfilIcon = require('../assets/userDefault.png')
+const perfilIcon = require('../assets/UsuarioIcon.png')
 
 type propsType = {
     nome: string,

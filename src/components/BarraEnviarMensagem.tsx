@@ -1,6 +1,6 @@
 import { Box, Image, Pressable, Input, InputField } from "@gluestack-ui/themed"
 const EmojiIcon = require('../assets/EmojiIcon.png')
-const EnviarIcon = require('../assets/EnviarIcon.png')
+const EnviarIcon = require('../assets/EnviarIconRounded.png')
 
 export default function BarraEnviarMensagem(){
 return (

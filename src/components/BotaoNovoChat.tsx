@@ -1,7 +1,7 @@
 import { Image } from "@gluestack-ui/themed"
 import { Pressable } from "react-native"
 
-const botaoNovoChat = require('../assets/plusButton.png')
+const botaoNovoChat = require('../assets/MaisIcon.png')
 
 export default function BotaoNovoChat(){
     return <Pressable>

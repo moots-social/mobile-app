@@ -1,9 +1,8 @@
 import { Box, Text, Image, Menu, Button, MenuItem, MenuItemLabel } from "@gluestack-ui/themed"
-import { Pressable } from "react-native"
+import BotaoVoltar from "./BotaoVoltar"
 
-const IconePerfil = require('../assets/userDefault.png')
-const BotaoVoltar =  require('../assets/backButton.png')
-const BotaoMaisOpcoes = require('../assets/BotaoMaisOpcoes.png')
+const IconePerfil = require('../assets/UsuarioIcon.png')
+const MenuIcon = require('../assets/MenuIcon.png')
 
 type props = {
     nome?: string,
@@ -15,9 +14,7 @@ export default function CabecalhoUsuario({nome='Você', paginaContatos=true, nav
   return <Box bg="$white" flexDirection="row"  w="100%" h={110}>
             <Box w="33.3%" justifyContent="center" pl={20}>
                 {!paginaContatos && (
-                    <Pressable onPress={()=>navigation.navigate('tabs')}>
-                        <Image source={BotaoVoltar} size="2xs"/>
-                    </Pressable>
+                    <BotaoVoltar navigation={navigation} voltarPara='tabs'/>
                 )}
             </Box>
             <Box w="33.3%" justifyContent="center" alignItems="center">
@@ -30,7 +27,7 @@ export default function CabecalhoUsuario({nome='Você', paginaContatos=true, nav
                     <Menu placement="bottom" trigger={({ ...triggerProps})=>{
                         return(
                             <Button {...triggerProps} bg="$white">
-                                <Image source={BotaoMaisOpcoes} size="2xs"/>
+                                <Image source={MenuIcon} size="2xs"/>
                             </Button>
                         )
                     }}>

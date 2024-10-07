@@ -1,7 +1,7 @@
 import { Box, Image, styled } from "@gluestack-ui/themed"
 
-const iconSeguir = require('../assets/iconSeguir.png')
-const iconListaSeguidores = require('../assets/iconListaSeguidores.png')
+const iconSeguir = require('../assets/SeguirIcon.png')
+const iconListaSeguidores = require('../assets/ListaIcon.png')
 
 const StyledImageSeguir = styled(Image, {
     w: 11,

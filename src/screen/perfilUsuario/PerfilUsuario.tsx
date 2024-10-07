@@ -1,11 +1,10 @@
-import { Box } from '@gluestack-ui/themed'
-import CardCurso from '../../components/CardCurso'
+import { Box, Text } from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 
 export default function PerfilUsuario() {
   return (
     <LinearGradientMoots>
-      <CardCurso />
+      <Text>Perfil</Text>
     </LinearGradientMoots>
   )
 }
