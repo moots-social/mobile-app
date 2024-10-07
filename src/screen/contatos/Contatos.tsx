@@ -1,10 +1,12 @@
 
-import { Box, FlatList, ScrollView } from '@gluestack-ui/themed'
+import { Box} from '@gluestack-ui/themed'
 import { Titulo } from '../../components/Texto'
 
 import Contato from '../../components/Contato'
 import CabecalhoUsuario from '../../components/CabecalhoUsuario'
 import BotaoNovoChat from '../../components/BotaoNovoChat'
+import LinearGradientMoots from '../../components/LinearGradientMoots'
+import { RoundedTop } from '../../components/Rounded'
 
 const users = 
   {
@@ -17,15 +19,15 @@ const users =
 
 export default function Contatos({navigation}) {
   return(
-  <Box alignItems="center" bg="$white" h="100%">
+  <LinearGradientMoots alignItems="center" bg="$white" h="100%">
     <CabecalhoUsuario />
-    <Titulo>Seus contatos</Titulo>
-    <Box>
+    <RoundedTop bg="$white" mt={20} w="100%" h="100%" alignItems="center">
+      <Titulo pb={0} pt={2} my={5}>Seus contatos</Titulo>
       <Contato navigation={navigation} nome={users.nome} conteudo={users.conteudo} timestamp={users.timestamp}/>
-    </Box>
+    </RoundedTop>
     <Box position="absolute" top="85%" right="5%">
       <BotaoNovoChat />
     </Box>
-  </Box>
+  </LinearGradientMoots>
   ) 
 }

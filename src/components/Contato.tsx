@@ -25,7 +25,7 @@ export default function Contato({nome, navigation, conteudo, timestamp}: propsTy
   return (
     <Pressable onPress={()=>navigation.navigate('chat', {id: '1_2'})} style={{marginTop: 10}}>
         <StyledShadowBox>
-            <Box h={100} bg="$darkCinco" justifyContent="center" rounded={20}>
+            <Box h={100} bg="$lightSeis" justifyContent="center" rounded={20}>
                 <Box flexDirection="row" alignItems="flex-start" w="80%" >
                     <Box px={20}>
                         <Avatar bgColor="$amber600" size="md" borderRadius="$full">
@@ -36,15 +36,15 @@ export default function Contato({nome, navigation, conteudo, timestamp}: propsTy
                     <Box justifyContent="space-between" flexDirection="row" width="86%">
                         <Box flexDirection="column">
                             <Box flexDirection="row">
-                                <Text fontFamily="Poppins_500Medium" color="$black">{nome}</Text>
+                                <Text fontFamily="Poppins_500Medium" color="$white">{nome}</Text>
                             </Box>
                             <Box>
-                                <Text fontFamily="Poppins_500Medium" >{conteudo}</Text>
+                                <Text fontFamily="Poppins_500Medium" color="$white" >{conteudo}</Text>
                             </Box>
                         </Box>
                         <Box>
                             <Box>
-                                <Text fontFamily="Poppins_700Bold" fontSize="$2xs" >{timestamp}</Text>
+                                <Text fontFamily="Poppins_700Bold" color="$white" fontSize="$2xs" >{timestamp}</Text>
                             </Box>
                         </Box>
                     </Box>

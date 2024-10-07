@@ -7,7 +7,7 @@ import BarraEnviarMensagem from '../../components/BarraEnviarMensagem'
 
 export default function Chat({navigation}: any) {
   return (
-    <Box bg="$darkQuatro" h="100%">
+    <Box bg="$lightDois" h="100%">
       <CabecalhoUsuario paginaContatos={false} navigation={navigation} nome="João Paulo"/>
       <ScrollView>
         <Box px={20} pt={20} pb={15}>

@@ -5,9 +5,9 @@ const EnviarIcon = require('../assets/EnviarIconRounded.png')
 export default function BarraEnviarMensagem(){
 return (
     <Box flexDirection="row" justifyContent="space-around">
-        <Botao40DarkSeis evento={()=>alert('oi')} icone={EmojiIcon}/>
+        <Botao40LightSete evento={()=>alert('oi')} icone={EmojiIcon}/>
         <InputMensagem />
-        <Botao40DarkSeis evento={()=>alert('oi')} icone={EnviarIcon}/>
+        <Botao40LightSete evento={()=>alert('oi')} icone={EnviarIcon}/>
     </Box>
 )    
 }
@@ -16,9 +16,9 @@ return <Input w={288} variant="rounded" borderWidth={1} borderColor="$black">
             <InputField fontFamily="Poppins_500Medium" placeholder="Digite aqui..." bg="$white"/>
         </Input>
 }
-export function Botao40DarkSeis({evento, icone}: any){
+export function Botao40LightSete({evento, icone}: any){
 return (
-    <Pressable w={40} h={40} rounded={30} bg="$darkSeis" borderWidth={1} onPress={evento} justifyContent="center" alignItems="center">
+    <Pressable w={40} h={40} rounded={30} bg="$lightSete" borderWidth={1} onPress={evento} justifyContent="center" alignItems="center">
         <Image source={icone} size='2xs'/>
     </Pressable>
 )

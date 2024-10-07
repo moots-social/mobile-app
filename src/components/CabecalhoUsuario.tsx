@@ -1,5 +1,7 @@
 import { Box, Text, Image, Menu, Button, MenuItem, MenuItemLabel } from "@gluestack-ui/themed"
 import BotaoVoltar from "./BotaoVoltar"
+import { StyledShadowBox } from "./Contato"
+import { RoundedBottom } from "./Rounded"
 
 const IconePerfil = require('../assets/UsuarioIcon.png')
 const MenuIcon = require('../assets/MenuIcon.png')
@@ -11,7 +13,7 @@ type props = {
 }
 
 export default function CabecalhoUsuario({nome='Você', paginaContatos=true, navigation}: props) {
-  return <Box bg="$white" flexDirection="row"  w="100%" h={110}>
+  return <RoundedBottom bg="$white" flexDirection="row"  w="100%" h={110} roundedTop={0}>
             <Box w="33.3%" justifyContent="center" pl={20}>
                 {!paginaContatos && (
                     <BotaoVoltar navigation={navigation} voltarPara='tabs'/>
@@ -43,5 +45,5 @@ export default function CabecalhoUsuario({nome='Você', paginaContatos=true, nav
                     </Menu>
                 )}
             </Box>
-        </Box>
+        </RoundedBottom>
 }
