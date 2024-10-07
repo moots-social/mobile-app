@@ -13,3 +13,15 @@ export const RoundedTop = styled(StyledShadowBox, {
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0
 })
+export const RoundedBottomSemSombra = styled(Box, {
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10
+})
+export const RoundedTopSemSombra = styled(Box, {
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0
+})
