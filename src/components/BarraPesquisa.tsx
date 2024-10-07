@@ -3,7 +3,6 @@ import FiltrosModal from "./FiltrosModal";
 import { TextoNegrito } from "./Texto";
 import { useState } from "react";
 import { StyledShadowBox } from "../screen/login/Cadastro";
-import { ExtendedContext } from "../context/PesquisaContext";
 
 const BotaoVoltar =  require('../assets/backButton.png')
 const BotaoEnviar = require('../assets/EnviarIconRounded.png')
