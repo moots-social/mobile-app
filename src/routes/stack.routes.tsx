@@ -5,6 +5,9 @@ import Contatos from "../screen/contatos/Contatos";
 import Chat from "../screen/chat/Chat";
 import Info from "../screen/login/Info";
 import Bottom from "./bottom.routes";
+import EditarPerfil from "../screen/editarPerfil/EditarPerfil";
+import RedefinirSenha from "../screen/editarPerfil/RedefinirSenha";
+import ExcluirConta from "../screen/editarPerfil/ExcluirConta";
 
 const { Screen, Navigator } = createStackNavigator();
 export default function Stack() {
@@ -16,6 +19,9 @@ export default function Stack() {
       <Screen name="chat" component={Chat} options={{headerShown: false}}/>
       <Screen name="contatos" component={Contatos} options={{headerShown: false}}/>
       <Screen name="info" component={Info} options={{headerShown: false}}/>
+      <Screen name="editar" component={EditarPerfil} options={{headerShown: false}}/>
+      <Screen name="redefinir" component={RedefinirSenha} options={{headerShown: false}}/>
+      <Screen name="excluir" component={ExcluirConta} options={{headerShown: false}}/>
     </Navigator>
   );
 }

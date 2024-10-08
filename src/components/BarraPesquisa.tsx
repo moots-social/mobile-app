@@ -4,7 +4,8 @@ import { TextoNegrito } from "./Texto";
 import { useState } from "react";
 import { StyledShadowBox } from "../screen/login/Cadastro";
 
-const BotaoVoltar =  require('../assets/backButton.png')
+import BotaoVoltar from "./BotaoVoltar";
+
 const BotaoEnviar = require('../assets/EnviarIconRounded.png')
 const IconePesquisa = require('../assets/PesquisaIcon.png')
 
@@ -39,11 +40,7 @@ export default function BarraPesquisa(){
 
                     {!isExtended && (
                         <Box>
-                            <Pressable onPress={() => {
-                                setIsExtended(true)
-                                }}>
-                                <Image source={BotaoVoltar} size="2xs"/>
-                            </Pressable>
+                            <BotaoVoltar onPress={()=> setIsExtended(true)}/>
                         </Box>
                     )}
 

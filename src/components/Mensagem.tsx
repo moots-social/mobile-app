@@ -10,7 +10,7 @@ type props = {
 export function MensagemEnviada({conteudo, timestamp}: props) {
   return (
     <Box>
-        <StyledShadowBox display="flex" alignSelf="flex-end" bg="$darkSeis" rounded={30} borderWidth={2} borderColor="$white" minHeight={40} minWidth={40} maxWidth="90%" flexWrap="wrap" alignItems="flex-end">
+        <StyledShadowBox display="flex" alignSelf="flex-end" bg="$lightSete" rounded={30} minHeight={40} minWidth={40} maxWidth="90%" flexWrap="wrap" alignItems="flex-end">
             <TextoNegrito fontFamily="Poppins_500Medium"  color="$white" my={2} mx={4} >{conteudo}</TextoNegrito>
         </StyledShadowBox>
         <Box alignItems="flex-end" >
@@ -23,7 +23,7 @@ export function MensagemEnviada({conteudo, timestamp}: props) {
 export function MensagemRecebida({conteudo, timestamp}: props) {
   return (
     <Box alignSelf="flex-start">
-        <StyledShadowBox display="flex" bg="$white" rounded={30} borderWidth={2} borderColor="$black" minHeight={40} minWidth={40} maxWidth="90%" flexWrap="wrap" alignItems="flex-end">
+        <StyledShadowBox display="flex" bg="$white" rounded={30} minHeight={40} minWidth={40} maxWidth="90%" flexWrap="wrap" alignItems="flex-end">
             <TextoNegrito fontFamily="Poppins_500Medium" my={2} mx={4} >{conteudo}</TextoNegrito>
         </StyledShadowBox>
         <Box>

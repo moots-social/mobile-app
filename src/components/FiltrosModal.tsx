@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { TextoNegrito, Titulo } from "./Texto";
 import BotaoSecao from "./BotaoSecao";
 
-const filtroIcon = require('../assets/filtroIcon.png')
+const filtroIcon = require('../assets/FiltroIcon.png')
 
 export default function FiltrosModal({...rest}){
 

@@ -9,7 +9,7 @@ import FormControlInput from "../../components/FormControlInput";
 import Antdesign from "react-native-vector-icons/AntDesign";
 import { Select } from '@gluestack-ui/themed';
 
-const imagemPerfil = require("../../assets/userDefault.png");
+const imagemPerfil = require("../../assets/UsuarioIcon.png");
 const imagemCurso = require("../../assets/vectorizedDesenvolvimento.png")
 
 const StyledShadowBox = styled(Box, {

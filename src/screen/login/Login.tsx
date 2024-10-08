@@ -3,7 +3,7 @@ import { styled } from "@gluestack-style/react";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledVStack = styled(VStack, {
   display: "flex",
@@ -13,10 +13,11 @@ const StyledVStack = styled(VStack, {
   height: "100%",
 });
 
-const [nome, setNome] = useState(28);
-const [email, setEmail] = useState();
-
 export default function Login({ navigation }) {
+  const [nome, setNome] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [resp, setResp] = useState<string>("");
+
   return (
     <StyledVStack>
       <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
@@ -33,10 +34,9 @@ export default function Login({ navigation }) {
               </TouchableOpacity>
             </Box>
 
-            <Input  placeholder="Digite sua senha"  borderRadius={30}  textAlign="center"  fontFamily="Poppins_500Medium"/>
-
+            <Input  placeholder="Digite sua senha"  borderRadius={30}  textAlign="center"  fontFamily="Poppins_500Medium" />
             <Box flexDirection="row" mt={5} mb={5}>
-              <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
+              <TextoNegrito>Esqueceu sua senha?</TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
                 <TextoNegrito color="#AF75BF">Redefinir senha</TextoNegrito>
               </TouchableOpacity>
