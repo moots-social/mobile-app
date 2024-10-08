@@ -3,9 +3,9 @@ import { styled } from "@gluestack-style/react";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usuarioLogin } from "../../api/apis";
-import axios from "axios";
+import SyncStorage from '@react-native-async-storage/async-storage';
 
 
 const StyledVStack = styled(VStack, {
@@ -27,14 +27,16 @@ export default function Login({ navigation }) {
             email : email,
             senha : senha
         });
-
         const res = await dado.data;
         
-        if(res)
-          setResp("login feito com sucesso" + res.token);
+        if(res.token){
+          SyncStorage.setItem('token', res.token);
+          navigation.navigate("tabs")
+        }
         else{
           setResp("deu certo nao boy")
         }
+
     } catch (error) {
       console.error("Erro no login:", error);
       setResp("Erro ao realizar login");
