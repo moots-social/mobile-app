@@ -1,4 +1,4 @@
-const splashScreen = require('../assets/splashScreenLight.png')
+const splashScreen = require('../assets/SplashScreen.png')
 
 import { NavigationContainer } from "@react-navigation/native";
 import Stack from "./stack.routes";

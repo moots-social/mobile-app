@@ -3,9 +3,8 @@ import FiltrosModal from "./FiltrosModal";
 import { TextoNegrito } from "./Texto";
 import { useState } from "react";
 import { StyledShadowBox } from "../screen/login/Cadastro";
-import { ExtendedContext } from "../context/PesquisaContext";
+import BotaoVoltar from "./BotaoVoltar";
 
-const BotaoVoltar =  require('../assets/backButton.png')
 const BotaoEnviar = require('../assets/EnviarIconRounded.png')
 const IconePesquisa = require('../assets/PesquisaIcon.png')
 
@@ -40,11 +39,7 @@ export default function BarraPesquisa(){
 
                     {!isExtended && (
                         <Box>
-                            <Pressable onPress={() => {
-                                setIsExtended(true)
-                                }}>
-                                <Image source={BotaoVoltar} size="2xs"/>
-                            </Pressable>
+                            <BotaoVoltar onPress={()=> setIsExtended(true)}/>
                         </Box>
                     )}
 
