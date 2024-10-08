@@ -3,26 +3,17 @@ import { Box, Image, styled } from "@gluestack-ui/themed"
 const iconSeguir = require('../assets/SeguirIcon.png')
 const iconListaSeguidores = require('../assets/ListaIcon.png')
 
-const StyledImageSeguir = styled(Image, {
-    w: 11,
-    h: 9
-})
-const StyledImageLista = styled(Image, {
-    w: 11,
-    h: 11
-})
-
-export function BotaoSeguir(){
+export function BotaoSeguir({imgW=20, imgH=16, ...rest}){
     return(
-        <Box w={25} h={25} bg="$lightTres" borderWidth={1} borderColor="$black" rounded={15} justifyContent="center" alignItems="center">
-            <StyledImageSeguir source={iconSeguir} />
+        <Box bg="$lightTres" borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+            <Image source={iconSeguir} w={imgW} h={imgH} m={10}/>
         </Box>
     )
 }
-export function BotaoListaSeguidores(){
+export function BotaoListaSeguidores({imgW=16, imgH=16, ...rest}){
     return(
-        <Box w={25} h={25} bg="$lightDois" borderWidth={1} borderColor="$black" rounded={15} justifyContent="center" alignItems="center">
-            <StyledImageLista source={iconListaSeguidores} />
+        <Box bg="$lightDois" borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+            <Image source={iconListaSeguidores} w={imgW} h={imgH} m={10}/>
         </Box>
     )
 }
