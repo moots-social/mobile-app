@@ -8,6 +8,7 @@ import Bottom from "./bottom.routes";
 import EditarPerfil from "../screen/editarPerfil/EditarPerfil";
 import RedefinirSenha from "../screen/editarPerfil/RedefinirSenha";
 import ExcluirConta from "../screen/editarPerfil/ExcluirConta";
+import Colecao from "../screen/colecao/Colecao";
 
 const { Screen, Navigator } = createStackNavigator();
 export default function Stack() {
@@ -22,6 +23,7 @@ export default function Stack() {
       <Screen name="editar" component={EditarPerfil} options={{headerShown: false}}/>
       <Screen name="redefinir" component={RedefinirSenha} options={{headerShown: false}}/>
       <Screen name="excluir" component={ExcluirConta} options={{headerShown: false}}/>
+      <Screen name="colecao" component={Colecao} options={{headerShown: false}}/>
     </Navigator>
   );
 }

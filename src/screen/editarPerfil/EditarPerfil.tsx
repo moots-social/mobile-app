@@ -27,7 +27,9 @@ export default function EditarPerfil({navigation, fotoPerfil}){
                             <Pressable alignItems="center" onPress={()=>navigation.navigate('redefinir')}>
                                 <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Redefinir senha</TextoNegrito>
                             </Pressable>
-                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Acessar sua coleção de posts</TextoNegrito>
+                            <Pressable alignItems="center" onPress={()=>navigation.navigate('colecao')}>
+                                <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Acessar sua coleção de posts</TextoNegrito>
+                            </Pressable>
                             <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                                 <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                             </Pressable>

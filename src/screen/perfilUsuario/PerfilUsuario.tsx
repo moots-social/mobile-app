@@ -26,7 +26,7 @@ export default function PerfilUsuario({navigation}) {
                         <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={()=>navigation.navigate('editar')}>
                             <MenuItemLabel>Editar perfil</MenuItemLabel>
                         </MenuItem>
-                        <MenuItem key="Pesquisar" textValue="Pesquisar">
+                        <MenuItem key="Pesquisar" textValue="Pesquisar" onPress={()=>navigation.navigate('colecao')}>
                             <MenuItemLabel>Coleção</MenuItemLabel>
                         </MenuItem>
                     </Menu>
