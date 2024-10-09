@@ -1,11 +1,15 @@
-import { Text } from "@gluestack-ui/themed";
+import { Box, Text } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
-import TelaTituloCabecalho from "../../components/TelaTituloCabecalho";
+import CabecalhoPerfil from "../../components/CabecalhoPerfil";
+import Notificacao from "../../components/Notificacao";
 
 export default function Notificacoes(){
     return (
         <LinearGradientMoots>
-            <TelaTituloCabecalho titulo="Notificações"/>
+            <CabecalhoPerfil titulo="Notificações" temBotaoVoltar={false}/>
+            <Box mt={35} alignItems="center">
+                <Notificacao />
+            </Box>
         </LinearGradientMoots>
     )
 }

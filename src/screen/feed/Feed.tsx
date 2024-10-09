@@ -1,14 +1,13 @@
 import { Box, Text } from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
-import CabecalhoIcone from '../../components/CabecalhoIcone'
 import BotaoNovoChat from '../../components/BotaoNovoChat'
-import TelaTituloCabecalho from '../../components/TelaTituloCabecalho'
+import CabecalhoPerfil from '../../components/CabecalhoPerfil'
 
 export default function Feed({navigation}) {
 
   return (
     <LinearGradientMoots>
-      <TelaTituloCabecalho titulo="Feed inicial"/>
+      <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
     </LinearGradientMoots>
   )
 }

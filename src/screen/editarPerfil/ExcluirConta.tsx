@@ -1,5 +1,5 @@
 import { Box } from "@gluestack-ui/themed";
-import CabecalhoPerfil from "../../components/CabecalhoPerfil";
+import CabecalhoPerfil from "../../components/CabecalhoPerfil.tsx";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import { RoundedBottom } from "../../components/Rounded";
 import { TextoNegrito } from "../../components/Texto";
