@@ -48,8 +48,6 @@ export default function Login({ navigation }) {
       <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
         <Titulo mt={5} mg={5}> Realize o login e aproveite</Titulo>
 
-        <Text>{resp}</Text>
-
         <Box alignItems="center" mb={30} w="80%">
           <FormControl w="100%">
             <Input  placeholder="Digite seu email"  borderRadius={30}  textAlign="center"  fontFamily="Poppins_500Medium" onChange={(text) => setEmail(text)}/>
