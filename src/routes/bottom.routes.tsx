@@ -55,7 +55,7 @@ export default function Bottom(){
               <Screen key={tab.id} name={tab.name} component={tab.component} options={{
                 headerShown: false, 
                 tabBarIcon: () => (
-                <Image source={tab.icon} size="2xs"/>
+                <Image source={tab.icon} w={30} h={30}/>
                 ), 
                 tabBarShowLabel: false,
                 }}

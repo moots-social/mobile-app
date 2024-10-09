@@ -4,6 +4,7 @@ import { ButtonText, Button } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
+import { StatusBar } from "expo-status-bar";
 
 const StyledVStack = styled(VStack, {
   display: "flex",
@@ -20,6 +21,7 @@ export default function Login({ navigation }) {
 
   return (
     <StyledVStack>
+      <StatusBar translucent={true} style="dark"/>
       <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
         <Titulo mt={5} mg={5}> Realize o login e aproveite</Titulo>
 

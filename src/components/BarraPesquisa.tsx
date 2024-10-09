@@ -32,7 +32,6 @@ export default function BarraPesquisa(){
     
     const [isExtended, setIsExtended] = useState(true)
 
-    
     return(
             <BottomRadiusShadowBox>
 

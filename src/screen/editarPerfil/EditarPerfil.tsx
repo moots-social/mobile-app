@@ -3,13 +3,16 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";
+import { useNavigation } from "@react-navigation/native";
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
-export default function EditarPerfil({navigation, fotoPerfil}){
+export default function EditarPerfil({fotoPerfil}){
+    const navigation = useNavigation()
+
     return(
         <LinearGradientMoots>
-            <CabecalhoPerfil navigation={navigation} titulo="Editar perfil"/>
+            <CabecalhoPerfil titulo="Editar perfil"/>
                 <ScrollView w="100%" bg="$white" bottom={5} h="100%">
                     <Box alignItems="center" my={20}>
                         <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$black">Perfil</Text>

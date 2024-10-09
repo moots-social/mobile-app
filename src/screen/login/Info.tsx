@@ -81,6 +81,7 @@ export default function Info({navigation}){
 
     return (
       <Box flex={1}>
+        
         <LinearGradientMoots>
 
           {/* primeiro bloco */}

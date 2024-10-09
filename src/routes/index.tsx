@@ -1,3 +1,8 @@
+import { NavigationContext } from "../context/NavigationContext";
+import { createRef } from "react";
+
+const navigationRef = createRef()
+
 const splashScreen = require('../assets/SplashScreen.png')
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -61,7 +66,9 @@ export default function Routes() {
 
   return (
     <NavigationContainer>
-      <Stack />
+      <NavigationContext.Provider value={navigationRef.current}>
+        <Stack />
+      </NavigationContext.Provider>
     </NavigationContainer>
   );
 }

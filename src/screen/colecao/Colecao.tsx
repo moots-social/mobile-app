@@ -1,10 +1,10 @@
 import CabecalhoPerfil from "../../components/CabecalhoPerfil.tsx";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 
-export default function Colecao({navigation}){
+export default function Colecao(){
     return(
         <LinearGradientMoots>
-            <CabecalhoPerfil navigation={navigation} titulo="Sua coleção"/>
+            <CabecalhoPerfil titulo="Sua coleção"/>
         </LinearGradientMoots>
     )
 }

@@ -1,15 +1,15 @@
 import { Box, Button, Text, Avatar, AvatarFallbackText, AvatarBadge, AvatarImage,  styled } from "@gluestack-ui/themed";
 import { TextoNegrito } from "./Texto";
 import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 const perfilIcon = require('../assets/UsuarioIcon.png')
+
 
 type propsType = {
     nome: string,
-    navigation: any,
     conteudo?: string,
     timestamp?: string
 }
-
 
 export const StyledShadowBox = styled(Box, {
     shadowColor: "#000",
@@ -21,7 +21,9 @@ export const StyledShadowBox = styled(Box, {
     overflow: "hidden",
 });
 
-export default function Contato({nome, navigation, conteudo, timestamp}: propsType) {
+export default function Contato({nome, conteudo, timestamp}: propsType) {
+    const navigation = useNavigation()
+    
   return (
     <Pressable onPress={()=>navigation.navigate('chat', {id: '1_2'})} style={{marginTop: 10}}>
         <StyledShadowBox>

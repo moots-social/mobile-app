@@ -17,13 +17,13 @@ const users =
   }
 
 
-export default function Contatos({navigation}) {
+export default function Contatos() {
   return(
   <LinearGradientMoots alignItems="center" bg="$white" h="100%">
     <CabecalhoUsuario />
     <RoundedTop bg="$white" mt={20} w="100%" h="100%" alignItems="center">
       <Titulo pb={0} pt={2} my={5}>Seus contatos</Titulo>
-      <Contato navigation={navigation} nome={users.nome} conteudo={users.conteudo} timestamp={users.timestamp}/>
+      <Contato nome={users.nome} conteudo={users.conteudo} timestamp={users.timestamp}/>
     </RoundedTop>
     <Box position="absolute" top="85%" right="5%">
       <BotaoNovoChat />

@@ -5,10 +5,10 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import { RoundedBottom } from "../../components/Rounded";
 import { TextoNegrito } from "../../components/Texto";
 
-export default function RedefinirSenha({navigation}){
+export default function RedefinirSenha(){
     return(
         <LinearGradientMoots>
-            <CabecalhoPerfil navigation={navigation} voltarPara={'editar'} titulo='Redefinir senha' />
+            <CabecalhoPerfil titulo='Redefinir senha' />
             <RoundedBottom w="100%" bg="$white" bottom={5} h={625} >
                 <Box w="100%" alignItems="center" my={20} >
                     <InputPerfil type='password' titulo='Senha atual' w="90%"/>
