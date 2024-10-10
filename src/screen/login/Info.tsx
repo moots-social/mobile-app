@@ -85,7 +85,7 @@ export default function Info({navigation}){
         <LinearGradientMoots>
 
           {/* primeiro bloco */}
-          <Box  h="30%" alignItems="center" mt={5}>
+          <Box  h="30%" alignItems="center" mt={7}>
             <TextoNegrito fontSize={32} paddingVertical={5} mt={4}>
               {secoes[numSecao].title}
             </TextoNegrito>

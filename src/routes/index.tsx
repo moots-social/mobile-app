@@ -1,8 +1,3 @@
-import { NavigationContext } from "../context/NavigationContext";
-import { createRef } from "react";
-
-const navigationRef = createRef()
-
 const splashScreen = require('../assets/SplashScreen.png')
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -57,7 +52,7 @@ export default function Routes() {
   if (!fontsLoaded) {
     return (
       <Box>
-        <StatusBar />
+        <StatusBar translucent={true}/>
         <Image source={splashScreen} w="100%" h="100%"/>
         <Spinner color="$lightSete" size="large"/>
       </Box>
@@ -66,9 +61,7 @@ export default function Routes() {
 
   return (
     <NavigationContainer>
-      <NavigationContext.Provider value={navigationRef.current}>
         <Stack />
-      </NavigationContext.Provider>
     </NavigationContainer>
   );
 }

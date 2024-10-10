@@ -7,7 +7,7 @@ import { ButtonText, Button } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import BotaoSecao from "../../components/BotaoSecao";
 
-const image = require("../../assets/vectorizedGreenAttempt.png");
+const image = require("../../assets/MootsIcon.png");
 
 export const StyledVStack = styled(VStack, {
   display: "flex",
@@ -43,13 +43,13 @@ export default function Cadastro({ navigation }) {
             height="60%"
             alignItems="center"
           >
-            <Titulo mt={5} mg={5}>
+            <Titulo mt={5} fontSize={20}>
               Faça parte agora.
             </Titulo>
             
-            <Box alignItems="center" w="80%">
+            <Box alignItems="center" w="85%">
               <FormControl w="100%">
-                <FormControl.Label ml={2} mt={3}>
+                <FormControl.Label>
                   <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
                     Email
                   </Text>
@@ -63,7 +63,7 @@ export default function Cadastro({ navigation }) {
                 />
                 </StyledShadowBox>
 
-                <FormControl.Label ml={2} mt={3}>
+                <FormControl.Label mt={3}>
                   <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
                     Senha
                   </Text>
@@ -76,7 +76,7 @@ export default function Cadastro({ navigation }) {
                   />    
                 </StyledShadowBox>
 
-                <FormControl.Label ml={2} mt={3}>
+                <FormControl.Label mt={3}>
                   <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
                     Confirmar a senha
                   </Text>
@@ -91,9 +91,9 @@ export default function Cadastro({ navigation }) {
                 </StyledShadowBox>
               </FormControl>
               
-              <Box flexDirection="row" mt="5" mb="5">
-                <TextoNegrito>Já tem uma conta?</TextoNegrito>
-                <TextoNegrito color="#468B51" onPress={()=>navigation.navigate('login')}> Realizar login</TextoNegrito>
+              <Box flexDirection="row" mt={2.5} mb={10}>
+                <TextoNegrito>Já tem uma conta? </TextoNegrito>
+                <TextoNegrito color="#468B51" onPress={()=>navigation.navigate('login')}>Realizar login</TextoNegrito>
               </Box>
             </Box>
 

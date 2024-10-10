@@ -1,4 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
+
 import Login from "../screen/login/Login";
 import Cadastro from "../screen/login/Cadastro";
 import Contatos from "../screen/contatos/Contatos";
@@ -9,6 +10,7 @@ import EditarPerfil from "../screen/editarPerfil/EditarPerfil";
 import RedefinirSenha from "../screen/editarPerfil/RedefinirSenha";
 import ExcluirConta from "../screen/editarPerfil/ExcluirConta";
 import Colecao from "../screen/colecao/Colecao";
+import PostExpandido from "../screen/postExpandido/PostExpandido";
 
 const { Screen, Navigator } = createStackNavigator();
 export default function Stack() {
@@ -24,6 +26,7 @@ export default function Stack() {
       <Screen name="redefinir" component={RedefinirSenha} options={{headerShown: false}}/>
       <Screen name="excluir" component={ExcluirConta} options={{headerShown: false}}/>
       <Screen name="colecao" component={Colecao} options={{headerShown: false}}/>
+      <Screen name="expandido" component={PostExpandido} options={{headerShown: false}}/>
     </Navigator>
   );
 }

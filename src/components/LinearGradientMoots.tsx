@@ -6,7 +6,7 @@ interface LinearGradientMootsProps {
     
   }
 
-export default function LinearGradientMoots({children,} : LinearGradientMootsProps){
+export default function LinearGradientMoots({children, ...rest} : LinearGradientMootsProps){
     return (
         <LinearGradient
         colors={["#FFFABB", "#E0F5FF", "#F4E5FF", "#E2FCFF"]}
@@ -14,6 +14,7 @@ export default function LinearGradientMoots({children,} : LinearGradientMootsPro
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }} // ajuste conforme necessário
         style={{ flex: 1 }}
+        {...rest}
         >
             {children}
         </LinearGradient>

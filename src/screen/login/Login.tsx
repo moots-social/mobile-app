@@ -5,14 +5,11 @@ import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import BotaoSecao from "../../components/BotaoSecao";
+import LinearGradientMoots from "../../components/LinearGradientMoots";
+import FormControlInput from "../../components/FormControlInput";
 
-const StyledVStack = styled(VStack, {
-  display: "flex",
-  justifyContent: "flex-end",
-  bg: "$darkCinco",
-  width: "100%",
-  height: "100%",
-});
+const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
   const [nome, setNome] = useState<string>("");
@@ -20,40 +17,38 @@ export default function Login({ navigation }) {
   const [resp, setResp] = useState<string>("");
 
   return (
-    <StyledVStack>
-      <StatusBar translucent={true} style="dark"/>
-      <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
-        <Titulo mt={5} mg={5}> Realize o login e aproveite</Titulo>
+    <LinearGradientMoots display="flex" justifyContent="flex-end" w="100%" h="100%">
+      <StatusBar translucent={true}/>
+      <Box display="flex" alignItems="center" h="40%" justifyContent="center">
+        <Image source={image} w={200} h={200}/>
+      </Box>
+      <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="60%" alignItems="center">
+        <Titulo mt={5} fontSize={20}> Comece a aproveitar.</Titulo>
 
-        <Box alignItems="center" mb={30} w="80%">
-          <FormControl w="100%">
-            <Input  placeholder="Digite seu email"  borderRadius={30}  textAlign="center"  fontFamily="Poppins_500Medium"/>
-
-            <Box flexDirection="row" mt={5} mb={5}>
+        <Box alignItems="center" w="85%">
+            <FormControlInput label="Email" loginOuCadastro={true}/>
+            <Box flexDirection="row" justifyContent="center" mt={2.5} mb={2.5}>
               <TextoNegrito>Não tem uma conta? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
-                <TextoNegrito color="#AF75BF">Realizar caddastro</TextoNegrito>
+                <TextoNegrito color="$lightSete">Realizar cadastro</TextoNegrito>
               </TouchableOpacity>
             </Box>
 
-            <Input  placeholder="Digite sua senha"  borderRadius={30}  textAlign="center"  fontFamily="Poppins_500Medium" />
-            <Box flexDirection="row" mt={5} mb={5}>
-              <TextoNegrito>Esqueceu sua senha?</TextoNegrito>
+            <FormControlInput label="Senha" loginOuCadastro={true}/>
+            <Box flexDirection="row" justifyContent="center" mt={2.5} mb={20}>
+              <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
-                <TextoNegrito color="#AF75BF">Redefinir senha</TextoNegrito>
+                <TextoNegrito color="$lightSete">Redefinir senha</TextoNegrito>
               </TouchableOpacity>
             </Box>
-          </FormControl>
         </Box>
 
         <Box alignItems="center" w="80%">
-          
-          <Button  w="100%" borderStyled="solid"  borderWidth={1}  borderColor="black"  bg="#AF75BFBA"  h={50}  borderRadius={40}
-          onPress={()=>navigation.navigate('tabs')}>
-            <ButtonText fontFamily="Poppins_700Bold">Iniciar Sessão</ButtonText>
-          </Button>
+          <BotaoSecao w="100%" onPress={()=>navigation.navigate('tabs')}>
+              Confirmar
+          </BotaoSecao>
         </Box>
       </Box>
-    </StyledVStack>
+    </LinearGradientMoots >
   );
 }
