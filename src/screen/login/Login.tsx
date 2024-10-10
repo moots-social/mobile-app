@@ -22,7 +22,7 @@ export default function Login({ navigation }) {
       <Box display="flex" alignItems="center" h="40%" justifyContent="center">
         <Image source={image} w={200} h={200}/>
       </Box>
-      <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="60%" alignItems="center">
+      <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
         <Titulo mt={5} fontSize={20}> Comece a aproveitar.</Titulo>
 
         <Box alignItems="center" w="85%">
@@ -35,7 +35,7 @@ export default function Login({ navigation }) {
             </Box>
 
             <FormControlInput label="Senha" loginOuCadastro={true}/>
-            <Box flexDirection="row" justifyContent="center" mt={2.5} mb={20}>
+            <Box flexDirection="row" justifyContent="center" mt={2.5} mb={30}>
               <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
                 <TextoNegrito color="$lightSete">Redefinir senha</TextoNegrito>

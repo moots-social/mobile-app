@@ -91,7 +91,7 @@ export default function Cadastro({ navigation }) {
                 </StyledShadowBox>
               </FormControl>
               
-              <Box flexDirection="row" mt={2.5} mb={10}>
+              <Box flexDirection="row" mt={2.5} mb={65}>
                 <TextoNegrito>Já tem uma conta? </TextoNegrito>
                 <TextoNegrito color="#468B51" onPress={()=>navigation.navigate('login')}>Realizar login</TextoNegrito>
               </Box>
