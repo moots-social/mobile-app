@@ -1,4 +1,4 @@
-import { Box, Text } from '@gluestack-ui/themed'
+import { Box} from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import CabecalhoPerfil from '../../components/CabecalhoPerfil'
 import { StatusBar } from 'expo-status-bar'
