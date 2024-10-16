@@ -6,8 +6,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import BotaoSecao from "../../components/BotaoSecao";
+<<<<<<< HEAD
 import { useState } from "react";
 import { usuarioApi } from "../../api/apis";
+=======
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
 
 const image = require("../../assets/vectorizedGreenAttempt.png");
 
@@ -29,8 +32,11 @@ export const StyledShadowBox = styled(Box, {
 });
 
 export default function Cadastro({ navigation }) {
+<<<<<<< HEAD
   const [sessao, setSessao] = useState({email: "", senha: "", confirmarSenha: ""});
   
+=======
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
   return (
     <Box flex={1}>
       <LinearGradientMoots>
@@ -64,7 +70,10 @@ export default function Cadastro({ navigation }) {
                   borderRadius={30}
                   fontFamily="Poppins_500Medium"
                   bg="#FFFFFF"
+<<<<<<< HEAD
                   onChange = {(text) => setSessao({...sessao, email: text})}
+=======
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
                 />
                 </StyledShadowBox>
 
@@ -78,7 +87,10 @@ export default function Cadastro({ navigation }) {
                     borderRadius={30}
                     fontFamily="Poppins_500Medium"
                     bg="#FFFFFF"
+<<<<<<< HEAD
                     onChange = {(text) => setSessao({...sessao, senha: text})}
+=======
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
                   />    
                 </StyledShadowBox>
 
@@ -93,7 +105,10 @@ export default function Cadastro({ navigation }) {
                   borderRadius={30}
                   fontFamily="Poppins_500Medium"
                   bg="#FFFFFF"
+<<<<<<< HEAD
                   onChange = {(text) => setSessao({...sessao, confirmarSenha: text})}
+=======
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
                 />
                 </StyledShadowBox>
               </FormControl>
@@ -105,7 +120,11 @@ export default function Cadastro({ navigation }) {
             </Box>
 
             <Box alignItems="center" w="100%">
+<<<<<<< HEAD
               <BotaoSecao onPress={() => navigation.navigate("info", { sessao })}>
+=======
+              <BotaoSecao onPress={() => navigation.navigate("info")}>
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
                 Confirmar
               </BotaoSecao>
             </Box>

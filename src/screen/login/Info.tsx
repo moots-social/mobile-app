@@ -67,9 +67,14 @@ const secoes = [
   }
 ]
 
+<<<<<<< HEAD
 export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
+=======
+export default function Info({navigation}){
+    const [numSecao, setNumSecao] = useState(0);
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
 
     function avancarSecao() {
       if (numSecao < secoes.length - 1) 
@@ -85,11 +90,14 @@ export default function Info({navigation, route}){
         <LinearGradientMoots>
 
           {/* primeiro bloco */}
+<<<<<<< HEAD
           <Text>
             {sessao.email}
             {sessao.senha}
           </Text>
 
+=======
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
           <Box  h="30%" alignItems="center" mt={5}>
             <TextoNegrito fontSize={32} paddingVertical={5} mt={4}>
               {secoes[numSecao].title}

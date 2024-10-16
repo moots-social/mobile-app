@@ -10,7 +10,10 @@ import RedefinirSenha from "../screen/editarPerfil/RedefinirSenha";
 import ExcluirConta from "../screen/editarPerfil/ExcluirConta";
 
 const { Screen, Navigator } = createStackNavigator();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
 export default function Stack() {
   return (
     <Navigator>
