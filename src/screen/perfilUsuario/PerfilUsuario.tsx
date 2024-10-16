@@ -2,7 +2,6 @@ import { Box, Image, Text, ScrollView} from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import { Titulo } from '../../components/Texto'
 import { BotaoListaSeguidores, BotaoSeguir } from '../../components/BotoesPerfil'
-import BotaoEditar from '../../components/BotaoEditar'
 import { StatusBar } from 'expo-status-bar'
 
 const MenuIcon = require('../../assets/MenuIcon.png')
@@ -29,7 +28,6 @@ export default function PerfilUsuario() {
           <Titulo>Publicações</Titulo>
         </Box>
       </ScrollView>
-      <BotaoEditar position="absolute" top="85%" right="5%" />
     </LinearGradientMoots>
   )
 }

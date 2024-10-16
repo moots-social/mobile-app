@@ -3,6 +3,7 @@ import LinearGradientMoots from '../../components/LinearGradientMoots'
 import CabecalhoPerfil from '../../components/CabecalhoPerfil'
 import { StatusBar } from 'expo-status-bar'
 import Post from '../../components/Post'
+import AlertaRetangular from '../../components/AlertaRetangular'
 import AlertDialogGreen from '../../components/AlertDialogGreen'
 
 export default function Feed({navigation}) {
