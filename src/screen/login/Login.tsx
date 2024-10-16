@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
+import { ActivityIndicator } from 'react-native'
 
 const image = require("../../assets/MootsIcon.png")
 
@@ -15,6 +16,15 @@ export default function Login({ navigation }) {
   const [nome, setNome] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [resp, setResp] = useState<string>("");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const handleSubmit = () =>{
+    setIsLoading(true)
+    setTimeout(()=>{
+      navigation.navigate('tabs')
+    }, 1000)
+  }
 
   return (
     <LinearGradientMoots display="flex" justifyContent="flex-end" w="100%" h="100%">
@@ -44,9 +54,9 @@ export default function Login({ navigation }) {
         </Box>
 
         <Box alignItems="center" w="80%">
-          <BotaoSecao w="100%" onPress={()=>navigation.navigate('tabs')}>
+          {!isLoading ?(<BotaoSecao w="100%" onPress={handleSubmit}>
               Confirmar
-          </BotaoSecao>
+          </BotaoSecao>) : <ActivityIndicator color="#468B51"/>}
         </Box>
       </Box>
     </LinearGradientMoots >
