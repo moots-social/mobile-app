@@ -1,17 +1,22 @@
-import { Box, Text } from "@gluestack-ui/themed";
-import { LinearGreenGradientMoots } from "./LinearGradientMoots";
+import { Image } from "@gluestack-ui/themed";
 import { FullRounded } from "./Rounded";
 import { TextoNegrito } from "./Texto";
 
-export default function AlertaRegular({children}: any){
+const fecharIcon = require('../assets/FecharIcon.png')
+
+export default function AlertaRetangular({children}: any){
     return(
-        <FullRounded minH={65} w={380} bg="$white" p={20} flexDirection="row" justifyContent="space-between">
-            <Text fontFamily="Poppins_700Bold" fontSize={14} color="$black">
+        <FullRounded bg="$white" minH={65} w={380} p={20} pr={15}  flexDirection="row" justifyContent="space-between">
+            <TextoNegrito >
                 {children}
-            </Text>
-            <Text justifyContent="flex-end" fontSize={16} brw={1} position="absolute" >
-                X
-            </Text>
+            </TextoNegrito>
+            <Image source={fecharIcon} w={10} h={10} bottom={5}/>
         </FullRounded>
     )
 }
+
+//exemplo de uso
+{/* <AlertaRetangular>
+    Publicação adicionada com sucesso.
+    <Link><LinkText color="$add2" fontFamily="Poppins_600SemiBold" textDecorationLine='none'>Visualizar</LinkText></Link>
+</AlertaRetangular> */}

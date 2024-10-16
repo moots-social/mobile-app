@@ -47,6 +47,7 @@ export const gluestackUIConfig = createConfig({
       //
 
       add1: "#1C2B21",
+      add2: '#176585',
 
       rose50: '#fff1f2',
       rose100: '#ffe4e6',

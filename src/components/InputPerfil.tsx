@@ -15,7 +15,7 @@ export default function InputPerfil({titulo, tituloSize=18, type="text",  placeh
 export function MultiLinhaInputPerfil({titulo, tituloSize=18, placeholder='', ...rest}){
     return(
         <Box alignItems="center">
-            <TextoNegrito fontSize={tituloSize}>{titulo}</TextoNegrito>
+            {titulo!=='' && <TextoNegrito fontSize={tituloSize}>{titulo}</TextoNegrito>}
             <Textarea brw={1} brc="$black" {...rest} mt={10}>
                 <TextareaInput placeholder={placeholder} fontFamily="Poppins_500Medium"/>
             </Textarea>

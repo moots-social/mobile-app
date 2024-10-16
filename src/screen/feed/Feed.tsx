@@ -1,9 +1,10 @@
-import { Box, Text } from '@gluestack-ui/themed'
+import { Box} from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import CabecalhoPerfil from '../../components/CabecalhoPerfil'
 import { StatusBar } from 'expo-status-bar'
 import Post from '../../components/Post'
-import AlertaRegular from '../../components/AlertaRetangular'
+import AlertaRetangular from '../../components/AlertaRetangular'
+import AlertDialogGreen from '../../components/AlertDialogGreen'
 
 export default function Feed({navigation}) {
 
@@ -14,9 +15,9 @@ export default function Feed({navigation}) {
       <Box alignItems="center" mt={35}>
         <Post />
       </Box>
-      <AlertaRegular>
-        Sua publicação foi enviada com sucesso.
-      </AlertaRegular>
+      <AlertDialogGreen titulo='Confirmar ação'>
+        Tem certeza que deseja parar de seguir @usuario10?
+      </AlertDialogGreen>
     </LinearGradientMoots>
   )
 }
