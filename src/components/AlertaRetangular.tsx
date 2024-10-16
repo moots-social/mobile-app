@@ -6,7 +6,7 @@ const fecharIcon = require('../assets/FecharIcon.png')
 
 export default function AlertaRetangular({children}: any){
     return(
-        <FullRounded bg="$white" minH={65} w={380} p={20} pr={15}  flexDirection="row" justifyContent="space-between">
+        <FullRounded bg="$white" minH={65} w="95%" p={20} pr={15}  flexDirection="row" justifyContent="space-between">
             <TextoNegrito >
                 {children}
             </TextoNegrito>
