@@ -8,6 +8,7 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
 import Antdesign from "react-native-vector-icons/AntDesign";
 import { Select } from '@gluestack-ui/themed';
+import { usuarioApi } from "../../api/apis";
 
 const imagemPerfil = require("../../assets/UsuarioIcon.png");
 const imagemCurso = require("../../assets/vectorizedDesenvolvimento.png")
@@ -67,14 +68,11 @@ const secoes = [
   }
 ]
 
-<<<<<<< HEAD
 export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
-=======
-export default function Info({navigation}){
-    const [numSecao, setNumSecao] = useState(0);
->>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
+    const [create, setCreate] = (useState({nomeCompleto: "", tag: "", fotoPerfil: "", curso: "", sessao}))
+    const [resp, setResp] = useState("");
 
     function avancarSecao() {
       if (numSecao < secoes.length - 1) 
@@ -85,19 +83,28 @@ export default function Info({navigation}){
       if (numSecao > 0) setNumSecao(numSecao - 1);
     }
 
+    const handleSubmit = async () => {
+      try {
+        const res = await usuarioApi.post("/criar", create);
+
+        const dado = await res.data;
+
+        if (dado) {
+          
+        } else {
+
+        }
+      } catch (error) {
+        console.error("Erro no login:", error);
+        setResp("Erro ao realizar login");
+      }
+    }; 
+
     return (
       <Box flex={1}>
         <LinearGradientMoots>
 
           {/* primeiro bloco */}
-<<<<<<< HEAD
-          <Text>
-            {sessao.email}
-            {sessao.senha}
-          </Text>
-
-=======
->>>>>>> 01a894f4e78897c7b58b7b59f3b94e6ebd18fda3
           <Box  h="30%" alignItems="center" mt={5}>
             <TextoNegrito fontSize={32} paddingVertical={5} mt={4}>
               {secoes[numSecao].title}
@@ -109,14 +116,14 @@ export default function Info({navigation}){
           </Box>
 
           <VStack h="70%">
-            {/* segundo bloco */}
 
+          {/* segundo bloco */}
           <Box alignItems="center" h="70%">
             {secoes[numSecao]?.nameTag?.map((obj) => (
               <Box alignItems="center" justifyContent="center" h="100%" w="90%">
-                  <FormControlInput label={obj.label} mb={5}/>
-
-                  <FormControlInput label={obj.labelTwo} mb={3}/>
+                  <FormControlInput label={obj.label} mb={5} onChange = {(text) => setCreate({...create, nomeCompleto: text})}/>
+  
+                  <FormControlInput label={obj.labelTwo} mb={3} onChange = {(text) => setCreate({...create, tag: text})}/>
                   <TextoNegrito fontSize={12}>{obj.describe}</TextoNegrito>
               </Box>
             ))}
@@ -143,7 +150,7 @@ export default function Info({navigation}){
                   <FormControlLabelText color="#7D7D7D" fontFamily="$fontProjectTitle" fontSize={15}>{obj.describe}</FormControlLabelText>
                 </FormControlLabel>
                   <StyledShadowBox w="100%">
-                    <Select>
+                    <Select onValueChange={(value) => setCreate({...create, curso: value})}>
                       <SelectTrigger variant="rounded" size="lg" bg="white">
                         <SelectInput placeholder="Selecione seu curso" />
                         <SelectIcon mr={20}>
@@ -175,7 +182,6 @@ export default function Info({navigation}){
           </Box>
 
           {/* terceiro bloco */}
-
             <Box  h="30%" justifyContent="center">
               <Box w="100%" alignItems="center">
                   {numSecao == 0 || numSecao == 1 ?
