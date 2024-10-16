@@ -5,7 +5,9 @@ import { TextoNegrito, Titulo } from '../../components/Texto'
 import { StatusBar } from 'expo-status-bar'
 
 export default function Pesquisa() {
+
   const isExtended = true
+  
   return (
     <LinearGradientMoots>
       <StatusBar translucent={false} />
