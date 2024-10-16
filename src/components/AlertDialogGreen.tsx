@@ -12,12 +12,17 @@ import {
     Button,
     ButtonText,
   } from '@gluestack-ui/themed';
-import { TextoNegrito, Titulo } from './Texto';
+  import { ReactNode } from 'react';
 
-const fecharIcon = require('../assets/FecharIcon.png')
-
-// todo - propriedades, botões, estrutura
-export default function AlertDialogGreen({titulo, children}){
+  interface IAlertDialogGreenProps{
+      titulo: string,
+      botao1?: string,
+      botao2?: string,
+      children: ReactNode
+  }
+  const fecharIcon = require('../assets/FecharIcon.png')
+  
+  export default function AlertDialogGreen({titulo, botao1='Sim', botao2='Não', children}: IAlertDialogGreenProps){
     return(
         <AlertDialog bg="$white" isOpen={false} >
             <AlertDialogBackdrop />
@@ -34,10 +39,10 @@ export default function AlertDialogGreen({titulo, children}){
                 <AlertDialogFooter>
                     <ButtonGroup>
                         <Button variant="solid" bg="$lightSete">
-                            <ButtonText>Sim</ButtonText>
+                            <ButtonText>{botao1}</ButtonText>
                         </Button>
                         <Button variant="outline" brc="$lightQuatro">
-                            <ButtonText color="$lightQuatro">Não</ButtonText>
+                            <ButtonText color="$lightQuatro">{botao2}</ButtonText>
                         </Button>
                     </ButtonGroup>
                 </AlertDialogFooter>
