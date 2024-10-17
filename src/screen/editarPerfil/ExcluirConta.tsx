@@ -1,4 +1,4 @@
-import { Box } from "@gluestack-ui/themed";
+import { Box, Text } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil.tsx";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import { RoundedBottom } from "../../components/Rounded";
@@ -12,6 +12,9 @@ export default function ExcluirConta(){
                 <Box w="90%" alignItems="center" my={20} >
                     <TextoNegrito textAlign="center">Se você excluir sua conta, seu email ficará livre para a criação de outra conta. Além disso, você perderá suas publicações salvas, informações do perfil e suas conversas.</TextoNegrito>
                     <TextoNegrito mt={35}>Essa ação não pode ser revertida.</TextoNegrito>
+                </Box>
+                <Box justifyContent="flex-end" h="63%" py={35} alignItems="center">
+                    <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Excluir conta</Text>
                 </Box>
             </RoundedBottom>
         </LinearGradientMoots>

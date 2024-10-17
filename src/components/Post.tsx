@@ -3,6 +3,7 @@ import { FullRounded } from "./Rounded";
 import { TextoNegrito } from "./Texto";
 import { BotaoComentar, BotaoCurtir, BotaoDescurtir, BotaoSalvar } from "./BotoesPostComentario";
 import { useNavigation } from "@react-navigation/native";
+import { MenuPost } from "./Menu";
 
 const menuIcon = require('../assets/MenuIcon.png')
 const usuarioIcon = require('../assets/UsuarioIcon.png')
@@ -31,7 +32,7 @@ export default function Post({conteudoUsuario, menu=true, botaoComentario=true, 
                         <TextoNegrito>Usuario</TextoNegrito>
                         <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>usuario1</Text>
                     </Box>
-                    <Text fontFamily="Poppins_500Medium" fontSize={14}>asdsadsa dasdasd  dsad dddd  dd testetestetestetestetestetestetestetestetestetesteteste</Text>
+                    <Text fontFamily="Poppins_500Medium" fontSize={14}>teste</Text>
                     <Box flexDirection="row" display="flex" mt={10}>
                         <Box flexDirection="row" w="95%" gap={10}>
                             <BotaoCurtir size="2xs"/>
@@ -41,9 +42,7 @@ export default function Post({conteudoUsuario, menu=true, botaoComentario=true, 
                         <BotaoComentar justifyContent="flex-end" size="2xs" />
                     </Box>
                 </Box>
-                    <Image source={menuIcon} size="2xs"/>
-                <Box >
-                </Box>
+                <MenuPost  />
             </Box>
         </FullRounded>
     )

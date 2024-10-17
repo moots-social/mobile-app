@@ -25,9 +25,9 @@ export default function RedefinirSenha(){
                 <Box w="100%" my={20} >
                     <InputPerfil type='password' titulo='Repita a nova senha' w="90%"/>
                 </Box>
-                {/* <Box justifyContent="flex-end" h="50%" py={35} alignItems="center">
+                <Box justifyContent="flex-end" h="50%" py={35} alignItems="center">
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$lightSete">Salvar alterações</Text>
-                </Box> */}
+                </Box>
             </RoundedBottom>
         </LinearGradientMoots>
     )
