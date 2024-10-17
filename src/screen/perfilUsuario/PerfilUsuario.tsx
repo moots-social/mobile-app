@@ -1,10 +1,11 @@
 import { Box, Image, Text, ScrollView} from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import { Titulo } from '../../components/Texto'
-import { BotaoConfigurar, BotaoListaSeguidores, BotaoSeguir } from '../../components/BotoesPerfil'
+import { BotaoConfigurar, BotaoCurso, BotaoListaSeguidores, BotaoSeguir } from '../../components/BotoesPerfil'
 import { StatusBar } from 'expo-status-bar'
 
-const MenuIcon = require('../../assets/MenuIcon.png')
+
+const menuIcon = require('../../assets/MenuIcon.png')
 const covertest = require('../../assets/covertest.png')
 
 export default function PerfilUsuario() {
@@ -18,9 +19,9 @@ export default function PerfilUsuario() {
             <Text fontFamily='Poppins_500Medium' fontSize={18} color='#B6B3B3' textAlign='center'>@usuario</Text>
             <Text fontFamily='Poppins_500Medium' fontSize={18} color='#737373' textAlign='center'>Seja bem vindo ao meu perfil!</Text>
           </Box>
-        <Box flexDirection='row' justifyContent="space-between" alignSelf="center" w={180} my={10}>
+        <Box flexDirection='row' alignItems="center" justifyContent="space-between" alignSelf="center" w={180} my={10}>
           <BotaoConfigurar rounded={20} w={35} imgW={15} imgH={15}/>
-          <Image source={''} w={35} h={35} brw={1} brc="$black"/>
+          <BotaoCurso />
           <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12}/> 
         </Box>
         <Box alignItems="center">
