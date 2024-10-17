@@ -8,12 +8,21 @@ import { MenuPost } from "./Menu";
 const menuIcon = require('../assets/MenuIcon.png')
 const usuarioIcon = require('../assets/UsuarioIcon.png')
 
-export default function Post(){
+//como esse componente vai ser renderizado antes e depois de ser clicado,
+//passamos várias propriedades que verificarão onde o componente está sendo renderizado
+interface IPostProps{
+    conteudoUsuario: any,
+    menu?: boolean,
+    botaoComentario?: boolean,
+    expandivel?: boolean,
+}
+
+export default function Post({conteudoUsuario, menu=true, botaoComentario=true, expandivel=true}:IPostProps){
     const navigation = useNavigation()
 
     return(
         <FullRounded bg="$white" w="90%" py={20} px={10} >
-            <Box flexDirection="row" w="100%" brw={1}>
+            <Box flexDirection="row" w="100%">
                 <Box>
                     <Image source={usuarioIcon} w={40} h={40}/>
                 </Box>
@@ -27,10 +36,10 @@ export default function Post(){
                     <Box flexDirection="row" display="flex" mt={10}>
                         <Box flexDirection="row" w="95%" gap={10}>
                             <BotaoCurtir size="2xs"/>
-                            <BotaoDescurtir  size="2xs"/>
-                            <BotaoSalvar  size="2xs"/>
+                            <BotaoDescurtir size="2xs"/>
+                            <BotaoSalvar size="2xs"/>
                         </Box>
-                        <BotaoComentar justifyContent="flex-end" size="2xs"/>
+                        <BotaoComentar justifyContent="flex-end" size="2xs" />
                     </Box>
                 </Box>
                 <MenuPost  />
