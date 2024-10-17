@@ -30,8 +30,27 @@ export const StyledShadowBox = styled(Box, {
 
 export default function Cadastro({ navigation }) {
   const [sessao, setSessao] = useState({email: "", senha: ""});
-  const [confirmarSenha, setConfirmarSenha] = useState();
+  const [confirmarSenha, setConfirmarSenha] = useState("");
   
+  const handleSubmit = async() => {
+    const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`)
+    const res = await dado.data
+
+    if(await res){
+      if(sessao.email === "" || sessao.senha === "" || confirmarSenha === ""){
+        alert("Por favor preencha todos os campos")
+      } else if (sessao.senha != confirmarSenha){
+        alert("Senha errada. Tente novamente")
+      }  else {
+        navigation.navigate("info", { sessao })
+      }
+
+    } else {
+      alert("Este email já esta em uso")
+    }
+
+  }
+
   return (
     <Box flex={1}>
       <LinearGradientMoots>
@@ -79,6 +98,7 @@ export default function Cadastro({ navigation }) {
                     borderRadius={30}
                     fontFamily="Poppins_500Medium"
                     bg="#FFFFFF"
+                    secureTextEntry={true}
                     onChange = {(text) => setSessao({...sessao, senha: text})}
                   />    
                 </StyledShadowBox>
@@ -94,6 +114,7 @@ export default function Cadastro({ navigation }) {
                   borderRadius={30}
                   fontFamily="Poppins_500Medium"
                   bg="#FFFFFF"
+                  secureTextEntry={true}
                   onChange = {(text) => setConfirmarSenha(text)}
                 />
                 </StyledShadowBox>
@@ -106,7 +127,7 @@ export default function Cadastro({ navigation }) {
             </Box>
 
             <Box alignItems="center" w="100%">
-              <BotaoSecao onPress={() => navigation.navigate("info", { sessao })}>
+              <BotaoSecao onPress={() => handleSubmit()}>
                 Confirmar
               </BotaoSecao>
             </Box>

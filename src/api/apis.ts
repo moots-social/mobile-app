@@ -9,7 +9,7 @@ export const usuarioApi = axios.create({
 })
 
 export const usuarioLogin = axios.create({
-    baseURL: "http://172.16.2.65:8080/login",
+    baseURL: "http://172.16.1.198:8083/login",
     headers: {
         Accept: "application/json" // Corrigido de "aplication/json"
     }
