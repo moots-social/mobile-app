@@ -9,7 +9,7 @@ export function MenuPost(){
     return(
         <Menu trigger={({ ...triggerProps})=>{
             return(
-                <Pressable {...triggerProps} bg="$white">
+                <Pressable {...triggerProps} bg="$white" h={25}>
                     <Image source={menuIcon} size="2xs"/>
                 </Pressable>
             )
