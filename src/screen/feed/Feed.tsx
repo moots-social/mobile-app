@@ -18,6 +18,7 @@ export default function Feed({navigation}) {
       <AlertDialogGreen titulo='Confirmar ação'>
         Tem certeza que deseja parar de seguir @usuario10?
       </AlertDialogGreen>
+      
     </LinearGradientMoots>
   )
 }
