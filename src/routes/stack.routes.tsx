@@ -11,6 +11,7 @@ import RedefinirSenha from "../screen/editarPerfil/RedefinirSenha";
 import ExcluirConta from "../screen/editarPerfil/ExcluirConta";
 import Colecao from "../screen/colecao/Colecao";
 import PostExpandido from "../screen/postExpandido/PostExpandido";
+import Denuncia from "../screen/denuncia/Denuncia";
 
 const { Screen, Navigator } = createStackNavigator();
 export default function Stack() {
@@ -27,6 +28,7 @@ export default function Stack() {
       <Screen name="excluir" component={ExcluirConta} options={{headerShown: false}}/>
       <Screen name="colecao" component={Colecao} options={{headerShown: false}}/>
       <Screen name="expandido" component={PostExpandido} options={{headerShown: false}}/>
+      <Screen name="denuncia" component={Denuncia} options={{headerShown: false}}/>
     </Navigator>
   );
 }

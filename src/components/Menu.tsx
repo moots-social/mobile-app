@@ -1,5 +1,6 @@
 import { Image, Menu, MenuItem, MenuItemLabel, Pressable } from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
+import DenunciaModal from "./DenunciaModal"
 
 const menuIcon = require('../assets/MenuIcon.png')
 
@@ -16,7 +17,7 @@ export function MenuPost(){
             <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={()=>navigation.navigate('perfil')}>
                 <MenuItemLabel>Visitar perfil</MenuItemLabel>
             </MenuItem>
-            <MenuItem key="Pesquisar" textValue="Pesquisar">
+            <MenuItem key="Denunciar" textValue="Denunciar" onPress={()=>navigation.navigate('denuncia')}>
                 <MenuItemLabel>Denunciar publicação</MenuItemLabel>
             </MenuItem>
         </Menu>
