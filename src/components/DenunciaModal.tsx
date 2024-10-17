@@ -2,10 +2,23 @@ import { Box, Divider, Modal, ModalBackdrop, ModalBody, ModalContent, ModalFoote
 import { Titulo } from "./Texto";
 import { MultiLinhaInputPerfil } from "./InputPerfil";
 import BotaoSecao from "./BotaoSecao";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-export default function DenunciaModal(){
+interface IDenunciaModalProps{
+    modalVisivel: boolean
+}
+
+export default function DenunciaModal({modalVisivel}: IDenunciaModalProps){
+    const navigation = useNavigation()
+
+    const [isModalVisivel, setModalVisivel] = useState<boolean>(modalVisivel)
+    const [botaoVisivel, setBotaoVisive] = useState<boolean>(true)
+
+    
+
     return(
-        <Modal isOpen={false}>
+        <Modal isOpen={isModalVisivel} onClose={()=>{setModalVisivel(false); navigation.goBack()}}>
             <ModalBackdrop />
             <ModalContent w="95%" >
                 <ModalHeader flexDirection="column">
@@ -18,7 +31,11 @@ export default function DenunciaModal(){
                         <MultiLinhaInputPerfil titulo='' placeholder='Escreva o motivo da sua denúncia aqui...'/>
                     </ModalBody>
                     <ModalFooter>
-                        <BotaoSecao w="100%" h={60}>
+                        {}
+                        <BotaoSecao w="100%" h={60} onPress={()=>{
+                            setIsOpen(false)
+                            navigation.goBack()
+                            }}>
                             Confirmar
                         </BotaoSecao>
                     </ModalFooter>

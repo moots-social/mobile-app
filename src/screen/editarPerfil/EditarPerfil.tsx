@@ -37,9 +37,9 @@ export default function EditarPerfil({fotoPerfil}){
                                 <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                             </Pressable>
                     </Box>
-                    {/* <Pressable alignItems="center">
+                    <Pressable alignItems="center">
                         <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Sair</Text>
-                    </Pressable> */}
+                    </Pressable>
                 </ScrollView>
         </LinearGradientMoots>
     )

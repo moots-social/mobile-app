@@ -3,6 +3,7 @@ import { FullRounded } from "./Rounded";
 import { TextoNegrito } from "./Texto";
 import { BotaoComentar, BotaoCurtir, BotaoDescurtir, BotaoSalvar } from "./BotoesPostComentario";
 import { useNavigation } from "@react-navigation/native";
+import { MenuPost } from "./Menu";
 
 const menuIcon = require('../assets/MenuIcon.png')
 const usuarioIcon = require('../assets/UsuarioIcon.png')
@@ -22,7 +23,7 @@ export default function Post(){
                         <TextoNegrito>Usuario</TextoNegrito>
                         <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>usuario1</Text>
                     </Box>
-                    <Text fontFamily="Poppins_500Medium" fontSize={14}>testedsadlçsdsadsadasddsadsadsadsdadsadsaadçkasjdlsahdkljashbgkdhbsakdiljdasldjhasljdhsaljhdjaskhdjksahdkh</Text>
+                    <Text fontFamily="Poppins_500Medium" fontSize={14}>teste</Text>
                     <Box flexDirection="row" display="flex" mt={10}>
                         <Box flexDirection="row" w="95%" gap={10}>
                             <BotaoCurtir size="2xs"/>
@@ -32,23 +33,7 @@ export default function Post(){
                         <BotaoComentar justifyContent="flex-end" size="2xs"/>
                     </Box>
                 </Box>
-                <Menu placement="bottom" trigger={({ ...triggerProps})=>{
-                        return(
-                            <Pressable {...triggerProps} bg="$white">
-                                <Image source={menuIcon} h={10} w={10}/>
-                            </Pressable>
-                        )
-                    }}>
-                        <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={()=>navigation.navigate('perfil')}>
-                            <MenuItemLabel>Visitar perfil</MenuItemLabel>
-                        </MenuItem>
-                        <MenuItem key="Pesquisar" textValue="Pesquisar">
-                            <MenuItemLabel>Pesquisar</MenuItemLabel>
-                        </MenuItem>
-                        <MenuItem key="Bloquear" textValue="Bloquear">
-                            <MenuItemLabel>Bloquear usuário</MenuItemLabel>
-                        </MenuItem>
-                </Menu>
+                <MenuPost  />
             </Box>
         </FullRounded>
     )
