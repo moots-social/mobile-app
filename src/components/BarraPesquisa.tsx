@@ -34,8 +34,6 @@ export default function BarraPesquisa({extended=true, value=''}){
     const [isExtended, setIsExtended] = useState<boolean>(extended)
     const [valor, setValor] = useState<string>()
 
-    const palavra = useRoute().params
-
     return(
             <BottomRadiusShadowBox>
 
