@@ -47,13 +47,13 @@ export default function BarraPesquisa({extended=true, value=''}){
                     <Box w={!isExtended ? "70%" : "85%"}>
                         <Input variant="rounded" h={35} borderWidth={1} borderColor="$black">
                             <InputSlot>
-                                <InputIcon w="100%" ml={10}><Image source={IconePesquisa} w={15} h={15}/></InputIcon>
+                                <InputIcon w="100%" ml={10} bottom={2}><Image source={IconePesquisa} w={20} h={20}/></InputIcon>
                             </InputSlot>
                             <InputField fontFamily="Poppins_500Medium" placeholder="Pesquise algo..." ml={-10} pt={5}/>
                             <InputSlot>
                                     <Pressable onPress={() => navigation.navigate('pesquisaPalavraChave')}>
-                                        <InputIcon w="100%" mr={5}>
-                                            <Image source={BotaoEnviar} w={15} h={15}/>
+                                        <InputIcon w="100%" mr={5} bottom={2}>
+                                            <Image source={BotaoEnviar} w={20} h={20}/>
                                         </InputIcon>
                                     </Pressable>
                             </InputSlot>

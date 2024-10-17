@@ -1,8 +1,8 @@
 import { Box, Divider, Modal, ModalBackdrop, ModalBody, ModalContent, ModalFooter, ModalHeader, Text } from "@gluestack-ui/themed";
-import { Titulo } from "./Texto";
+import { TextoNegrito, Titulo } from "./Texto";
 import { MultiLinhaInputPerfil } from "./InputPerfil";
 import BotaoSecao from "./BotaoSecao";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 interface IDenunciaModalProps{
@@ -13,12 +13,28 @@ export default function DenunciaModal({modalVisivel}: IDenunciaModalProps){
     const navigation = useNavigation()
 
     const [isModalVisivel, setModalVisivel] = useState<boolean>(modalVisivel)
-    const [botaoVisivel, setBotaoVisive] = useState<boolean>(true)
+    const [botaoVisivel, setBotaoVisivel] = useState<boolean>(false)
+    const [textoBotaoAcao, setTextoBotaoAcao] = useState<string>('Carregando...')
 
-    
+    const handleAbrir = ()=>{
+        setTimeout(()=>{
+            setBotaoVisivel(true)
+        }, 300)
+    }
 
+    const handleFechar = (textoBotao: string)=>{
+        setTextoBotaoAcao(textoBotao)
+        setBotaoVisivel(false)
+        setTimeout(()=>{
+            setModalVisivel(false)
+        }, 300)
+    }
+
+    useEffect(()=>{
+        handleAbrir()
+    }, [])
     return(
-        <Modal isOpen={isModalVisivel} onClose={()=>{setModalVisivel(false); navigation.goBack()}}>
+        <Modal isOpen={isModalVisivel} onClose={()=>{handleFechar('Voltando...'); navigation.goBack()}}>
             <ModalBackdrop />
             <ModalContent w="95%" >
                 <ModalHeader flexDirection="column">
@@ -31,13 +47,13 @@ export default function DenunciaModal({modalVisivel}: IDenunciaModalProps){
                         <MultiLinhaInputPerfil titulo='' placeholder='Escreva o motivo da sua denúncia aqui...'/>
                     </ModalBody>
                     <ModalFooter>
-                        {}
-                        <BotaoSecao w="100%" h={60} onPress={()=>{
-                            setIsOpen(false)
+                        {botaoVisivel ? (<BotaoSecao w="100%" h={60} onPress={()=>{
+                            handleFechar('Confirmando...')
                             navigation.goBack()
                             }}>
                             Confirmar
-                        </BotaoSecao>
+                        </BotaoSecao>): <TextoNegrito color="#468B51">{textoBotaoAcao}</TextoNegrito>}
+                        
                     </ModalFooter>
                 </Box>
             </ModalContent>

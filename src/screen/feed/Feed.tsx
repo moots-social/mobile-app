@@ -13,7 +13,7 @@ export default function Feed({navigation}) {
       <StatusBar translucent={false}/>
       <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
       <Box alignItems="center" mt={35}>
-        <Post />
+        <Post conteudoUsuario=''/>
       </Box>
       <AlertDialogGreen titulo='Confirmar ação'>
         Tem certeza que deseja parar de seguir @usuario10?
