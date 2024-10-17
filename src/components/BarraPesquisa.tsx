@@ -1,10 +1,11 @@
-import { Box, Image, Input, InputField, InputIcon, InputSlot, Pressable, styled } from "@gluestack-ui/themed";
+import { Box, Image, Input, InputField, InputIcon, InputSlot, Pressable, Text, styled } from "@gluestack-ui/themed";
 import FiltrosModal from "./FiltrosModal";
 import { TextoNegrito } from "./Texto";
 import { useState } from "react";
 import { StyledShadowBox } from "../screen/login/Cadastro";
 
 import BotaoVoltar from "./BotaoVoltar";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const BotaoEnviar = require('../assets/EnviarIconRounded.png')
 const IconePesquisa = require('../assets/PesquisaIcon.png')
@@ -28,17 +29,20 @@ const StyledTermoBox = styled(Box, {
     px: 10
 })
 
-export default function BarraPesquisa(){
-    const [isExtended, setIsExtended] = useState(true)
+export default function BarraPesquisa({extended=true, value=''}){
+    const navigation = useNavigation()
+    const [isExtended, setIsExtended] = useState<boolean>(extended)
+    const [valor, setValor] = useState<string>()
+
+    const palavra = useRoute().params
 
     return(
             <BottomRadiusShadowBox>
 
                 <Box  flexDirection="row" justifyContent={!isExtended ? "space-around" : "space-between"} alignItems="center" py={10}>
-
                     {!isExtended && (
                         <Box>
-                            <BotaoVoltar onPress={()=> setIsExtended(true)}/>
+                            <BotaoVoltar onPress={()=>{navigation.navigate('pesquisa'); setIsExtended(true)}}/>
                         </Box>
                     )}
 
@@ -49,9 +53,7 @@ export default function BarraPesquisa(){
                             </InputSlot>
                             <InputField fontFamily="Poppins_500Medium" placeholder="Pesquise algo..." ml={-10} pt={5}/>
                             <InputSlot>
-                                    <Pressable onPress={() =>{
-                                        setIsExtended(false)
-                                        }}>
+                                    <Pressable onPress={() => navigation.navigate('pesquisaPalavraChave')}>
                                         <InputIcon w="100%" mr={5}>
                                             <Image source={BotaoEnviar} w={15} h={15}/>
                                         </InputIcon>

@@ -2,18 +2,13 @@ import { Box, Image, Text, ScrollView} from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import { Titulo } from '../../components/Texto'
 import { BotaoConfigurar, BotaoCurso, BotaoListaSeguidores, BotaoSeguir } from '../../components/BotoesPerfil'
-import { StatusBar } from 'expo-status-bar'
-
-
-const menuIcon = require('../../assets/MenuIcon.png')
-const covertest = require('../../assets/covertest.png')
 
 export default function PerfilUsuario() {
   return (
     <LinearGradientMoots>
       <ScrollView w="100%">
-            <Image source={covertest} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10}/>
-            {/* <Image source={''} w={100} h={100} rounded={60} brw={1} brc="$black" alignSelf="center" top={90}/> */}
+            <Image source={''} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} brw={1} brc='#000'/>
+            {/* <Image source={''} w={100} h={100} rounded={60} brw={1} brc="$black" alignSelf="center" /> */}
           <Box mt={5} alignItems="center" alignSelf="center" >
             <Text fontFamily='Poppins_600SemiBold' fontSize={26} color='$black' textAlign='center'>Usuario</Text>
             <Text fontFamily='Poppins_500Medium' fontSize={18} color='#B6B3B3' textAlign='center'>@usuario</Text>
