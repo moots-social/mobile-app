@@ -29,20 +29,10 @@ const StyledTermoBox = styled(Box, {
     px: 10
 })
 
-export default function BarraPesquisa({extended=true, valorParam=''}){
+export default function BarraPesquisa({extended=true, value=''}){
     const navigation = useNavigation()
     const [isExtended, setIsExtended] = useState<boolean>(extended)
-    const [isInvalid, setIsInvalid] = useState<boolean>(false)
-    const [valor, setValor] = useState<string>('')
-
-    const handlePesquisar = ()=>{
-        if(valor==='' && valorParam===''){
-            setIsInvalid(true)
-            return
-        }
-        setIsInvalid(false)
-        navigation.navigate('pesquisaPalavraChave', {valor: valor})
-    }
+    const [valor, setValor] = useState<string>()
 
     return(
             <BottomRadiusShadowBox>
@@ -55,23 +45,15 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
                     )}
 
                     <Box w={!isExtended ? "70%" : "85%"}>
-                        <Input variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid}>
+                        <Input variant="rounded" h={35} borderWidth={1} borderColor="$black">
                             <InputSlot>
-                                <InputIcon w="100%" ml={10} bottom={2}><Image source={IconePesquisa} w={20} h={20}/></InputIcon>
+                                <InputIcon w="100%" ml={10}><Image source={IconePesquisa} w={15} h={15}/></InputIcon>
                             </InputSlot>
-                            <InputField 
-                                fontFamily="Poppins_500Medium" 
-                                placeholder="Pesquise algo..." 
-                                ml={-10} 
-                                pt={5} 
-                                onChangeText={(novoValor)=>setValor(novoValor)} 
-                                //to-do: arrumar a forma que o valor vai aparecer quando a pesquisa for feita
-                                value={valorParam!='' ? valorParam : valor}
-                            />
+                            <InputField fontFamily="Poppins_500Medium" placeholder="Pesquise algo..." ml={-10} pt={5}/>
                             <InputSlot>
-                                    <Pressable onPress={handlePesquisar}>
-                                        <InputIcon w="100%" mr={5} bottom={2}>
-                                            <Image source={BotaoEnviar} w={20} h={20}/>
+                                    <Pressable onPress={() => navigation.navigate('pesquisaPalavraChave')}>
+                                        <InputIcon w="100%" mr={5}>
+                                            <Image source={BotaoEnviar} w={15} h={15}/>
                                         </InputIcon>
                                     </Pressable>
                             </InputSlot>

@@ -1,7 +1,7 @@
 import { Box, Button, Image, Menu, MenuItem, MenuItemLabel, Pressable, Text } from "@gluestack-ui/themed";
 import { FullRounded } from "./Rounded";
 import { TextoNegrito } from "./Texto";
-import { BotaoComentar, BotaoCurtir, BotaoDescurtir, BotaoSalvar } from "./BotoesPostComentario";
+import { BotaoComentar, BotaoCurtirPost, BotaoDescurtirPost, BotaoSalvar } from "./BotoesPostComentario";
 import { useNavigation } from "@react-navigation/native";
 import { MenuPost } from "./Menu";
 
@@ -36,8 +36,8 @@ export default function Post({conteudoUsuario, menu=true, botaoComentario=true, 
                         <Text fontFamily="Poppins_500Medium" fontSize={14}>teste</Text>
                         <Box flexDirection="row" display="flex" mt={10}>
                             <Box flexDirection="row" w="95%" gap={10}>
-                                <BotaoCurtir size="2xs"/>
-                                <BotaoDescurtir size="2xs"/>
+                                <BotaoCurtirPost size="2xs"/>
+                                <BotaoDescurtirPost size="2xs"/>
                                 <BotaoSalvar size="2xs"/>
                             </Box>
                             <BotaoComentar justifyContent="flex-end" size="2xs" />

@@ -10,8 +10,8 @@ export default function NovoPost(){
     return(
             <LinearGradientMoots>
                 <CabecalhoPerfil titulo="Nova publicação" zIndex={1}/>
-                <RoundedBottom zIndex={0} minHeight={500} bg="$white" bottom={5} display="flex">
-                    <Box p={20}>
+                <RoundedBottom zIndex={0} minHeight={500} bg="$white" bottom={5}>
+                    <Box p={20} display="flex" justifyContent="space-between" minHeight={500}>
                         <Box display="flex">
                             <Box flexDirection="row" alignItems="center">
                                 <Image source={usuarioIcon} w={40} h={40}/>
@@ -23,7 +23,7 @@ export default function NovoPost(){
                         </Box>
                         <Box>
                             <Box>
-
+                                <Text>oi</Text>
                             </Box>
                         </Box>
                     </Box>

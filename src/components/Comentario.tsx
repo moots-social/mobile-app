@@ -1,6 +1,6 @@
 import { Box, Image, Text } from "@gluestack-ui/themed";
 import { TextoNegrito } from "./Texto";
-import { BotaoCurtir, BotaoDescurtir } from "./BotoesPostComentario";
+import { BotaoCurtirComentario, BotaoDescurtirComentario } from "./BotoesPostComentario";
 
 const usuarioIcon = require('../assets/UsuarioIcon.png')
 
@@ -20,8 +20,8 @@ export default function Comentario({fotoPerfil, tag, conteudo, ...rest}: IComent
                 <Text fontFamily="Poppins_600SemiBold" fontSize={12}>{conteudo}</Text>
             </Box>
             <Box flexDirection="row" justifyContent="flex-end" bottom={5}>
-                <BotaoCurtir w={14} h={14} mr={5}/>
-                <BotaoDescurtir w={14} h={14} />
+                <BotaoCurtirComentario imgW={14} imgH={14} mr={5}/>
+                <BotaoDescurtirComentario imgW={14} imgH={14} />
             </Box>
         </Box>
     )
