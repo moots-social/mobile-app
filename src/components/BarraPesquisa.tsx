@@ -65,6 +65,7 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
                                 ml={-10} 
                                 pt={5} 
                                 onChangeText={(novoValor)=>setValor(novoValor)} 
+                                //to-do: arrumar a forma que o valor vai aparecer quando a pesquisa for feita
                                 value={valorParam!='' ? valorParam : valor}
                             />
                             <InputSlot>
