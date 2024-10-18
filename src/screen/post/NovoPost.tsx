@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@gluestack-ui/themed";
+import { Box, Image, Text, Textarea, TextareaInput } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { RoundedBottom } from "../../components/Rounded";
@@ -18,8 +18,11 @@ export default function NovoPost(){
                                 <Image source={usuarioIcon} w={40} h={40}/>
                                 <TextoNegrito ml={2}>Usuário</TextoNegrito>
                             </Box>
-                            <Box justifyContent="center">
-                                <Text fontSize={16} fontFamily="Poppins_500Medium" color="#7D7D7D" ml={48}>No que você está pensando?</Text>
+                            <Box justifyContent="center" >
+                                <Textarea ml={38} brw={0} w="85%" h={200} bottom={10}>
+                                    <TextareaInput fontFamily="Poppins_500Medium" placeholder="No que você está pensando?"/>
+                                </Textarea>
+                                {/* <Text fontSize={16} fontFamily="Poppins_500Medium" color="#7D7D7D" ml={48}>No que você está pensando?</Text> */}
                             </Box>
                         </Box>
                         <Box flexDirection="row" justifyContent="space-between">
