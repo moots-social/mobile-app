@@ -3,6 +3,7 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { RoundedBottom } from "../../components/Rounded";
 import { TextoNegrito } from "../../components/Texto";
+import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria } from "../../components/BotoesPostComentario";
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
@@ -21,10 +22,12 @@ export default function NovoPost(){
                                 <Text fontSize={16} fontFamily="Poppins_500Medium" color="#7D7D7D" ml={48}>No que você está pensando?</Text>
                             </Box>
                         </Box>
-                        <Box>
-                            <Box>
-                                <Text>oi</Text>
+                        <Box flexDirection="row" justifyContent="space-between">
+                            <Box flexDirection="row">
+                                <BotaoGaleria/>
+                                <BotaoCamera />
                             </Box>
+                            <BotaoEnviarNovoPost />
                         </Box>
                     </Box>
                 </RoundedBottom>
