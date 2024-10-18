@@ -22,7 +22,6 @@ export default function NovoPost(){
                                 <Textarea ml={38} brw={0} w="85%" h={200} bottom={10}>
                                     <TextareaInput fontFamily="Poppins_500Medium" placeholder="No que você está pensando?"/>
                                 </Textarea>
-                                {/* <Text fontSize={16} fontFamily="Poppins_500Medium" color="#7D7D7D" ml={48}>No que você está pensando?</Text> */}
                             </Box>
                         </Box>
                         <Box flexDirection="row" justifyContent="space-between">
