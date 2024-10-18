@@ -7,11 +7,11 @@ import { StyledShadowBox } from "../screen/login/Cadastro";
 import BotaoVoltar from "./BotaoVoltar";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-const BotaoEnviar = require('../assets/EnviarIconRounded.png')
-const IconePesquisa = require('../assets/PesquisaIcon.png')
+const botaoEnviar = require('../assets/EnviarIconRounded.png')
+const pesquisaIcon = require('../assets/PesquisaIcon.png')
 
 interface ITermoProps{
-    termo:string,
+    termo: string,
 }
 
 export const BottomRadiusShadowBox = styled(StyledShadowBox, {
@@ -53,7 +53,7 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
                     <Box w={!isExtended ? "70%" : "85%"}>
                         <Input variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid}>
                             <InputSlot>
-                                <InputIcon w="100%" ml={10} bottom={2}><Image source={IconePesquisa} w={20} h={20}/></InputIcon>
+                                <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20}/></InputIcon>
                             </InputSlot>
                             <InputField 
                                 fontFamily="Poppins_500Medium" 
@@ -65,7 +65,7 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
                             <InputSlot>
                                     <Pressable onPress={handlePesquisar}>
                                         <InputIcon w="100%" mr={5} bottom={2}>
-                                            <Image source={BotaoEnviar} w={20} h={20}/>
+                                            <Image source={botaoEnviar} w={20} h={20}/>
                                         </InputIcon>
                                     </Pressable>
                             </InputSlot>
@@ -85,6 +85,33 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
                 </Box>}
                 
             </BottomRadiusShadowBox>
+    )
+}
+
+export function BarraPesquisaChat(){
+    return(
+        <BottomRadiusShadowBox justifyContent="center">
+            <Box flexDirection="row" justifyContent="space-between" >
+                <Input variant="rounded" h={35} w="100%" borderWidth={2} borderColor="$black">
+                    <InputSlot>
+                        <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20}/></InputIcon>
+                    </InputSlot>
+                    <InputField 
+                        fontFamily="Poppins_500Medium" 
+                        placeholder="Procure alguém..."
+                        ml={-10} 
+                        pt={5}
+                    />
+                    <InputSlot>
+                        <Pressable>
+                            <InputIcon w="100%" mr={5} bottom={2}>
+                                <Image source={botaoEnviar} w={20} h={20}/>
+                            </InputIcon>
+                        </Pressable>
+                    </InputSlot>
+                </Input>
+            </Box>
+        </BottomRadiusShadowBox>
     )
 }
 

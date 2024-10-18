@@ -17,20 +17,12 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState<string>("");
   const [resp, setResp] = useState<string>("");
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const handleSubmit = () =>{
-    setIsLoading(true)
-    setTimeout(()=>{
-      navigation.navigate('tabs')
-    }, 1000)
-  }
 
   return (
     <LinearGradientMoots display="flex" justifyContent="flex-end" w="100%" h="100%">
       <StatusBar translucent={true}/>
       <Box display="flex" alignItems="center" h="40%" justifyContent="center">
-        <Image source={image} w={200} h={200}/>
+        <Image source={image} alt='logo' w={200} h={200}/>
       </Box>
       <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
         <Titulo mt={5} fontSize={20}> Comece a aproveitar.</Titulo>
@@ -54,9 +46,9 @@ export default function Login({ navigation }) {
         </Box>
 
         <Box alignItems="center" w="80%">
-          {!isLoading ?(<BotaoSecao w="100%" onPress={handleSubmit}>
+          <BotaoSecao w="100%" onPress={()=> navigation.navigate('tabs')}>
               Confirmar
-          </BotaoSecao>) : <ActivityIndicator color="#468B51"/>}
+          </BotaoSecao>
         </Box>
       </Box>
     </LinearGradientMoots >
