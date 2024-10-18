@@ -108,6 +108,7 @@ export default function Info({navigation, route}){
           <Box  h="30%" alignItems="center" mt={5}>
             <TextoNegrito fontSize={32} paddingVertical={5} mt={4}>
               {secoes[numSecao].title}
+              {sessao.email} e {sessao.senha}
             </TextoNegrito>
 
             <TextoNegrito fontSize={20} textAlign="center">

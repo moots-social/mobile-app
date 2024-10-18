@@ -32,24 +32,27 @@ export default function Cadastro({ navigation }) {
   const [sessao, setSessao] = useState({email: "", senha: ""});
   const [confirmarSenha, setConfirmarSenha] = useState("");
   
-  const handleSubmit = async() => {
-    const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`)
-    const res = await dado.data
-
-    if(await res){
-      if(sessao.email === "" || sessao.senha === "" || confirmarSenha === ""){
-        alert("Por favor preencha todos os campos")
-      } else if (sessao.senha != confirmarSenha){
-        alert("Senha errada. Tente novamente")
-      }  else {
-        navigation.navigate("info", { sessao })
-      }
-
+  const handleSubmit = async () => {
+    if (sessao.email === "" || sessao.senha === "" || confirmarSenha === "") {
+      alert("por favor, preencha todos os campos");
+    } else if (sessao.senha !== confirmarSenha) {
+      alert("senha está incorreta");
     } else {
-      alert("Este email já esta em uso")
+      try {
+        const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
+        const res = dado.data;
+  
+        if (res) {
+          alert("este email já está em uso");
+          setSessao({...sessao, email: ""})
+        }
+      } catch (error: any) {
+        alert(error.response.data.error);
+        navigation.navigate("info", { sessao }); // Navega para a tela de info
+      }
     }
-
-  }
+  };
+  
 
   return (
     <Box flex={1}>

@@ -29,7 +29,8 @@ export default function Login({ navigation }) {
         const res = await dado.data;
         
         if(res.token){
-          alert("logado fi")
+          SyncStorage.setItem('token', res.token);
+          navigation.navigate("tabs")
         }
         else{
           alert("deu certo nao boy")
