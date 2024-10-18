@@ -29,10 +29,20 @@ const StyledTermoBox = styled(Box, {
     px: 10
 })
 
-export default function BarraPesquisa({extended=true, value=''}){
+export default function BarraPesquisa({extended=true, valorParam=''}){
     const navigation = useNavigation()
     const [isExtended, setIsExtended] = useState<boolean>(extended)
-    const [valor, setValor] = useState<string>()
+    const [isInvalid, setIsInvalid] = useState<boolean>(false)
+    const [valor, setValor] = useState<string>('')
+
+    const handlePesquisar = ()=>{
+        if(valor==='' && valorParam===''){
+            setIsInvalid(true)
+            return
+        }
+        setIsInvalid(false)
+        navigation.navigate('pesquisaPalavraChave', {valor: valor})
+    }
 
     return(
             <BottomRadiusShadowBox>
@@ -45,13 +55,20 @@ export default function BarraPesquisa({extended=true, value=''}){
                     )}
 
                     <Box w={!isExtended ? "70%" : "85%"}>
-                        <Input variant="rounded" h={35} borderWidth={1} borderColor="$black">
+                        <Input variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid}>
                             <InputSlot>
                                 <InputIcon w="100%" ml={10} bottom={2}><Image source={IconePesquisa} w={20} h={20}/></InputIcon>
                             </InputSlot>
-                            <InputField fontFamily="Poppins_500Medium" placeholder="Pesquise algo..." ml={-10} pt={5}/>
+                            <InputField 
+                                fontFamily="Poppins_500Medium" 
+                                placeholder="Pesquise algo..." 
+                                ml={-10} 
+                                pt={5} 
+                                onChangeText={(novoValor)=>setValor(novoValor)} 
+                                value={valorParam!='' ? valorParam : valor}
+                            />
                             <InputSlot>
-                                    <Pressable onPress={() => navigation.navigate('pesquisaPalavraChave')}>
+                                    <Pressable onPress={handlePesquisar}>
                                         <InputIcon w="100%" mr={5} bottom={2}>
                                             <Image source={BotaoEnviar} w={20} h={20}/>
                                         </InputIcon>
