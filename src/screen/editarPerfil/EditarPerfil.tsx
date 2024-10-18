@@ -39,7 +39,7 @@ export default function EditarPerfil({fotoPerfil}){
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
-                        <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
+                        <Pressable alignItems="center">
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito>
                         </Pressable>
                 </Box>
