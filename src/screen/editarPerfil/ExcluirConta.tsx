@@ -1,7 +1,5 @@
 import { Box, Text } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil.tsx";
-import LinearGradientMoots from "../../components/LinearGradientMoots";
-import { RoundedBottom } from "../../components/Rounded";
 import { TextoNegrito } from "../../components/Texto";
 
 export default function ExcluirConta(){

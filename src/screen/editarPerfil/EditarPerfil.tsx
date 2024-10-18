@@ -1,4 +1,4 @@
-import { Box, Image, Input, InputField, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
+import { Box, Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";

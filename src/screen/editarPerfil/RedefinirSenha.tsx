@@ -7,9 +7,9 @@ import { TextoNegrito } from "../../components/Texto";
 
 export default function RedefinirSenha(){
     return(
-        <LinearGradientMoots>
+        <Box w="100%" bg="$white" h="100%">
             <CabecalhoPerfil titulo='Redefinir senha' />
-            <RoundedBottom w="100%" bg="$white" bottom={5} h={625} >
+            <Box w="100%" bg="$white" bottom={5} h={625} >
                 <Box w="100%" alignItems="center" my={20} >
                     <InputPerfil type='password' titulo='Senha atual' w="90%"/>
                     <Box flexDirection="row" mt={5}>
@@ -28,7 +28,7 @@ export default function RedefinirSenha(){
                 <Box justifyContent="flex-end" h="50%" py={35} alignItems="center">
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$lightSete">Salvar alterações</Text>
                 </Box>
-            </RoundedBottom>
-        </LinearGradientMoots>
+            </Box>
+        </Box>
     )
 }
