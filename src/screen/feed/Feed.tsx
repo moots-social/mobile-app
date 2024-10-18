@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar'
 import Post from '../../components/Post'
 import AlertaRetangular from '../../components/AlertaRetangular'
 import AlertDialogGreen from '../../components/AlertDialogGreen'
+import { BotaoNovoPost } from '../../components/BotaoMais'
 
 export default function Feed({navigation}) {
 
@@ -18,7 +19,7 @@ export default function Feed({navigation}) {
       <AlertDialogGreen titulo='Confirmar ação'>
         Tem certeza que deseja parar de seguir @usuario10?
       </AlertDialogGreen>
-      
+      <BotaoNovoPost position="absolute" top="85%" right="5%" />
     </LinearGradientMoots>
   )
 }

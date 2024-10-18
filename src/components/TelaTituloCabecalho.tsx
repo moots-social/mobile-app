@@ -1,6 +1,6 @@
 import { Box, Text } from "@gluestack-ui/themed"
 import CabecalhoIcone from "./CabecalhoIcone"
-import BotaoNovoChat from "./BotaoNovoChat"
+import BotaoNovoChat from "./BotaoMais"
 
 export default function TelaTituloCabecalho({titulo, temBotaoMais=false}){
     return( <>

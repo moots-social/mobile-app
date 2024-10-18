@@ -4,7 +4,7 @@ import { Titulo } from '../../components/Texto'
 
 import Contato from '../../components/Contato'
 import CabecalhoUsuario from '../../components/CabecalhoUsuario'
-import BotaoNovoChat from '../../components/BotaoNovoChat'
+import {BotaoNovoChat} from '../../components/BotaoMais'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import { RoundedTop } from '../../components/Rounded'
 
@@ -25,9 +25,7 @@ export default function Contatos() {
       <Titulo pb={0} pt={2} my={5}>Seus contatos</Titulo>
       <Contato nome={users.nome} conteudo={users.conteudo} timestamp={users.timestamp}/>
     </RoundedTop>
-    <Box position="absolute" top="85%" right="5%">
-      <BotaoNovoChat />
-    </Box>
+    <BotaoNovoChat position="absolute" top="85%" right="5%" />
   </LinearGradientMoots>
   ) 
 }
