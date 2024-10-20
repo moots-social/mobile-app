@@ -30,9 +30,8 @@ export default function Contato({nome, conteudo, timestamp}: propsType) {
             <Box h={100} bg="$lightSeis" justifyContent="center" rounded={20}>
                 <Box flexDirection="row" alignItems="flex-start" w="80%" >
                     <Box px={20}>
-                        <Avatar bgColor="$amber600" size="md" borderRadius="$full">
+                        <Avatar bgColor="$lightSete" size="md" borderRadius="$full">
                             <AvatarImage source={perfilIcon}/>
-                            <AvatarBadge bg="$green" borderColor="$green"/>
                         </Avatar>
                     </Box>
                     <Box justifyContent="space-between" flexDirection="row" width="86%">

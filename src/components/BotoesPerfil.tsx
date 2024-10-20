@@ -5,6 +5,8 @@ import { TextoNegrito, Titulo } from "./Texto"
 import BotaoSecao from "./BotaoSecao"
 import { useEffect, useState } from "react"
 import CartaoUsuario from "./CartaoUsuario"
+import { RoundedBottom } from "./Rounded"
+import { ScrollView } from "react-native-gesture-handler"
 
 const seguirIcon = require('../assets/SeguirIcon.png')
 const listaIcon = require('../assets/ListaIcon.png')
@@ -36,9 +38,36 @@ export function BotaoConfigurar({imgW=10, imgH=10, ...rest}){
     )
 }
 export function BotaoListaSeguidores({imgW=16, imgH=16, ...rest}){
+    const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
+    const[botaoSelecionado, setBotaoSelecionado] = useState<string>('seguindo')
+
+    const handleBotaoSeguindo = ()=>{
+        setBotaoSelecionado('seguindo')
+    }
+
+    const handleBotaoSeguidores = () =>{
+        setBotaoSelecionado('seguidores')
+    }
+
     return(
-        <Pressable bg="$lightDois" borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} {...rest}>
+        <Pressable bg="$lightDois" borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>setModalVisivel(true)} {...rest}>
             <Image source={listaIcon} w={imgW} h={imgH} m={10}/>
+            <Modal isOpen={isModalVisivel} onClose={()=>setModalVisivel(false)}>
+                <ModalBackdrop/>
+                <ModalContent  bg="$white" h="80%" w="90%">
+                    <Box bg="$white" flexDirection="row" py={20}>
+                        <Pressable w="50%" justifyContent="center" alignItems="center" onPress={handleBotaoSeguindo}>
+                            <TextoNegrito textDecorationLine={botaoSelecionado==='seguindo' ? 'underline' : 'none'} color={botaoSelecionado==='seguindo' && '$lightSeis'}>Seguindo</TextoNegrito>
+                        </Pressable>
+                        <Pressable w="50%" justifyContent="center" alignItems="center" onPress={handleBotaoSeguidores}>
+                            <TextoNegrito textDecorationLine={botaoSelecionado==='seguidores' ? 'underline' : 'none'} color={botaoSelecionado==='seguidores' && '$lightSeis'}>Seguidores</TextoNegrito>
+                        </Pressable>
+                    </Box>
+                    <Box>
+
+                    </Box>
+                </ModalContent>
+            </Modal>
         </Pressable>
     )
 }
@@ -68,7 +97,6 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
         }, 300)
     }
 
-
     const handleImagemCor = () =>{
         if(curso==='desenvolvimento') {
             setImagem(desenvolvimentoIcon)
@@ -76,32 +104,24 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
             setCorFundoCartao("$lightSete")
             return
         }
-        //F82C2C
-        //923333
         if(curso==='mecanica') {
             setImagem(mecanicaIcon)
             setCorCartao("#F82C2C")
             setCorFundoCartao("#923333")
             return
         }
-        //78C8E1
-        //174A95
         if(curso==='redes') {
             setImagem(redesIcon)
             setCorCartao("#78C8E1")
             setCorFundoCartao("#174A95")
             return
         }
-        //FFBE3D
-        //BB861C
         if(curso==='qualidade') {
             setImagem(qualidadeIcon)
             setCorCartao("#FFBE3D")
             setCorFundoCartao("#BB861C")
             return
         }
-        //FD9BF9
-        //C50ABD
         if(curso==='fic') {
             setImagem(ficIcon)
             setCorCartao("#FD9BF9")

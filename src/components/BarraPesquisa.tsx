@@ -6,6 +6,7 @@ import { StyledShadowBox } from "../screen/login/Cadastro";
 
 import BotaoVoltar from "./BotaoVoltar";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { RoundedBottomSemSombra } from "./Rounded";
 
 const botaoEnviar = require('../assets/EnviarIconRounded.png')
 const pesquisaIcon = require('../assets/PesquisaIcon.png')
@@ -90,7 +91,7 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
 
 export function BarraPesquisaChat(){
     return(
-        <BottomRadiusShadowBox justifyContent="center">
+        <RoundedBottomSemSombra justifyContent="center" p={10}>
             <Box flexDirection="row" justifyContent="space-between" >
                 <Input variant="rounded" h={35} w="100%" borderWidth={2} borderColor="$black">
                     <InputSlot>
@@ -111,7 +112,7 @@ export function BarraPesquisaChat(){
                     </InputSlot>
                 </Input>
             </Box>
-        </BottomRadiusShadowBox>
+        </RoundedBottomSemSombra>
     )
 }
 
