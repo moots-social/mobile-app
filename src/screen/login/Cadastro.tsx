@@ -43,6 +43,7 @@ export default function Cadastro({ navigation }) {
         const res = dado.data;
   
         if (res) {
+          console.log(res)
           alert("este email já está em uso");
           setSessao({...sessao, email: ""})
         }

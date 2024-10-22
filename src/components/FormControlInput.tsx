@@ -4,11 +4,12 @@ import { ITextareaProps } from "@gluestack-ui/textarea/lib/typescript/types";
 
 interface Props extends ITextareaProps{
     label: string,
+    mbb: number
 }
 
-export default function FormControlInput({label, ...rest} : Props ){
+export default function FormControlInput({label, mbb, ...rest} : Props ){
     return (
-      <FormControl {...rest} w="100%" alignItems="center">
+      <FormControl mb={mbb} w="100%" alignItems="center">
 
         <FormControl.Label>
           <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
@@ -21,6 +22,7 @@ export default function FormControlInput({label, ...rest} : Props ){
             borderRadius={30}
             fontFamily="Poppins_500Medium"
             bg="#FFFFFF"
+            {...rest}
           />
         </StyledShadowBox>
       </FormControl>
