@@ -117,8 +117,9 @@ export function BarraPesquisaChat(){
 }
 
 export function TermoRecente({termo, ...rest}: ITermoProps){
+    const navigation = useNavigation()
     return(
-        <Pressable bg= "$add1" alignItems= "center" rounded= {15} px={10} onLongPress={()=>alert(termo)} {...rest}>
+        <Pressable bg= "$add1" alignItems= "center" rounded= {15} px={10} onPress={()=>navigation.navigate('pesquisaPalavraChave', {valor: termo})} onLongPress={()=>alert(termo)} {...rest}>
             <TextoNegrito color="$lightSeis">{termo}</TextoNegrito>
         </Pressable>
     )
