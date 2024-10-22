@@ -4,13 +4,14 @@ import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import * as ImagePicker from 'expo-image-picker'
 import { RoundedBottom } from "../../components/Rounded";
 import { TextoNegrito } from "../../components/Texto";
-import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria } from "../../components/BotoesPostComentario";
-import { useEffect, useState } from "react";
+import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria, TesteContext } from "../../components/BotoesPostComentario";
+import { useContext, useEffect, useState } from "react";
 import { ImagemContext } from "../../context/PostContext";
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function NovoPost(){
+
     return(
             <LinearGradientMoots>
                 <ScrollView>

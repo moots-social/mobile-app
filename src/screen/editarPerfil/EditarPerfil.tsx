@@ -1,14 +1,44 @@
-import { Box, Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
+import * as ImagePicker from 'expo-image-picker'
+import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Box, Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 const desenvolvimentoIcon = require('../../assets/cursoIcons/DesenvolvimentoIcon.png')
 
-export default function EditarPerfil({fotoPerfil}){
+export default function EditarPerfil(){
     const navigation = useNavigation()
+    const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
+
+    const [fotoPerfil, setFotoPerfil] = useState<ImagePicker.ImagePickerAsset>()
+    const [fotoCapa, setFotoCapa] = useState<ImagePicker.ImagePickerAsset>()
+
+    const handleOpcaoEscolhida = (opcao: string)=>{
+        setOpcoesVisivel(false)
+        setTimeout(async()=>{
+            let resultado = await ImagePicker.launchImageLibraryAsync({
+                allowsMultipleSelection: false,
+                allowsEditing: true,
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                aspect: [4, 3],
+                quality: 1, 
+        
+            })
+
+            if(!resultado.canceled){
+                if(opcao==='fotoPerfil'){
+                    setFotoPerfil(resultado.assets[0])
+                    return
+                }
+                setFotoCapa(resultado.assets[0])
+                return
+            }
+            return
+        }, 300)
+    }
 
     return(
         <ScrollView w="100%" bg="$white" h="100%">
@@ -17,10 +47,23 @@ export default function EditarPerfil({fotoPerfil}){
                 <Box alignItems="center" mt={10}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$black">Perfil</Text>
                     <Box flexDirection="row" justifyContent="space-between" gap={20}>
-                        <Image source={fotoPerfil ? fotoPerfil : UsuarioIcon}/>
+                        <Image source={UsuarioIcon}/>
                         <Image source={desenvolvimentoIcon}/>
                     </Box>
-                    <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Alterar foto de perfil ou capa</TextoNegrito>
+                    <Pressable onPress={()=>setOpcoesVisivel(true)}>
+                        <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Alterar foto de perfil ou capa</TextoNegrito>
+                        <Actionsheet isOpen={isOpcoesVisivel} onClose={()=>setOpcoesVisivel(false)}>
+                            <ActionsheetBackdrop/>
+                            <ActionsheetContent>
+                                <ActionsheetItem onPress={()=>handleOpcaoEscolhida('fotoPerfil')}>
+                                    <ActionsheetItemText>Foto de perfil</ActionsheetItemText>
+                                </ActionsheetItem>
+                                <ActionsheetItem onPress={()=>handleOpcaoEscolhida('capa')}>
+                                    <ActionsheetItemText>Capa</ActionsheetItemText>
+                                </ActionsheetItem>
+                            </ActionsheetContent>
+                        </Actionsheet>
+                    </Pressable>
                 </Box>
                 <Box alignItems="center">
                         <InputPerfil titulo="Nome de exibição" w="90%"/>

@@ -1,8 +1,6 @@
 import { Image, Pressable } from "@gluestack-ui/themed"
-import { useContext, useState } from "react";
+import { createContext, useState } from "react";
 import * as ImagePicker from 'expo-image-picker'
-import {Asset, ImageLibraryOptions, launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import { ImagemContext } from "../context/PostContext";
 
 const coracaoIcon = require('../assets/CoracaoIcon.png')
 const descurtirIcon = require('../assets/DescurtirIcon.png')
@@ -94,9 +92,9 @@ export function BotaoGaleria({...rest}){
         }
     }
     return(
-        <Pressable w={30} h={20} {...rest} onPress={selecionarImagem}>
-            <Image source={galeriaIcon} w={26} h={20}/>
-        </Pressable>
+            <Pressable w={30} h={20} {...rest} onPress={selecionarImagem}>
+                <Image source={galeriaIcon} w={26} h={20}/>
+            </Pressable>
     )
 }
 
@@ -105,9 +103,9 @@ export function BotaoCamera({...rest}){
 
     const tirarFoto= async()=>{
         let resultado = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsMultipleSelection: true,
             selectionLimit: 4,
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             aspect: [4, 3],
             quality: 1, 
     
