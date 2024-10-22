@@ -1,6 +1,5 @@
 import { Box, Text, Image, Menu, Button, MenuItem, MenuItemLabel } from "@gluestack-ui/themed"
 import BotaoVoltar from "./BotaoVoltar"
-import { StyledShadowBox } from "./Contato"
 import { RoundedBottom } from "./Rounded"
 import { useNavigation } from "@react-navigation/native"
 

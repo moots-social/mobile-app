@@ -1,5 +1,3 @@
-
-import { Box, ScrollView} from '@gluestack-ui/themed'
 import { Titulo } from '../../components/Texto'
 
 import Contato from '../../components/Contato'

@@ -6,8 +6,10 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import BotaoSecao from "../../components/BotaoSecao";
+import { useState } from "react";
+import { usuarioApi } from "../../api/apis";
 
-const image = require("../../assets/MootsIcon.png");
+const image = require("../../assets/vectorizedGreenAttempt.png");
 
 export const StyledVStack = styled(VStack, {
   display: "flex",
@@ -27,6 +29,32 @@ export const StyledShadowBox = styled(Box, {
 });
 
 export default function Cadastro({ navigation }) {
+  const [sessao, setSessao] = useState({email: "", senha: ""});
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  
+  const handleSubmit = async () => {
+    if (sessao.email === "" || sessao.senha === "" || confirmarSenha === "") {
+      alert("por favor, preencha todos os campos");
+    } else if (sessao.senha !== confirmarSenha) {
+      alert("senha está incorreta");
+    } else {
+      try {
+        const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
+        const res = dado.data;
+  
+        if (res) {
+          console.log(res)
+          alert("este email já está em uso");
+          setSessao({...sessao, email: ""})
+        }
+      } catch (error: any) {
+        alert(error.response.data.error);
+        navigation.navigate("info", { sessao }); // Navega para a tela de info
+      }
+    }
+  };
+  
+
   return (
     <Box flex={1}>
       <LinearGradientMoots>
@@ -60,10 +88,11 @@ export default function Cadastro({ navigation }) {
                   borderRadius={30}
                   fontFamily="Poppins_500Medium"
                   bg="#FFFFFF"
+                  onChange = {(text) => setSessao({...sessao, email: text})}
                 />
                 </StyledShadowBox>
 
-                <FormControl.Label mt={3}>
+                <FormControl.Label ml={2} mt={3}>
                   <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
                     Senha
                   </Text>
@@ -73,10 +102,12 @@ export default function Cadastro({ navigation }) {
                     borderRadius={30}
                     fontFamily="Poppins_500Medium"
                     bg="#FFFFFF"
+                    secureTextEntry={true}
+                    onChange = {(text) => setSessao({...sessao, senha: text})}
                   />    
                 </StyledShadowBox>
 
-                <FormControl.Label mt={3}>
+                <FormControl.Label ml={2} mt={3}>
                   <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
                     Confirmar a senha
                   </Text>
@@ -87,6 +118,8 @@ export default function Cadastro({ navigation }) {
                   borderRadius={30}
                   fontFamily="Poppins_500Medium"
                   bg="#FFFFFF"
+                  secureTextEntry={true}
+                  onChange = {(text) => setConfirmarSenha(text)}
                 />
                 </StyledShadowBox>
               </FormControl>
@@ -98,7 +131,7 @@ export default function Cadastro({ navigation }) {
             </Box>
 
             <Box alignItems="center" w="100%">
-              <BotaoSecao onPress={() => navigation.navigate("info")}>
+              <BotaoSecao onPress={() => handleSubmit()}>
                 Confirmar
               </BotaoSecao>
             </Box>

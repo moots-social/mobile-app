@@ -22,6 +22,7 @@ export default function FormControlInput({label, loginOuCadastro=false, ...rest}
             borderRadius={30}
             fontFamily="Poppins_500Medium"
             bg="#FFFFFF"
+            {...rest}
           />
         </StyledShadowBox>
       </FormControl>

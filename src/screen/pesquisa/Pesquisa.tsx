@@ -2,7 +2,6 @@ import { Box } from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import BarraPesquisa, { BottomRadiusShadowBox } from '../../components/BarraPesquisa'
 import { TextoNegrito, Titulo } from '../../components/Texto'
-import { StatusBar } from 'expo-status-bar'
 
 export default function Pesquisa() {
 

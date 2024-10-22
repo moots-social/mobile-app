@@ -4,9 +4,13 @@ import CabecalhoPerfil from '../../components/CabecalhoPerfil'
 import { StatusBar } from 'expo-status-bar'
 import Post from '../../components/Post'
 import { BotaoNovoPost } from '../../components/BotaoMais'
+import SyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Feed() {
-
+  const token = SyncStorage.getItem('token')
+  console.log("isso ai" + token)
+  
   return (
     <LinearGradientMoots>
       <StatusBar translucent={false}/>
