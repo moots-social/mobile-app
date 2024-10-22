@@ -3,7 +3,7 @@ import { styled } from "@gluestack-style/react";
 import { LinearGradient } from "expo-linear-gradient";
 import { TextoNegrito, Titulo } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { ButtonText, Button } from "@gluestack-ui/themed";
+import { ButtonText, Button, SliderThumb } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import BotaoSecao from "../../components/BotaoSecao";
 import { useState } from "react";
@@ -41,7 +41,7 @@ export default function Cadastro({ navigation }) {
       try {
         const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
         const res = dado.data;
-  
+        
         if (res) {
           console.log(res)
           alert("este email já está em uso");

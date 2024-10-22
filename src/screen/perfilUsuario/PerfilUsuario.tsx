@@ -20,7 +20,7 @@ export default function PerfilUsuario() {
           </Box>
         <Box flexDirection='row' alignItems="center" justifyContent="space-between" alignSelf="center" w={180} my={10}>
           <BotaoConfigurar w={35} imgW={15} imgH={15}/>
-          <BotaoCurso curso="redes"/>
+          <BotaoCurso curso="desenvolvimento"/>
           <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12}/> 
         </Box>
         <Box alignItems="center">
