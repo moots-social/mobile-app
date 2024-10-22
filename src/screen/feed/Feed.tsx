@@ -1,25 +1,22 @@
-import { Box} from '@gluestack-ui/themed'
+import { Box, ScrollView} from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import CabecalhoPerfil from '../../components/CabecalhoPerfil'
 import { StatusBar } from 'expo-status-bar'
 import Post from '../../components/Post'
-import AlertaRetangular from '../../components/AlertaRetangular'
-import AlertDialogGreen from '../../components/AlertDialogGreen'
 import { BotaoNovoPost } from '../../components/BotaoMais'
 
-export default function Feed({navigation}) {
+export default function Feed() {
 
   return (
     <LinearGradientMoots>
       <StatusBar translucent={false}/>
-      <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
-      <Box alignItems="center" mt={35}>
-        <Post conteudoUsuario=''/>
-      </Box>
-      <AlertDialogGreen titulo='Confirmar ação'>
-        Tem certeza que deseja parar de seguir @usuario10?
-      </AlertDialogGreen>
-      <BotaoNovoPost position="absolute" top="85%" right="5%" />
+      <ScrollView h="100%">
+        <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
+        <Box alignItems="center" mt={35}>
+          <Post conteudoUsuario='' mb={10}/>
+        </Box>
+      </ScrollView>
+        <BotaoNovoPost position="absolute" top="85%" right="5%" />
     </LinearGradientMoots>
   )
 }

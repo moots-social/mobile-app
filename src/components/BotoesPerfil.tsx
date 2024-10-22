@@ -52,7 +52,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, ...rest}){
     return(
         <Pressable bg="$lightDois" borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>setModalVisivel(true)} {...rest}>
             <Image source={listaIcon} w={imgW} h={imgH} m={10}/>
-            <Modal isOpen={isModalVisivel} onClose={()=>setModalVisivel(false)}>
+            <Modal isOpen={isModalVisivel} onClose={()=>{setModalVisivel(false); setBotaoSelecionado('seguindo')}}>
                 <ModalBackdrop/>
                 <ModalContent  bg="$white" h="80%" w="90%">
                     <Box bg="$white" flexDirection="row" py={20}>

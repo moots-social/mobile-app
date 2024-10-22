@@ -11,7 +11,7 @@ export default function EditarPerfil({fotoPerfil}){
     const navigation = useNavigation()
 
     return(
-        <Box w="100%" bg="$white" h="100%">
+        <ScrollView w="100%" bg="$white" h="100%">
             <CabecalhoPerfil titulo="Editar perfil"/>
             <Box gap={20}>
                 <Box alignItems="center" mt={10}>
@@ -47,6 +47,6 @@ export default function EditarPerfil({fotoPerfil}){
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Sair</Text>
                 </Pressable>
             </Box>
-        </Box>
+        </ScrollView>
     )
 }

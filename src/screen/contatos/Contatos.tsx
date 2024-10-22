@@ -1,5 +1,5 @@
 
-import { Box} from '@gluestack-ui/themed'
+import { Box, ScrollView} from '@gluestack-ui/themed'
 import { Titulo } from '../../components/Texto'
 
 import Contato from '../../components/Contato'
@@ -19,13 +19,13 @@ const users =
 
 export default function Contatos() {
   return(
-  <LinearGradientMoots alignItems="center" bg="$white" h="100%">
-    <CabecalhoUsuario />
-    <RoundedTop bg="$white" mt={20} w="100%" h="100%" alignItems="center">
-      <Titulo pb={0} pt={2} my={5}>Seus contatos</Titulo>
-      <Contato nome={users.nome} conteudo={users.conteudo} timestamp={users.timestamp}/>
-    </RoundedTop>
-    <BotaoNovoChat position="absolute" top="85%" right="5%" />
+  <LinearGradientMoots >
+      <CabecalhoUsuario />
+      <RoundedTop bg="$white" mt={20} w="100%" h="100%" alignItems="center">
+          <Titulo my={3}>Seus contatos</Titulo>
+          <Contato nome={users.nome} conteudo={users.conteudo} timestamp={users.timestamp} mb={10}/>
+      </RoundedTop>
+      <BotaoNovoChat position="absolute" top="85%" right="5%" />
   </LinearGradientMoots>
   ) 
 }

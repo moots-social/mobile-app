@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 const perfilIcon = require('../assets/UsuarioIcon.png')
 
 
-type propsType = {
+interface IContatoInterface{
     nome: string,
     conteudo?: string,
     timestamp?: string
@@ -21,12 +21,12 @@ export const StyledShadowBox = styled(Box, {
     overflow: "hidden",
 });
 
-export default function Contato({nome, conteudo, timestamp}: propsType) {
+export default function Contato({nome, conteudo, timestamp, ...rest}: IContatoInterface) {
     const navigation = useNavigation()
     
   return (
-    <Pressable onPress={()=>navigation.navigate('chat', {id: '1_2'})} style={{marginTop: 10}}>
-        <StyledShadowBox>
+    <Pressable onPress={()=>navigation.navigate('chat', {id: '1_2'})}>
+        <StyledShadowBox {...rest}>
             <Box h={100} bg="$lightSeis" justifyContent="center" rounded={20}>
                 <Box flexDirection="row" alignItems="flex-start" w="80%" >
                     <Box px={20}>
