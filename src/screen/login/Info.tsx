@@ -8,6 +8,7 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
 import Antdesign from "react-native-vector-icons/AntDesign";
 import { Select } from '@gluestack-ui/themed';
+import { usuarioApi } from "../../api/apis";
 
 const imagemPerfil = require("../../assets/UsuarioIcon.png");
 const imagemCurso = require("../../assets/vectorizedDesenvolvimento.png")
@@ -67,8 +68,11 @@ const secoes = [
   }
 ]
 
-export default function Info({navigation}){
+export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
+    const { sessao } = route.params;
+    const { email, senha } = sessao
+    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: "", curso: "", roles: ["USER"], email, senha})
 
     function avancarSecao() {
       if (numSecao < secoes.length - 1) 
@@ -79,15 +83,42 @@ export default function Info({navigation}){
       if (numSecao > 0) setNumSecao(numSecao - 1);
     }
 
+    function functionOne(){
+      if(create.tag === "" || create.nomeCompleto === ""){
+        alert("Seu nome e tag são obrigatorios")
+      } else {
+        alert(create.tag + create.nomeCompleto)
+        avancarSecao();
+      }
+    }
+
+    const handleSubmit = async() => {
+      try {
+        if(create.curso === ""){
+          alert("por favor, selecione seu curso")
+        }
+        const res = await usuarioApi.post("/criar", create);
+        const dado = await res.data;
+        console.log(res)
+
+        if (dado) {
+          alert('Usuario ' + dado.nomeCompleto + " criado com sucesso")
+          navigation.navigate("tabs")
+      } 
+      } catch (error: any) {
+        alert(error.response.data.error)
+        console.log(error)
+      }
+    }; 
+
     return (
       <Box flex={1}>
-        
         <LinearGradientMoots>
-
           {/* primeiro bloco */}
-          <Box  h="30%" alignItems="center" mt={7}>
+          <Box h="30%" alignItems="center" mt={5}>
             <TextoNegrito fontSize={32} paddingVertical={5} mt={4}>
               {secoes[numSecao].title}
+              {sessao.email} e {sessao.senha}
             </TextoNegrito>
 
             <TextoNegrito fontSize={20} textAlign="center">
@@ -97,87 +128,150 @@ export default function Info({navigation}){
 
           <VStack h="70%">
             {/* segundo bloco */}
+            <Box alignItems="center" h="70%">
+              {secoes[numSecao]?.nameTag?.map((obj) => (
+                <Box
+                  alignItems="center"
+                  justifyContent="center"
+                  h="100%"
+                  w="90%"
+                >
+                  <FormControlInput
+                    label={obj.label}
+                    mbb={5}
+                    onChange={(text) => setCreate({ ...create, nomeCompleto: text })}
+                  />
 
-          <Box alignItems="center" h="70%">
-            {secoes[numSecao]?.nameTag?.map((obj) => (
-              <Box alignItems="center" justifyContent="center" h="100%" w="90%">
-                  <FormControlInput label={obj.label} mb={5}/>
-
-                  <FormControlInput label={obj.labelTwo} mb={3}/>
+                  <FormControlInput
+                    label={obj.labelTwo}
+                    mbb={3}
+                    onChange={(text) => setCreate({ ...create, tag: text })}
+                  />
                   <TextoNegrito fontSize={12}>{obj.describe}</TextoNegrito>
-              </Box>
-            ))}
+                </Box>
+              ))}
 
-            {secoes[numSecao]?.perfil?.map((obj) => (
-              <Box h="70%" alignItems="center" w="90%">
-                  <Image source={obj.imagem} size={180} mb={30}/>
-                  <StyledShadowBox w="90%" borderWidth={3} borderRadius={15} bg="white" flexDirection="row">
-                    <Box borderColor="black" h={10} justifyContent="center" alignItems="center" w="80%" pl={12}>
-                        <TextoNegrito fontSize={20}>{obj.buttonText}</TextoNegrito>
+              {secoes[numSecao]?.perfil?.map((obj) => (
+                <Box h="70%" alignItems="center" w="90%">
+                  <Image source={obj.imagem} size={180} mb={30} />
+                  <StyledShadowBox
+                    w="90%"
+                    borderWidth={3}
+                    borderRadius={15}
+                    bg="white"
+                    flexDirection="row"
+                  >
+                    <Box
+                      borderColor="black"
+                      h={10}
+                      justifyContent="center"
+                      alignItems="center"
+                      w="80%"
+                      pl={12}
+                    >
+                      <TextoNegrito fontSize={20}>
+                        {obj.buttonText}
+                      </TextoNegrito>
                     </Box>
                     <Box w="20%" justifyContent="center" alignItems="center">
-                      <Antdesign name="camerao" size={30}/>
+                      <Antdesign name="camerao" size={30} />
                     </Box>
                   </StyledShadowBox>
-              </Box>
-            ))}
+                </Box>
+              ))}
 
-            {secoes[numSecao]?.curso?.map((obj) => (
-              <Box h="70%" alignItems="center" w="90%">
-                <Image source={obj.image} size={160} mb={10}/>
-                <FormControl w="100%">
-                <FormControlLabel justifyContent="center">
-                  <FormControlLabelText color="#7D7D7D" fontFamily="$fontProjectTitle" fontSize={15}>{obj.describe}</FormControlLabelText>
-                </FormControlLabel>
-                  <StyledShadowBox w="100%">
-                    <Select>
-                      <SelectTrigger variant="rounded" size="lg" bg="white">
-                        <SelectInput placeholder="Selecione seu curso" />
-                        <SelectIcon mr={20}>
-                          <Antdesign name="caretdown"/>
-                        </SelectIcon>
-                      </SelectTrigger>
-                      <SelectPortal>
-                        <SelectBackdrop />
-                        <SelectContent>
-                          <SelectDragIndicatorWrapper>
-                            <SelectDragIndicator />
-                          </SelectDragIndicatorWrapper>
-                          <SelectItem label={obj.picking.dev} value="Desenvolvimento" />
-                          <SelectItem label={obj.picking.mec} value="Mecânica" />
-                          <SelectItem label={obj.picking.rede}  value="Redes"/>
-                          <SelectItem label={obj.picking.fic} value="FIC" />
-                          <SelectItem label={obj.picking.qual} value="Qualidade" />
-                        </SelectContent>
-                      </SelectPortal>
-                    </Select>
-                  </StyledShadowBox>
-                <FormControlError>
-                  <FormControlErrorIcon as={AlertCircleIcon} />
-                  <FormControlErrorText>Campo obrigatório</FormControlErrorText>
-                </FormControlError>
-                </FormControl>
-              </Box>
-            ))}
-          </Box>
+              {secoes[numSecao]?.curso?.map((obj) => (
+                <Box h="70%" alignItems="center" w="90%">
+                  <Image source={obj.image} size={160} mb={10} />
+                  <FormControl w="100%">
+                    <FormControlLabel justifyContent="center">
+                      <FormControlLabelText
+                        color="#7D7D7D"
+                        fontFamily="$fontProjectTitle"
+                        fontSize={15}
+                      >
+                        {obj.describe}
+                      </FormControlLabelText>
+                    </FormControlLabel>
+                    <StyledShadowBox w="100%">
+                      <Select
+                        onValueChange={(value) =>
+                          setCreate({ ...create, curso: value })
+                        }
+                      >
+                        <SelectTrigger variant="rounded" size="lg" bg="white">
+                          <SelectInput placeholder="Selecione seu curso" />
+                          <SelectIcon mr={20}>
+                            <Antdesign name="caretdown" />
+                          </SelectIcon>
+                        </SelectTrigger>
+                        <SelectPortal>
+                          <SelectBackdrop />
+                          <SelectContent>
+                            <SelectDragIndicatorWrapper>
+                              <SelectDragIndicator />
+                            </SelectDragIndicatorWrapper>
+                            <SelectItem
+                              label={obj.picking.dev}
+                              value="Desenvolvimento"
+                            />
+                            <SelectItem
+                              label={obj.picking.mec}
+                              value="Mecânica"
+                            />
+                            <SelectItem
+                              label={obj.picking.rede}
+                              value="Redes"
+                            />
+                            <SelectItem label={obj.picking.fic} value="FIC" />
+                            <SelectItem
+                              label={obj.picking.qual}
+                              value="Qualidade"
+                            />
+                          </SelectContent>
+                        </SelectPortal>
+                      </Select>
+                    </StyledShadowBox>
+                    <FormControlError>
+                      <FormControlErrorIcon as={AlertCircleIcon} />
+                      <FormControlErrorText>
+                        Campo obrigatório
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+                </Box>
+              ))}
+            </Box>
 
-          {/* terceiro bloco */}
-
-            <Box  h="30%" justifyContent="center">
+            {/* terceiro bloco */}
+            <Box h="30%" justifyContent="center">
               <Box w="100%" alignItems="center">
-                  {numSecao == 0 || numSecao == 1 ?
-                    <BotaoSecao onPress={() => avancarSecao()}>
-                      Continuar
-                    </BotaoSecao>
-                  :
-                  <BotaoSecao onPress={() => navigation.navigate("tabs")}>
+                {numSecao === 0 && (
+                  <BotaoSecao onPress={() => functionOne()}>
+                    Continuar
+                  </BotaoSecao>
+                )}
+                {numSecao === 1 && (
+                  <BotaoSecao onPress={() => avancarSecao()}>
+                    Continuar
+                  </BotaoSecao>
+                )}
+                {numSecao === 2 && (
+                  <BotaoSecao onPress={() => handleSubmit()}>
                     Confirmar
                   </BotaoSecao>
-                  }
-
-                {numSecao > 0 && <TextoNegrito color="#468B51" mt={3} onPress={() => voltarSecao()}>Voltar</TextoNegrito>}
+                )}
+                
+                {numSecao > 0 && (
+                  <TextoNegrito
+                    color="#468B51"
+                    mt={3}
+                    onPress={() => voltarSecao()}
+                  >
+                    Voltar
+                  </TextoNegrito>
+                )}
               </Box>
-              
             </Box>
           </VStack>
         </LinearGradientMoots>

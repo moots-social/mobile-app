@@ -1,4 +1,3 @@
-import { styled } from "@gluestack-style/react"
 import { Image, Pressable } from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
 

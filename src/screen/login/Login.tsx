@@ -1,3 +1,5 @@
+import { usuarioLogin } from "../../api/apis";
+import SyncStorage from '@react-native-async-storage/async-storage';
 import { Box,  FormControl,  Image,  Input,  Link,  Text,  VStack} from "@gluestack-ui/themed-native-base";
 import { styled } from "@gluestack-style/react";
 import { ButtonText, Button } from "@gluestack-ui/themed";
@@ -17,10 +19,30 @@ export default function Login({ navigation }) {
   const ref = useRef(null)
 
   const [errorDialog, setErrorDialog] = useState(false)
-  const [nome, setNome] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [resp, setResp] = useState<string>("");
 
+  const [email, setEmail] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
+    
+  const handleSubmit = async () => {
+      try {
+          const dado = await usuarioLogin.post("", {
+              email : email,
+              senha : senha
+          });
+          const res = await dado.data;
+          
+          if(res.token){
+            SyncStorage.setItem('token', res.token);
+            navigation.navigate("tabs")
+          }
+          else{
+            alert("deu certo nao boy")
+          }
+
+      } catch (error: any) {
+        alert(error.response.data.error)
+    }
+  };
 
   return (
     <LinearGradientMoots display="flex" justifyContent="flex-end" w="100%" h="100%">
@@ -29,10 +51,10 @@ export default function Login({ navigation }) {
         <Image source={image} alt='logo' w={200} h={200}/>
       </Box>
       <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="50%" alignItems="center">
-        <Titulo mt={5} fontSize={20}> Comece a aproveitar.</Titulo>
+        <Titulo mt={5} fontSize={20}>Comece a aproveitar.</Titulo>
 
         <Box alignItems="center" w="85%">
-            <FormControlInput label="Email" loginOuCadastro={true}/>
+            <FormControlInput label="Email" loginOuCadastro={true} onChange={(text) => setEmail(text)}/>
             <Box flexDirection="row" justifyContent="center" mt={2.5} mb={2.5}>
               <TextoNegrito>Não tem uma conta? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
@@ -40,7 +62,7 @@ export default function Login({ navigation }) {
               </TouchableOpacity>
             </Box>
 
-            <FormControlInput label="Senha" loginOuCadastro={true}/>
+            <FormControlInput label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)}/>
             <Box flexDirection="row" justifyContent="center" mt={2.5} mb={30}>
               <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
@@ -50,7 +72,7 @@ export default function Login({ navigation }) {
         </Box>
 
         <Box alignItems="center" w="80%">
-          <BotaoSecao w="100%" onPress={()=> navigation.navigate('tabs')}>
+          <BotaoSecao w="100%" onPress={() => handleSubmit()}>
               Confirmar
           </BotaoSecao>
         </Box>
@@ -59,5 +81,4 @@ export default function Login({ navigation }) {
         Seu email ou senha estão incorretos. Tente novamente.
       </ModalConfirmar>
     </LinearGradientMoots >
-  );
-}
+)}
