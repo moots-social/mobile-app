@@ -9,6 +9,8 @@ import FormControlInput from "../../components/FormControlInput";
 import Antdesign from "react-native-vector-icons/AntDesign";
 import { Select } from '@gluestack-ui/themed';
 import { usuarioApi } from "../../api/apis";
+import * as ImagePicker from "expo-image-picker";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const imagemPerfil = require("../../assets/UsuarioIcon.png");
 const imagemCurso = require("../../assets/vectorizedDesenvolvimento.png")
@@ -73,6 +75,21 @@ export default function Info({navigation, route}){
     const { sessao } = route.params;
     const { email, senha } = sessao
     const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: "", curso: "", roles: ["USER"], email, senha})
+    const [Imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
+
+    const selecionarImagem = async() => {
+      let resultado = await ImagePicker.launchImageLibraryAsync({
+        allowsMultipleSelection: false,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 3],
+        quality: 1
+      })
+
+      if(!resultado.canceled){
+        setImagens(resultado.assets)
+        setCreate({...create, fotoPerfil: resultado.assets[0].uri})
+      }
+    }
 
     function avancarSecao() {
       if (numSecao < secoes.length - 1) 
@@ -101,6 +118,7 @@ export default function Info({navigation, route}){
 
 
         if (dado) {
+          console.log(dado)
           alert('Usuario ' + dado.nomeCompleto + " criado com sucesso")
           navigation.navigate("tabs")
       } 
@@ -155,6 +173,7 @@ export default function Info({navigation, route}){
               {secoes[numSecao]?.perfil?.map((obj) => (
                 <Box h="70%" alignItems="center" w="90%">
                   <Image source={obj.imagem} size={180} mb={30} />
+                  <TouchableOpacity onPress={() => selecionarImagem()} activeOpacity={1}>
                   <StyledShadowBox
                     w="90%"
                     borderWidth={3}
@@ -178,6 +197,8 @@ export default function Info({navigation, route}){
                       <Antdesign name="camerao" size={30} />
                     </Box>
                   </StyledShadowBox>
+
+                  </TouchableOpacity>
                 </Box>
               ))}
 
