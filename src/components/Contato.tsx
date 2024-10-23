@@ -1,15 +1,15 @@
 import { Box, Button, Text, Avatar, AvatarFallbackText, AvatarBadge, AvatarImage,  styled } from "@gluestack-ui/themed";
 import { TextoNegrito } from "./Texto";
 import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 const perfilIcon = require('../assets/UsuarioIcon.png')
 
-type propsType = {
+
+interface IContatoInterface{
     nome: string,
-    navigation: any,
     conteudo?: string,
     timestamp?: string
 }
-
 
 export const StyledShadowBox = styled(Box, {
     shadowColor: "#000",
@@ -21,16 +21,17 @@ export const StyledShadowBox = styled(Box, {
     overflow: "hidden",
 });
 
-export default function Contato({nome, navigation, conteudo, timestamp}: propsType) {
+export default function Contato({nome, conteudo, timestamp, ...rest}: IContatoInterface) {
+    const navigation = useNavigation()
+    
   return (
-    <Pressable onPress={()=>navigation.navigate('chat', {id: '1_2'})} style={{marginTop: 10}}>
-        <StyledShadowBox>
+    <Pressable onPress={()=>navigation.navigate('chat', {id: '1_2'})}>
+        <StyledShadowBox {...rest}>
             <Box h={100} bg="$lightSeis" justifyContent="center" rounded={20}>
                 <Box flexDirection="row" alignItems="flex-start" w="80%" >
                     <Box px={20}>
-                        <Avatar bgColor="$amber600" size="md" borderRadius="$full">
+                        <Avatar bgColor="$lightSete" size="md" borderRadius="$full">
                             <AvatarImage source={perfilIcon}/>
-                            <AvatarBadge bg="$green" borderColor="$green"/>
                         </Avatar>
                     </Box>
                     <Box justifyContent="space-between" flexDirection="row" width="86%">

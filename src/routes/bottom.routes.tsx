@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
 import Contatos from "../screen/contatos/Contatos"
-import Notificacao from "../screen/notificacao/Notificacao"
 import Pesquisa from "../screen/pesquisa/Pesquisa"
 import { Image } from "@gluestack-ui/themed"
 import Feed from "../screen/feed/Feed"
 import PerfilUsuario from "../screen/perfilUsuario/PerfilUsuario"
+import Notificacoes from "../screen/notificacoes/Notificacoes"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const contatoIcon = require('../assets/ChatIcon.png')
@@ -35,8 +35,8 @@ const tabs = [
     },
     {
         id: 3,
-        name: 'notificacao',
-        component: Notificacao,
+        name: 'notificacoes',
+        component: Notificacoes,
         icon: notificacaoIcon
     },
     {
@@ -55,7 +55,7 @@ export default function Bottom(){
               <Screen key={tab.id} name={tab.name} component={tab.component} options={{
                 headerShown: false, 
                 tabBarIcon: () => (
-                <Image source={tab.icon} size="2xs"/>
+                <Image source={tab.icon} w={30} h={30}/>
                 ), 
                 tabBarShowLabel: false,
                 }}

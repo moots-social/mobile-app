@@ -3,7 +3,7 @@ import { styled } from "@gluestack-style/react";
 import { LinearGradient } from "expo-linear-gradient";
 import { TextoNegrito, Titulo } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { ButtonText, Button } from "@gluestack-ui/themed";
+import { ButtonText, Button, SliderThumb } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import BotaoSecao from "../../components/BotaoSecao";
 import { useState } from "react";
@@ -41,7 +41,7 @@ export default function Cadastro({ navigation }) {
       try {
         const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
         const res = dado.data;
-  
+        
         if (res) {
           console.log(res)
           alert("este email já está em uso");
@@ -71,13 +71,13 @@ export default function Cadastro({ navigation }) {
             height="60%"
             alignItems="center"
           >
-            <Titulo mt={5} mg={5}>
+            <Titulo mt={5} fontSize={20}>
               Faça parte agora.
             </Titulo>
             
-            <Box alignItems="center" w="80%">
+            <Box alignItems="center" w="85%">
               <FormControl w="100%">
-                <FormControl.Label ml={2} mt={3}>
+                <FormControl.Label>
                   <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
                     Email
                   </Text>
@@ -124,9 +124,9 @@ export default function Cadastro({ navigation }) {
                 </StyledShadowBox>
               </FormControl>
               
-              <Box flexDirection="row" mt="5" mb="5">
-                <TextoNegrito>Já tem uma conta?</TextoNegrito>
-                <TextoNegrito color="#468B51" onPress={()=>navigation.navigate('login')}> Realizar login</TextoNegrito>
+              <Box flexDirection="row" mt={2.5} mb={65}>
+                <TextoNegrito>Já tem uma conta? </TextoNegrito>
+                <TextoNegrito color="#468B51" onPress={()=>navigation.navigate('login')}>Realizar login</TextoNegrito>
               </Box>
             </Box>
 

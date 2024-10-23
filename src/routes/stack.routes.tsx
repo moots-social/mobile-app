@@ -8,6 +8,11 @@ import Bottom from "./bottom.routes";
 import EditarPerfil from "../screen/editarPerfil/EditarPerfil";
 import RedefinirSenha from "../screen/editarPerfil/RedefinirSenha";
 import ExcluirConta from "../screen/editarPerfil/ExcluirConta";
+import Colecao from "../screen/colecao/Colecao";
+import PostExpandido from "../screen/post/PostExpandido";
+import Denuncia from "../screen/denuncia/Denuncia";
+import PesquisaPalavraChave from "../screen/pesquisa/PesquisaPalavraChave";
+import NovoPost from "../screen/post/NovoPost";
 
 const { Screen, Navigator } = createStackNavigator();
 export default function Stack() {
@@ -22,6 +27,11 @@ export default function Stack() {
       <Screen name="editar" component={EditarPerfil} options={{headerShown: false}}/>
       <Screen name="redefinir" component={RedefinirSenha} options={{headerShown: false}}/>
       <Screen name="excluir" component={ExcluirConta} options={{headerShown: false}}/>
+      <Screen name="colecao" component={Colecao} options={{headerShown: false}}/>
+      <Screen name="expandido" component={PostExpandido} options={{headerShown: false}}/>
+      <Screen name="novoPost" component={NovoPost} options={{headerShown: false}}/>
+      <Screen name="denuncia" component={Denuncia} options={{headerShown: false}}/>
+      <Screen name="pesquisaPalavraChave" component={PesquisaPalavraChave} options={{headerShown: false}}/>
     </Navigator>
   );
 }

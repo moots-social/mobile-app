@@ -52,7 +52,7 @@ export default function Routes() {
   if (!fontsLoaded) {
     return (
       <Box>
-        <StatusBar />
+        <StatusBar translucent={true}/>
         <Image source={splashScreen} w="100%" h="100%"/>
         <Spinner color="$lightSete" size="large"/>
       </Box>
@@ -61,7 +61,7 @@ export default function Routes() {
 
   return (
     <NavigationContainer>
-      <Stack />
+        <Stack />
     </NavigationContainer>
   );
 }

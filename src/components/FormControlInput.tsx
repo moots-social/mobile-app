@@ -4,12 +4,13 @@ import { ITextareaProps } from "@gluestack-ui/textarea/lib/typescript/types";
 
 interface Props extends ITextareaProps{
     label: string,
-    mbb: number
+    loginOuCadastro?: boolean,
+    onChange?: any
 }
 
-export default function FormControlInput({label, mbb, ...rest} : Props ){
+export default function FormControlInput({label, loginOuCadastro=false, onChange, ...rest} : Props ){
     return (
-      <FormControl mb={mbb} w="100%" alignItems="center">
+      <FormControl {...rest} w="100%" alignItems={!loginOuCadastro ? "center" : "flex-start"}>
 
         <FormControl.Label>
           <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
@@ -22,9 +23,11 @@ export default function FormControlInput({label, mbb, ...rest} : Props ){
             borderRadius={30}
             fontFamily="Poppins_500Medium"
             bg="#FFFFFF"
+            onChange={onChange ? onChange : ''}
             {...rest}
           />
         </StyledShadowBox>
       </FormControl>
     );
 }
+
