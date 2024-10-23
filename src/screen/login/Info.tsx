@@ -79,15 +79,14 @@ export default function Info({navigation, route}){
         setNumSecao(numSecao + 1);
     }
 
-    function voltarSecao() {
-      if (numSecao > 0) setNumSecao(numSecao - 1);
+    function voltarSecao(n: number) {
+      if (numSecao > 0) setNumSecao(numSecao - n);
     }
 
     function functionOne(){
       if(create.tag === "" || create.nomeCompleto === ""){
         alert("Seu nome e tag são obrigatorios")
       } else {
-        alert(create.tag + create.nomeCompleto)
         avancarSecao();
       }
     }
@@ -99,14 +98,17 @@ export default function Info({navigation, route}){
         }
         const res = await usuarioApi.post("/criar", create);
         const dado = await res.data;
-        console.log(res)
+
 
         if (dado) {
           alert('Usuario ' + dado.nomeCompleto + " criado com sucesso")
           navigation.navigate("tabs")
       } 
       } catch (error: any) {
-        alert(error.response.data.error)
+        if(error.response.data.error === "Tag já está em uso."){
+          alert(error.response.data.error)
+          voltarSecao(2)
+        }
         console.log(error)
       }
     }; 
@@ -118,7 +120,6 @@ export default function Info({navigation, route}){
           <Box h="30%" alignItems="center" mt={5}>
             <TextoNegrito fontSize={32} paddingVertical={5} mt={4}>
               {secoes[numSecao].title}
-              {sessao.email} e {sessao.senha}
             </TextoNegrito>
 
             <TextoNegrito fontSize={20} textAlign="center">
@@ -213,20 +214,20 @@ export default function Info({navigation, route}){
                             </SelectDragIndicatorWrapper>
                             <SelectItem
                               label={obj.picking.dev}
-                              value="Desenvolvimento"
+                              value="DESENVOLVIMENTO"
                             />
                             <SelectItem
                               label={obj.picking.mec}
-                              value="Mecânica"
+                              value="MECANICA"
                             />
                             <SelectItem
                               label={obj.picking.rede}
-                              value="Redes"
+                              value="REDES"
                             />
                             <SelectItem label={obj.picking.fic} value="FIC" />
                             <SelectItem
                               label={obj.picking.qual}
-                              value="Qualidade"
+                              value="QUALIDADE"
                             />
                           </SelectContent>
                         </SelectPortal>
@@ -266,7 +267,7 @@ export default function Info({navigation, route}){
                   <TextoNegrito
                     color="#468B51"
                     mt={3}
-                    onPress={() => voltarSecao()}
+                    onPress={() => voltarSecao(1)}
                   >
                     Voltar
                   </TextoNegrito>
