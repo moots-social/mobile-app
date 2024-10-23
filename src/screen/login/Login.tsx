@@ -1,14 +1,11 @@
-import { Box,  FormControl,  Image,  Input,  Link,  Text,  VStack} from "@gluestack-ui/themed-native-base";
-import { styled } from "@gluestack-style/react";
-import { ButtonText, Button } from "@gluestack-ui/themed";
+import { Box,  Image} from "@gluestack-ui/themed-native-base";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
-import { ActivityIndicator } from 'react-native'
 
 const image = require("../../assets/MootsIcon.png")
 
