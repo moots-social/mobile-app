@@ -29,7 +29,14 @@ export function BotaoSeguir({imgW=20, imgH=16, ...rest}){
         </Pressable>
     )
 }
-export function BotaoConfigurar({imgW=10, imgH=10, ...rest}){
+
+interface IBotaoConfigurar{
+    imgW?: number,
+    imgH?: number,
+    curso?: string
+}
+
+export function BotaoConfigurar({imgW=10, imgH=10, curso, ...rest}){
     const navigation = useNavigation()
     return(
         <Pressable bg="$lightTres" borderWidth={1} borderColor="$black" rounded={20} justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>navigation.navigate('editar')} {...rest}>

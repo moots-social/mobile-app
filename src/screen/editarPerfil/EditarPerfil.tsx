@@ -7,7 +7,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
+
 const desenvolvimentoIcon = require('../../assets/cursoIcons/DesenvolvimentoIcon.png')
+const mecanicaIcon = require('../../assets/cursoIcons/MecanicaIcon.png')
+const redesIcon = require('../../assets/cursoIcons/RedesIcon.png')
+const qualidadeIcon = require('../../assets/cursoIcons/QualidadeIcon.png')
+const ficIcon = require('../../assets/cursoIcons/FicIcon.png')
 
 export default function EditarPerfil(){
     const navigation = useNavigation()
