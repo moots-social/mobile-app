@@ -19,7 +19,7 @@ export default function Login({ navigation }) {
   const ref = useRef(null)
 
   const [errorDialog, setErrorDialog] = useState(false)
-
+  const [textoDialog, setTextoDialog] = useState('')
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
     
@@ -36,11 +36,13 @@ export default function Login({ navigation }) {
             navigation.navigate("tabs")
           }
           else{
-            alert("deu certo nao boy")
+            setTextoDialog("Não foi possível realizar a autenticação. Tente novamente.")
+            setErrorDialog(true)
           }
 
       } catch (error: any) {
-        alert(error.response.data.error)
+        setTextoDialog(error.response.data.error)
+        setErrorDialog(true)
     }
   };
 
@@ -78,7 +80,7 @@ export default function Login({ navigation }) {
         </Box>
       </Box>
       <ModalConfirmar titulo="Autenticação inválida" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
-        Seu email ou senha estão incorretos. Tente novamente.
+        {textoDialog}
       </ModalConfirmar>
     </LinearGradientMoots >
 )}

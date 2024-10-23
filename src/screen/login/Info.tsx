@@ -106,7 +106,6 @@ export default function Info({navigation, route}){
           navigation.navigate("tabs")
       } 
       } catch (error: any) {
-        alert(error.response.data.error)
         console.log(error)
       }
     }; 
