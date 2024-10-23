@@ -1,7 +1,6 @@
 import { Box, Image, ScrollView, Text, Textarea, TextareaInput } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
-import * as ImagePicker from 'expo-image-picker'
 import { RoundedBottom } from "../../components/Rounded";
 import { TextoNegrito } from "../../components/Texto";
 import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria, TesteContext } from "../../components/BotoesPostComentario";

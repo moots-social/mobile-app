@@ -77,14 +77,14 @@ export function BotaoGaleria({...rest}){
             selectionLimit: 4,
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             aspect: [4, 3],
-            quality: 1, 
-    
+            quality: 1,
         })
-    
+
         if (!resultado.canceled) {
             setImagens(resultado.assets)
         }
     }
+
     return(
         <Pressable w={30} h={20} {...rest} onPress={selecionarImagem}>
             <Image source={galeriaIcon} w={26} h={20}/>

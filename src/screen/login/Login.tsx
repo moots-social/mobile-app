@@ -3,16 +3,20 @@ import { styled } from "@gluestack-style/react";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
 import { ActivityIndicator } from 'react-native'
+import { ModalConfirmar } from "../../components/AlertDialogMoots";
 
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
+  const ref = useRef(null)
+
+  const [errorDialog, setErrorDialog] = useState(false)
   const [nome, setNome] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [resp, setResp] = useState<string>("");
@@ -48,6 +52,9 @@ export default function Login({ navigation }) {
         <Box alignItems="center" w="80%">
           <BotaoSecao w="100%" onPress={()=> navigation.navigate('tabs')}>
               Confirmar
+              <ModalConfirmar titulo="Autenticação inválida" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
+                Seu email ou senha estão incorretos. Tente novamente.
+              </ModalConfirmar>
           </BotaoSecao>
         </Box>
       </Box>
