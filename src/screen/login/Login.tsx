@@ -5,21 +5,25 @@ import { styled } from "@gluestack-style/react";
 import { ButtonText, Button } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
 import { ActivityIndicator } from 'react-native'
+import { ModalConfirmar } from "../../components/AlertDialogMoots";
 
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
+  const ref = useRef(null)
 
-    const [email, setEmail] = useState<string>("");
-    const [senha, setSenha] = useState<string>("");
+  const [errorDialog, setErrorDialog] = useState(false)
+  const [textoDialog, setTextoDialog] = useState('')
+  const [email, setEmail] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
     
-    const handleSubmit = async () => {
+  const handleSubmit = async () => {
       try {
           const dado = await usuarioLogin.post("", {
               email : email,
@@ -32,11 +36,13 @@ export default function Login({ navigation }) {
             navigation.navigate("tabs")
           }
           else{
-            alert("deu certo nao boy")
+            setTextoDialog("Não foi possível realizar a autenticação. Tente novamente.")
+            setErrorDialog(true)
           }
 
       } catch (error: any) {
-        alert(error.response.data.error)
+        setTextoDialog(error.response.data.error)
+        setErrorDialog(true)
     }
   };
 
@@ -73,5 +79,8 @@ export default function Login({ navigation }) {
           </BotaoSecao>
         </Box>
       </Box>
+      <ModalConfirmar titulo="Autenticação inválida" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
+        {textoDialog}
+      </ModalConfirmar>
     </LinearGradientMoots >
 )}

@@ -30,7 +30,6 @@ export default function Stack() {
       <Screen name="colecao" component={Colecao} options={{headerShown: false}}/>
       <Screen name="expandido" component={PostExpandido} options={{headerShown: false}}/>
       <Screen name="novoPost" component={NovoPost} options={{headerShown: false}}/>
-      <Screen name="denuncia" component={Denuncia} options={{headerShown: false}}/>
       <Screen name="pesquisaPalavraChave" component={PesquisaPalavraChave} options={{headerShown: false}}/>
     </Navigator>
   );
