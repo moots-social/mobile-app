@@ -52,12 +52,12 @@ export default function Login({ navigation }) {
         <Box alignItems="center" w="80%">
           <BotaoSecao w="100%" onPress={()=> navigation.navigate('tabs')}>
               Confirmar
-              <ModalConfirmar titulo="Autenticação inválida" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
-                Seu email ou senha estão incorretos. Tente novamente.
-              </ModalConfirmar>
           </BotaoSecao>
         </Box>
       </Box>
+      <ModalConfirmar titulo="Autenticação inválida" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
+        Seu email ou senha estão incorretos. Tente novamente.
+      </ModalConfirmar>
     </LinearGradientMoots >
   );
 }
