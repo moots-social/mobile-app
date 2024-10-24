@@ -12,8 +12,13 @@ import { usuarioApi } from "../../api/apis";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const imagemPerfil = require("../../assets/UsuarioIcon.png");
-const imagemCurso = require("../../assets/vectorizedDesenvolvimento.png")
+const imagemPerfil = "https://storageimagesmoots.blob.core.windows.net/artifact-image-container/68a77764-1c2e-4bc4-8d6b-c280ac593970.png";
+
+const imagemCursoDesenvolvimento = require("../../assets/cursoIcons/DesenvolvimentoIcon.png")
+const imagemCursoFic = require("../../assets/cursoIcons/FicIcon.png")
+const imagemCursoMecanica = require("../../assets/cursoIcons/MecanicaIcon.png")
+const imagemCursoQualidade = require("../../assets/cursoIcons/QualidadeIcon.png")
+const imagemCursoRedes = require("../../assets/cursoIcons/RedesIcon.png")
 
 const StyledShadowBox = styled(Box, {
   shadowColor: "#000",
@@ -44,7 +49,6 @@ const secoes = [
     subTitle: "Você pode pular essa parte se desejar.", 
     perfil: [
       {
-        imagem: imagemPerfil,
         buttonText: "Adicionar foto"
       }
     ]
@@ -55,7 +59,6 @@ const secoes = [
     subTitle: "Só mais um pouquinho.", 
     curso:[
       {
-        image: imagemCurso,
         describe: "Seu curso",
         picking: {
           dev: "Desenvolvimento",
@@ -74,8 +77,9 @@ export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
     const { email, senha } = sessao
-    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: "", curso: "", roles: ["USER"], email, senha})
-    const [Imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
+    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, curso: "", roles: ["USER"], email, senha})
+    const [imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
+    const [imagemCurso, setImagemCurso] = useState(imagemCursoDesenvolvimento)
 
     const selecionarImagem = async() => {
       let resultado = await ImagePicker.launchImageLibraryAsync({
@@ -88,6 +92,22 @@ export default function Info({navigation, route}){
       if(!resultado.canceled){
         setImagens(resultado.assets)
         setCreate({...create, fotoPerfil: resultado.assets[0].uri})
+      }
+    }
+
+    function handleSelect(value: string) {
+      setCreate({ ...create, curso: value })
+
+      if(value === "DESENVOLVIMENTO"){
+        setImagemCurso(imagemCursoDesenvolvimento)
+      } else if (value === "MECANICA"){
+        setImagemCurso(imagemCursoMecanica)
+      } else if (value === "FIC"){
+        setImagemCurso(imagemCursoFic)
+      } else if (value === "QUALIDADE"){
+        setImagemCurso(imagemCursoQualidade)
+      } else if (value === "REDES") {
+        setImagemCurso(imagemCursoRedes)
       }
     }
 
@@ -136,7 +156,7 @@ export default function Info({navigation, route}){
         <LinearGradientMoots>
           {/* primeiro bloco */}
           <Box h="30%" alignItems="center" mt={5}>
-            <TextoNegrito fontSize={32} paddingVertical={5} mt={4}>
+            <TextoNegrito fontSize={32} paddingVertical={5} mt={20}>
               {secoes[numSecao].title}
             </TextoNegrito>
 
@@ -157,13 +177,15 @@ export default function Info({navigation, route}){
                 >
                   <FormControlInput
                     label={obj.label}
-                    mbb={5}
+                    mbb={8}
+                    value={create.nomeCompleto}
                     onChange={(text) => setCreate({ ...create, nomeCompleto: text })}
                   />
 
                   <FormControlInput
                     label={obj.labelTwo}
                     mbb={3}
+                    value={create.tag}
                     onChange={(text) => setCreate({ ...create, tag: text })}
                   />
                   <TextoNegrito fontSize={12}>{obj.describe}</TextoNegrito>
@@ -172,7 +194,7 @@ export default function Info({navigation, route}){
 
               {secoes[numSecao]?.perfil?.map((obj) => (
                 <Box h="70%" alignItems="center" w="90%">
-                  <Image source={obj.imagem} size={180} mb={30} />
+                  <Image key={create.fotoPerfil} source={create.fotoPerfil} size={180} mb={30} borderRadius={90}/>
                   <TouchableOpacity onPress={() => selecionarImagem()} activeOpacity={1}>
                   <StyledShadowBox
                     w="90%"
@@ -199,12 +221,19 @@ export default function Info({navigation, route}){
                   </StyledShadowBox>
 
                   </TouchableOpacity>
+                  <TextoNegrito
+                    color="#468B51"
+                    mt={3}
+                    onPress={() => setCreate({...create, fotoPerfil: imagemPerfil})}
+                  >
+                   Não usar imagem
+                  </TextoNegrito>
                 </Box>
               ))}
 
               {secoes[numSecao]?.curso?.map((obj) => (
                 <Box h="70%" alignItems="center" w="90%">
-                  <Image source={obj.image} size={160} mb={10} />
+                  <Image key={create.curso} source={imagemCurso} size={160} mb={10} />
                   <FormControl w="100%">
                     <FormControlLabel justifyContent="center">
                       <FormControlLabelText
@@ -216,11 +245,9 @@ export default function Info({navigation, route}){
                       </FormControlLabelText>
                     </FormControlLabel>
                     <StyledShadowBox w="100%">
-                      <Select
-                        onValueChange={(value) =>
-                          setCreate({ ...create, curso: value })
-                        }
-                      >
+                    <Select
+                      onValueChange={(value) => handleSelect(value)}
+                    >
                         <SelectTrigger variant="rounded" size="lg" bg="white">
                           <SelectInput placeholder="Selecione seu curso" />
                           <SelectIcon mr={20}>

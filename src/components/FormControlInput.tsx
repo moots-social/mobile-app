@@ -5,12 +5,13 @@ import { ITextareaProps } from "@gluestack-ui/textarea/lib/typescript/types";
 interface Props extends ITextareaProps{
     label: string,
     loginOuCadastro?: boolean,
-    onChange?: any
+    onChange?: any,
+    mbb: string
 }
 
-export default function FormControlInput({label, loginOuCadastro=false, onChange, ...rest} : Props ){
+export default function FormControlInput({label, loginOuCadastro=false, onChange, mbb, ...rest} : Props ){
     return (
-      <FormControl {...rest} w="100%" alignItems={!loginOuCadastro ? "center" : "flex-start"}>
+      <FormControl mb={mbb} {...rest} w="100%" alignItems={!loginOuCadastro ? "center" : "flex-start"}>
 
         <FormControl.Label>
           <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">
