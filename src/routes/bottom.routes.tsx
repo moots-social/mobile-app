@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import SyncStorage from '@react-native-async-storage/async-storage';
 
 import Contatos from "../screen/contatos/Contatos"
 import Pesquisa from "../screen/pesquisa/Pesquisa"
@@ -6,12 +7,21 @@ import { Image } from "@gluestack-ui/themed"
 import Feed from "../screen/feed/Feed"
 import PerfilUsuario from "../screen/perfilUsuario/PerfilUsuario"
 import Notificacoes from "../screen/notificacoes/Notificacoes"
+import { useEffect } from "react";
 
 const homeIcon = require('../assets/HomeIcon.png')
 const contatoIcon = require('../assets/ChatIcon.png')
 const notificacaoIcon = require('../assets/NotificacaoIcon.png')
 const pesquisaIcon = require('../assets/PesquisaIcon.png')
 const perfilIcon = require('../assets/UsuarioIcon.png')
+
+const handleToken = async()=>{
+    try{
+        const token = await SyncStorage.getItem('token')
+    }catch(e){
+        alert(e)
+    }
+}
 
 const {Screen, Navigator} = createBottomTabNavigator()
 const tabs = [
@@ -47,7 +57,13 @@ const tabs = [
     }
 ]
 
+
 export default function Bottom(){
+
+    useEffect(()=>{
+        handleToken()
+    }, [])
+
     return(
         <Navigator>
             
@@ -60,7 +76,6 @@ export default function Bottom(){
                 tabBarShowLabel: false,
                 }}
                />  
- 
             ))
             }
         </Navigator>

@@ -26,6 +26,7 @@ import {
 import { Image } from "@gluestack-ui/themed-native-base";
 import { StatusBar } from "expo-status-bar";
 import { Box, Spinner } from "@gluestack-ui/themed";
+import { ProviderUsuarioContext } from "../context/UsuarioContext";
 
 export default function Routes() {
   const [fontsLoaded] = useFonts({
@@ -60,8 +61,10 @@ export default function Routes() {
   }
 
   return (
-    <NavigationContainer>
-        <Stack />
-    </NavigationContainer>
+    <ProviderUsuarioContext>
+      <NavigationContainer>
+          <Stack />
+      </NavigationContainer>
+    </ProviderUsuarioContext>
   );
 }

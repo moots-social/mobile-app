@@ -8,9 +8,11 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
 import Antdesign from "react-native-vector-icons/AntDesign";
 import { Select } from '@gluestack-ui/themed';
-import { usuarioApi } from "../../api/apis";
+import { usuarioApi, usuarioLogin } from "../../api/apis";
 import * as ImagePicker from "expo-image-picker";
+import SyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useUsuarioContext } from "../../context/UsuarioContext";
 
 const imagemPerfil = require("../../assets/UsuarioIcon.png");
 const imagemCurso = require("../../assets/vectorizedDesenvolvimento.png")
@@ -71,6 +73,7 @@ const secoes = [
 ]
 
 export default function Info({navigation, route}){
+    const {usuario, setUsuario} = useUsuarioContext()
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
     const { email, senha } = sessao
@@ -114,20 +117,29 @@ export default function Info({navigation, route}){
           alert("por favor, selecione seu curso")
         }
         const res = await usuarioApi.post("/criar", create);
-        const dado = await res.data;
+        const novoUsuario = res.data;
 
-
-        if (dado) {
-          console.log(dado)
-          alert('Usuario ' + dado.nomeCompleto + " criado com sucesso")
+        if (novoUsuario) {
+          setUsuario(novoUsuario)
+          alert('Usuário ' + novoUsuario.nomeCompleto + " cadastrado com sucesso.")
+          try{
+            const res = await usuarioLogin('', {
+              email: email,
+              senha: senha
+            })
+            SyncStorage.setItem('token', res.token)
+          }catch(e){
+            alert(e.response.data.error)
+          }
           navigation.navigate("tabs")
       } 
       } catch (error: any) {
         if(error.response.data.error === "Tag já está em uso."){
           alert(error.response.data.error)
           voltarSecao(2)
+          return
         }
-        console.log(error)
+        alert(error)
       }
     }; 
 

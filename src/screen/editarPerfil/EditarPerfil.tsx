@@ -5,6 +5,8 @@ import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { useUsuarioContext } from '../../context/UsuarioContext';
+import { ActionCurso } from '../../components/BotoesPerfil';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
@@ -15,6 +17,7 @@ const qualidadeIcon = require('../../assets/cursoIcons/QualidadeIcon.png')
 const ficIcon = require('../../assets/cursoIcons/FicIcon.png')
 
 export default function EditarPerfil(){
+    const {usuario, setUsuario} = useUsuarioContext()
     const navigation = useNavigation()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
 
@@ -53,7 +56,7 @@ export default function EditarPerfil(){
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$black">Perfil</Text>
                     <Box flexDirection="row" justifyContent="space-between" gap={20}>
                         <Image source={UsuarioIcon}/>
-                        <Image source={desenvolvimentoIcon}/>
+                        <ActionCurso curso={usuario.curso} />
                     </Box>
                     <Pressable onPress={()=>setOpcoesVisivel(true)}>
                         <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Alterar foto de perfil ou capa</TextoNegrito>
@@ -71,9 +74,9 @@ export default function EditarPerfil(){
                     </Pressable>
                 </Box>
                 <Box alignItems="center">
-                        <InputPerfil titulo="Nome de exibição" w="90%"/>
+                        <InputPerfil titulo="Nome de exibição" w="90%" placeholder={usuario.nomeCompleto}/>
                         <Box w="100%" mt={20}>
-                            <MultiLinhaInputPerfil titulo="Descrição" w="90%"/>
+                            <MultiLinhaInputPerfil titulo="Descrição" w="90%" placeholder={usuario.descricao}/>
                         </Box>
                 </Box>
                 <Box alignItems="center">

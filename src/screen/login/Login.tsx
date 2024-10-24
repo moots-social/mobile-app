@@ -1,4 +1,4 @@
-import { usuarioLogin } from "../../api/apis";
+import { usuarioLogin, usuarioApi } from "../../api/apis";
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { Box,  FormControl,  Image,  Input,  Link,  Text,  VStack} from "@gluestack-ui/themed-native-base";
 import { styled } from "@gluestack-style/react";
@@ -12,10 +12,12 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
 import { ActivityIndicator } from 'react-native'
 import { ModalConfirmar } from "../../components/AlertDialogMoots";
+import { useUsuarioContext } from "../../context/UsuarioContext";
 
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
+  const { usuario, setUsuario } = useUsuarioContext()
   const ref = useRef(null)
 
   const [errorDialog, setErrorDialog] = useState(false)
@@ -25,21 +27,27 @@ export default function Login({ navigation }) {
     
   const handleSubmit = async () => {
       try {
-          const dado = await usuarioLogin.post("", {
-              email : email,
-              senha : senha
-          });
-          const res = await dado.data;
-          
-          if(res.token){
+        const dado = await usuarioLogin.post("", {
+            email : email,
+            senha : senha
+        });
+        const res = dado.data;
+        
+        if(res){
+          try{
+            const buscarUsuario = await usuarioApi.get(`/buscar/${res.id}`, {
+              headers: {
+                Authorization: res.token
+              }
+            })
+            setUsuario(buscarUsuario.data)
             SyncStorage.setItem('token', res.token);
             navigation.navigate("tabs")
-          }
-          else{
-            setTextoDialog("Não foi possível realizar a autenticação. Tente novamente.")
+          }catch(error: any){
+            setTextoDialog(error.response.data.error)
             setErrorDialog(true)
           }
-
+        }
       } catch (error: any) {
         setTextoDialog(error.response.data.error)
         setErrorDialog(true)

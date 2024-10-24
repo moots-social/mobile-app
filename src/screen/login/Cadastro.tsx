@@ -48,6 +48,7 @@ export default function Cadastro({ navigation }) {
         try {
           const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
           const res = dado.data;
+          
           if (res) {
             setTextoDialog("Esse email já está sendo utilizado. Tente com outro email.")
             setSessao({...sessao, email: ""})
