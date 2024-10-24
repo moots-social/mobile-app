@@ -10,18 +10,16 @@ import { ActionCurso } from '../../components/BotoesPerfil';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
-const desenvolvimentoIcon = require('../../assets/cursoIcons/DesenvolvimentoIcon.png')
-const mecanicaIcon = require('../../assets/cursoIcons/MecanicaIcon.png')
-const redesIcon = require('../../assets/cursoIcons/RedesIcon.png')
-const qualidadeIcon = require('../../assets/cursoIcons/QualidadeIcon.png')
-const ficIcon = require('../../assets/cursoIcons/FicIcon.png')
-
 export default function EditarPerfil(){
     const {usuario, setUsuario} = useUsuarioContext()
-    const navigation = useNavigation()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
 
-    const [fotoPerfil, setFotoPerfil] = useState<ImagePicker.ImagePickerAsset>()
+    const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: ''})
+
+    // const [nomeCompleto, setNomeCompleto] = useState()    
+    // const [descricao, setDescricao] = useState()    
+    
+    const [fotoPerfil, setFotoPerfil] = useState<ImagePicker.ImagePickerAsset>()    
     const [fotoCapa, setFotoCapa] = useState<ImagePicker.ImagePickerAsset>()
 
     const handleOpcaoEscolhida = (opcao: string)=>{
@@ -48,6 +46,15 @@ export default function EditarPerfil(){
         }, 300)
     }
 
+    const handleNomeChange = (text: string) => {
+        // setNomeCompleto(text);
+        setUsuarioAtualizado({...usuarioAtualizado, nomeCompleto: text})
+      };
+      
+      const handleDescricaoChange = (text: string) => {
+        // setDescricao(text);
+        setUsuarioAtualizado({...usuarioAtualizado, descricao: text})
+      };
     return(
         <ScrollView w="100%" bg="$white" h="100%">
             <CabecalhoPerfil titulo="Editar perfil"/>
@@ -74,9 +81,9 @@ export default function EditarPerfil(){
                     </Pressable>
                 </Box>
                 <Box alignItems="center">
-                        <InputPerfil titulo="Nome de exibição" w="90%" placeholder={usuario.nomeCompleto}/>
+                        <InputPerfil titulo="Nome completo" w="90%" placeholder={usuario.nomeCompleto} onChange={(text)=>handleNomeChange(text)}/>
                         <Box w="100%" mt={20}>
-                            <MultiLinhaInputPerfil titulo="Descrição" w="90%" placeholder={usuario.descricao}/>
+                            <MultiLinhaInputPerfil titulo="Descrição" w="90%" placeholder={usuario.descricao} onChange={(text)=>handleDescricaoChange(text)}/>
                         </Box>
                 </Box>
                 <Box alignItems="center">

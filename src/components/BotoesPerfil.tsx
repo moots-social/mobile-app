@@ -179,7 +179,7 @@ export function ActionCurso({curso, ...rest}: ICursoModalProps){
     const [imagem, setImagem] = useState<any>('')
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
 
-    const handleImagemCor = () =>{
+    const handleImagem = () =>{
         if(curso==='desenvolvimento'.toUpperCase()) setImagem(desenvolvimentoIcon)
         if(curso==='mecanica'.toUpperCase()) setImagem(mecanicaIcon)
         if(curso==='redes'.toUpperCase()) setImagem(redesIcon)
@@ -187,27 +187,27 @@ export function ActionCurso({curso, ...rest}: ICursoModalProps){
         if(curso==='fic'.toUpperCase()) setImagem(ficIcon)
     }
     useEffect(()=>{
-        handleImagemCor()
-    }, [curso])
+        handleImagem()
+    }, [])
     return(
         <Pressable onPress={()=>setOpcoesVisivel(true)}>
             <Image source={imagem}/>
             <Actionsheet isOpen={isOpcoesVisivel} onClose={()=>setOpcoesVisivel(false)}>
                 <ActionsheetBackdrop/>
                 <ActionsheetContent>
-                    <ActionsheetItem onPress={()=>setOpcoesVisivel(false)}>
+                    <ActionsheetItem onPress={()=>{setImagem(desenvolvimentoIcon); setOpcoesVisivel(false)}}>
                         <ActionsheetItemText>Desenvolvimento</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>setOpcoesVisivel(false)}>
+                    <ActionsheetItem onPress={()=>{setImagem(mecanicaIcon); setOpcoesVisivel(false)}}>
                         <ActionsheetItemText>Mecânica</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>setOpcoesVisivel(false)}>
+                    <ActionsheetItem onPress={()=>{setImagem(redesIcon); setOpcoesVisivel(false)}}>
                         <ActionsheetItemText>Redes</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>setOpcoesVisivel(false)}>
+                    <ActionsheetItem onPress={()=>{setImagem(qualidadeIcon); setOpcoesVisivel(false)}}>
                         <ActionsheetItemText>Qualidade</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>setOpcoesVisivel(false)}>
+                    <ActionsheetItem onPress={()=>{setImagem(ficIcon); setOpcoesVisivel(false)}}>
                         <ActionsheetItemText>FIC</ActionsheetItemText>
                     </ActionsheetItem>
                 </ActionsheetContent>

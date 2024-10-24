@@ -3,15 +3,35 @@ import LinearGradientMoots from '../../components/LinearGradientMoots'
 import { Titulo } from '../../components/Texto'
 import { BotaoConfigurar, BotaoCurso, BotaoListaSeguidores, BotaoSeguir } from '../../components/BotoesPerfil'
 import { useUsuarioContext } from '../../context/UsuarioContext'
+import { useEffect, useState } from 'react'
 
-export default function PerfilUsuario() {
+const usuarioIcon = require('../../assets/UsuarioIcon.png')
+
+export default function PerfilUsuario({route}) {
   const {usuario} = useUsuarioContext()
+  const [usuarioTemId, setUsuarioTemId] = useState()
+  const temId = async()=>{
+    try{
+      const {id}: number | undefined = route.params
+      //método que vai buscar usuário por id sem o token
+    }catch(error){
+      alert('nao tem id')
+    }
+  }
+
+  useEffect(()=>{
+    temId()
+  }, [])
+
+  useEffect(()=>{
+
+  }, [usuario])
   return (
     <LinearGradientMoots>
       <ScrollView w="100%" display="flex">
         <Box display="flex" justifyContent="flex-end">
-          <Image  source={''} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} brw={1} brc='#000' position="relative" zIndex={0}/>
-          <Image source={''} w={100} h={100} rounded={60} brw={1} brc="$black" alignSelf="center" zIndex={1} position="absolute" top={170} />
+          <Image source={usuario.fotoCapa} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
+          <Image source={usuario.fotoPerfil != '' ? usuario.fotoPerfil : usuarioIcon} w={100} h={100} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} />
         </Box>
           <Box mt={60} alignItems="center" alignSelf="center" >
             <Text fontFamily='Poppins_600SemiBold' fontSize={26} color='$black' textAlign='center'>{usuario.nomeCompleto}</Text>
@@ -24,7 +44,7 @@ export default function PerfilUsuario() {
           <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12}/> 
         </Box>
         <Box alignItems="center">
-          <Titulo>Publicações</Titulo>
+          <Titulo onPress={()=>alert(id)}>Publicações</Titulo>
         </Box>
       </ScrollView>
     </LinearGradientMoots>

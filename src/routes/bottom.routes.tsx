@@ -15,14 +15,6 @@ const notificacaoIcon = require('../assets/NotificacaoIcon.png')
 const pesquisaIcon = require('../assets/PesquisaIcon.png')
 const perfilIcon = require('../assets/UsuarioIcon.png')
 
-const handleToken = async()=>{
-    try{
-        const token = await SyncStorage.getItem('token')
-    }catch(e){
-        alert(e)
-    }
-}
-
 const {Screen, Navigator} = createBottomTabNavigator()
 const tabs = [
     {
@@ -59,10 +51,6 @@ const tabs = [
 
 
 export default function Bottom(){
-
-    useEffect(()=>{
-        handleToken()
-    }, [])
 
     return(
         <Navigator>
