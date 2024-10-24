@@ -3,7 +3,6 @@ import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, 
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";
-import { useNavigation } from "@react-navigation/native";
 import { useUsuarioContext } from '../../context/UsuarioContext';
 import { ActionCurso } from '../../components/BotoesPerfil';
 import SyncStorage from '@react-native-async-storage/async-storage';
