@@ -4,6 +4,7 @@ import { Titulo } from '../../components/Texto'
 import { BotaoConfigurar, BotaoCurso, BotaoListaSeguidores, BotaoSeguir } from '../../components/BotoesPerfil'
 import { useUsuarioContext } from '../../context/UsuarioContext'
 import { useEffect, useState } from 'react'
+import { usuarioApi } from '../../api/apis'
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
@@ -13,9 +14,11 @@ export default function PerfilUsuario({route}) {
   const temId = async()=>{
     try{
       const {id}: number | undefined = route.params
-      //método que vai buscar usuário por id sem o token
+      setUsuarioTemId(true)
+      const resultado = await usuarioApi.get(`/buscar/perfil/${id}`)
+      console.warn(resultado.data)
     }catch(error){
-      alert('nao tem id')
+      console.error(error)
     }
   }
 
@@ -30,8 +33,8 @@ export default function PerfilUsuario({route}) {
     <LinearGradientMoots>
       <ScrollView w="100%" display="flex">
         <Box display="flex" justifyContent="flex-end">
-          <Image source={usuario.fotoCapa} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
-          <Image source={usuario.fotoPerfil != '' ? usuario.fotoPerfil : usuarioIcon} w={100} h={100} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} />
+          <Image source={'usuario.fotoCapa'} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
+          <Image source={'usuario.fotoPerfil != "" ? usuario.fotoPerfil : usuarioIcon'} w={100} h={100} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} />
         </Box>
           <Box mt={60} alignItems="center" alignSelf="center" >
             <Text fontFamily='Poppins_600SemiBold' fontSize={26} color='$black' textAlign='center'>{usuario.nomeCompleto}</Text>
