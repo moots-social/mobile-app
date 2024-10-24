@@ -4,9 +4,11 @@ import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
 import { useUsuarioContext } from '../../context/UsuarioContext';
 import { ActionCurso } from '../../components/BotoesPerfil';
+import SyncStorage from '@react-native-async-storage/async-storage';
+import { usuarioApi } from '../../api/apis';
+import { useEffect, useState } from 'react';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
@@ -14,13 +16,7 @@ export default function EditarPerfil(){
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
 
-    const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: ''})
-
-    // const [nomeCompleto, setNomeCompleto] = useState()    
-    // const [descricao, setDescricao] = useState()    
-    
-    const [fotoPerfil, setFotoPerfil] = useState<ImagePicker.ImagePickerAsset>()    
-    const [fotoCapa, setFotoCapa] = useState<ImagePicker.ImagePickerAsset>()
+    const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: '', curso: ''})
 
     const handleOpcaoEscolhida = (opcao: string)=>{
         setOpcoesVisivel(false)
@@ -46,15 +42,35 @@ export default function EditarPerfil(){
         }, 300)
     }
 
-    const handleNomeChange = (text: string) => {
-        // setNomeCompleto(text);
-        setUsuarioAtualizado({...usuarioAtualizado, nomeCompleto: text})
-      };
-      
-      const handleDescricaoChange = (text: string) => {
-        // setDescricao(text);
-        setUsuarioAtualizado({...usuarioAtualizado, descricao: text})
-      };
+      const handleSubmit = async()=>{
+          try{
+            if(usuarioAtualizado.nomeCompleto == '' && usuarioAtualizado.descricao == '') throw new Error('Todos os campos estão vazios. Nenhum dado foi atualizado.')
+
+            const token = await SyncStorage.getItem('token')
+
+            const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
+                nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
+                curso: usuarioAtualizado.curso || usuario.curso
+            }, {headers: {Authorization: token}})
+
+            if(resultado.data){
+                setUsuario({...usuario, nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
+                    curso: usuarioAtualizado.curso || usuario.curso
+                })
+                setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: ''})
+                alert('Usuário atualizado com sucesso.')
+            }else{
+                alert('Não foi possível atualizar o usuário. Tente novamente.')
+            }
+
+        }catch(error: any){
+            console.warn(error)
+        }
+      }
+
+      useEffect(()=>{
+        setUsuarioAtualizado({...usuarioAtualizado, curso: usuario.novoCurso})
+      },[usuario.novoCurso])
     return(
         <ScrollView w="100%" bg="$white" h="100%">
             <CabecalhoPerfil titulo="Editar perfil"/>
@@ -81,9 +97,9 @@ export default function EditarPerfil(){
                     </Pressable>
                 </Box>
                 <Box alignItems="center">
-                        <InputPerfil titulo="Nome completo" w="90%" placeholder={usuario.nomeCompleto} onChange={(text)=>handleNomeChange(text)}/>
+                        <InputPerfil titulo="Nome completo" w="90%" placeholder={usuario.nomeCompleto} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, nomeCompleto: text})}/>
                         <Box w="100%" mt={20}>
-                            <MultiLinhaInputPerfil titulo="Descrição" w="90%" placeholder={usuario.descricao} onChange={(text)=>handleDescricaoChange(text)}/>
+                            <MultiLinhaInputPerfil titulo="Descrição" w="90%" placeholder={usuario.descricao} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, descricao: text})}/>
                         </Box>
                 </Box>
                 <Box alignItems="center">
@@ -97,7 +113,7 @@ export default function EditarPerfil(){
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
-                        <Pressable alignItems="center">
+                        <Pressable alignItems="center" onPress={handleSubmit}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito>
                         </Pressable>
                 </Box>

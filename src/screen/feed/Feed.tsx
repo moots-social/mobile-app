@@ -14,9 +14,6 @@ export default function Feed({navigation}) {
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false} />
         <Box alignItems="center" mt={35}>
           <Post conteudoUsuario='' mb={10}/>
-          <Pressable onPress={()=>navigation.navigate('perfil', {id: 1})} >
-            <Text>oi</Text>
-          </Pressable>
         </Box>
       </ScrollView>
         <BotaoNovoPost position="absolute" top="85%" right="5%" />

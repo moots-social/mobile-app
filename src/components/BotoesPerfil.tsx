@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import CartaoUsuario from "./CartaoUsuario"
 import { RoundedBottom } from "./Rounded"
 import { ScrollView } from "react-native-gesture-handler"
+import { useUsuarioContext } from "../context/UsuarioContext"
 
 const seguirIcon = require('../assets/SeguirIcon.png')
 const listaIcon = require('../assets/ListaIcon.png')
@@ -176,6 +177,7 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
 }
 
 export function ActionCurso({curso, ...rest}: ICursoModalProps){
+    const {usuario, setUsuario} = useUsuarioContext()
     const [imagem, setImagem] = useState<any>('')
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
 
@@ -186,6 +188,12 @@ export function ActionCurso({curso, ...rest}: ICursoModalProps){
         if(curso==='qualidade'.toUpperCase()) setImagem(qualidadeIcon)
         if(curso==='fic'.toUpperCase()) setImagem(ficIcon)
     }
+
+    const handleClick = (imagem: any, valor: string) =>{
+        setImagem(imagem)
+        setUsuario({...usuario, novoCurso: valor})
+        setOpcoesVisivel(false)
+    }
     useEffect(()=>{
         handleImagem()
     }, [])
@@ -195,19 +203,19 @@ export function ActionCurso({curso, ...rest}: ICursoModalProps){
             <Actionsheet isOpen={isOpcoesVisivel} onClose={()=>setOpcoesVisivel(false)}>
                 <ActionsheetBackdrop/>
                 <ActionsheetContent>
-                    <ActionsheetItem onPress={()=>{setImagem(desenvolvimentoIcon); setOpcoesVisivel(false)}}>
+                    <ActionsheetItem onPress={()=>{handleClick(desenvolvimentoIcon, 'DESENVOLVIMENTO')}}>
                         <ActionsheetItemText>Desenvolvimento</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>{setImagem(mecanicaIcon); setOpcoesVisivel(false)}}>
+                    <ActionsheetItem onPress={()=>{handleClick(mecanicaIcon, 'MECANICA')}}>
                         <ActionsheetItemText>Mecânica</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>{setImagem(redesIcon); setOpcoesVisivel(false)}}>
+                    <ActionsheetItem onPress={()=>{handleClick(redesIcon, 'REDES')}}>
                         <ActionsheetItemText>Redes</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>{setImagem(qualidadeIcon); setOpcoesVisivel(false)}}>
+                    <ActionsheetItem onPress={()=>{handleClick(qualidadeIcon, 'QUALIDADE')}}>
                         <ActionsheetItemText>Qualidade</ActionsheetItemText>
                     </ActionsheetItem>
-                    <ActionsheetItem onPress={()=>{setImagem(ficIcon); setOpcoesVisivel(false)}}>
+                    <ActionsheetItem onPress={()=>{handleClick(ficIcon, 'FIC')}}>
                         <ActionsheetItemText>FIC</ActionsheetItemText>
                     </ActionsheetItem>
                 </ActionsheetContent>
