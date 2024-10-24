@@ -8,10 +8,12 @@ import { ActionCurso } from '../../components/BotoesPerfil';
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from '../../api/apis';
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function EditarPerfil(){
+    const navigation = useNavigation()
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
 
@@ -43,8 +45,7 @@ export default function EditarPerfil(){
 
       const handleSubmit = async()=>{
           try{
-            if(usuarioAtualizado.nomeCompleto == '' && usuarioAtualizado.descricao == '') throw new Error('Todos os campos estão vazios. Nenhum dado foi atualizado.')
-
+            if(usuarioAtualizado.nomeCompleto === '' && usuarioAtualizado.descricao === '' && usuarioAtualizado.curso==='') throw new Error('Não há alterações a serem salvas.')
             const token = await SyncStorage.getItem('token')
 
             const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {

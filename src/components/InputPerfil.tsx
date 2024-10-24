@@ -1,7 +1,15 @@
 import { Box, Input, InputField, Textarea, TextareaInput } from "@gluestack-ui/themed";
 import { TextoNegrito } from "./Texto";
 
-export default function InputPerfil({titulo, tituloSize=18, type="text",  placeholder='', onChange, ...rest}){
+interface IInputPerfilProps{
+    titulo: string,
+    tituloSize?: number,
+    type?: string,
+    placeholder?: string,
+    onChange?: any
+}
+
+export default function InputPerfil({titulo, tituloSize=18, type="text",  placeholder='', onChange, ...rest}: IInputPerfilProps){
     return (
         <Box alignItems="center">
             <TextoNegrito fontSize={tituloSize}>{titulo}</TextoNegrito>
