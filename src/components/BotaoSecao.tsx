@@ -1,6 +1,6 @@
 import { IButtonProps } from "@gluestack-ui/themed";
-import { ReactNode } from "react";
-import { Button, ButtonText } from "@gluestack-ui/themed";
+import { ReactNode, useState } from "react";
+import { Button, ButtonText,} from "@gluestack-ui/themed";
 
 interface botaoSecao extends IButtonProps{
     children: ReactNode;
@@ -27,6 +27,7 @@ export default function BotaoSecao({children, ...props} : botaoSecao){
         {...props}
     >
         <ButtonText fontFamily="Poppins_700Bold">{children}</ButtonText>
+        
     </Button>
     )
 }

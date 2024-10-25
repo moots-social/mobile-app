@@ -9,6 +9,7 @@ import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from '../../api/apis';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { Alert } from 'react-native';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
@@ -16,6 +17,7 @@ export default function EditarPerfil(){
     const navigation = useNavigation()
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
+    const [botaoDisabled, setBotaoDisabled] = useState<boolean>(true)
 
     const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: '', curso: ''})
 
@@ -43,34 +45,41 @@ export default function EditarPerfil(){
         }, 300)
     }
 
-      const handleSubmit = async()=>{
-          try{
-            if(usuarioAtualizado.nomeCompleto === '' && usuarioAtualizado.descricao === '' && usuarioAtualizado.curso==='') throw new Error('Não há alterações a serem salvas.')
-            const token = await SyncStorage.getItem('token')
+    
 
-            const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
-                nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
+    const handleSubmit = async()=>{
+    try{
+        const token = await SyncStorage.getItem('token')
+
+        const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
+            nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
+            curso: usuarioAtualizado.curso || usuario.curso
+        }, {headers: {Authorization: token}})
+
+        if(resultado!==undefined){
+            setUsuario({...usuario, nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
                 curso: usuarioAtualizado.curso || usuario.curso
-            }, {headers: {Authorization: token}})
+            })
+            setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: undefined})
+            Alert.alert('Edição de perfil', 'Usuário atualizado com sucesso.')
+        }else throw new Error('Não foi possível editar seu perfil. Tente novamente.')
+    }catch(error: any){
+        console.warn(error.response.data.error)
+    }
+    }
 
-            if(resultado.data){
-                setUsuario({...usuario, nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
-                    curso: usuarioAtualizado.curso || usuario.curso
-                })
-                setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: ''})
-                alert('Usuário atualizado com sucesso.')
-            }else{
-                alert('Não foi possível atualizar o usuário. Tente novamente.')
-            }
-
-        }catch(error: any){
-            console.warn(error)
-        }
-      }
-
-      useEffect(()=>{
+    useEffect(()=>{
         setUsuarioAtualizado({...usuarioAtualizado, curso: usuario.novoCurso})
-      },[usuario.novoCurso])
+    },[usuario.novoCurso])
+
+    useEffect(()=>{
+        if(usuarioAtualizado.nomeCompleto==='' && usuarioAtualizado.descricao==='' && usuarioAtualizado.curso===undefined){
+            setBotaoDisabled(true)
+        }else{
+            setBotaoDisabled(false)
+        }
+    }, [usuarioAtualizado.nomeCompleto, usuarioAtualizado.descricao, usuarioAtualizado.curso])
+
     return(
         <ScrollView w="100%" bg="$white" h="100%">
             <CabecalhoPerfil titulo="Editar perfil"/>
@@ -113,8 +122,8 @@ export default function EditarPerfil(){
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
-                        <Pressable alignItems="center" onPress={handleSubmit}>
-                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito>
+                        <Pressable alignItems="center" onPress={handleSubmit} disabled={botaoDisabled}>
+                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color={!botaoDisabled ? "$lightSete" : '$grey'} mt={3}>Salvar alterações</TextoNegrito>
                         </Pressable>
                 </Box>
                 <Pressable alignItems="center">

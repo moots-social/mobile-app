@@ -123,7 +123,7 @@ export default function Info({navigation, route}){
           setUsuario(novoUsuario)
           alert('Usuário ' + novoUsuario.nomeCompleto + " cadastrado com sucesso.")
           try{
-            const res = await usuarioLogin('', {
+            const res = await usuarioLogin.post('', {
               email: email,
               senha: senha
             })

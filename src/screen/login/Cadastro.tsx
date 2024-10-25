@@ -1,14 +1,11 @@
 import { Box, FormControl, Image, Input, ScrollView, Text, VStack,} from "@gluestack-ui/themed-native-base";
 import { styled } from "@gluestack-style/react";
-import { LinearGradient } from "expo-linear-gradient";
 import { TextoNegrito, Titulo } from "../../components/Texto";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { ButtonText, Button, SliderThumb } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import BotaoSecao from "../../components/BotaoSecao";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { usuarioApi } from "../../api/apis";
-import { ModalConfirmar } from "../../components/AlertDialogMoots";
+import { Alert } from "react-native";
 
 const image = require("../../assets/vectorizedGreenAttempt.png");
 
@@ -30,38 +27,31 @@ export const StyledShadowBox = styled(Box, {
 });
 
 export default function Cadastro({ navigation }) {
-  const ref = useRef(null)
-  const [errorDialog, setErrorDialog] = useState(false)
-  const [textoDialog, setTextoDialog] = useState('')
   const [sessao, setSessao] = useState({email: "", senha: ""});
   const [confirmarSenha, setConfirmarSenha] = useState("");
   
   const handleSubmit = async () => {
     try{
       if(sessao.email === "" || sessao.senha === "" || confirmarSenha === "") {
-        setTextoDialog("Todos os campos necessitam ser preenchidos.");
-        setErrorDialog(true)
+        Alert.alert("Erro no cadastro", "Todos os campos necessitam ser preenchidos.");
       } else if (sessao.senha !== confirmarSenha) {
-        setTextoDialog("As senhas não correspondem.");
-        setErrorDialog(true)
+        Alert.alert("Erro no cadastro","As senhas não correspondem.");
       } else {
         try {
           const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
           const res = dado.data;
           
           if (res) {
-            setTextoDialog("Esse email já está sendo utilizado. Tente com outro email.")
+            Alert.alert("Erro no cadastro", "Esse email já está sendo utilizado. Tente com outro email.")
             setSessao({...sessao, email: ""})
-            setErrorDialog(true)
           }
         } catch (error: any) {
           navigation.navigate("info", { sessao }); // Navega para a tela de info
         }
       }
       
-    }catch(e){
-      setTextoDialog(''+e)
-      setErrorDialog(true)
+    }catch(error: any){
+      Alert.alert('Erro', error.response.data.error)
     }
   };
   
@@ -148,9 +138,6 @@ export default function Cadastro({ navigation }) {
             </Box>
           </Box>
         </StyledVStack>
-        <ModalConfirmar titulo="Cadastro inválido" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
-          {textoDialog}
-      </ModalConfirmar>
       </LinearGradientMoots>
     </Box>
   );

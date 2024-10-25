@@ -10,6 +10,7 @@ const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function PerfilUsuario({route}) {
   const {usuario} = useUsuarioContext()
+  
   // const [outroUsuario, setOutroUsuario] = useState<any>({})
   // const [usuarioTemId, setUsuarioTemId] = useState<boolean>()
   
@@ -32,8 +33,8 @@ export default function PerfilUsuario({route}) {
     <LinearGradientMoots>
       <ScrollView w="100%" display="flex">
         <Box display="flex" justifyContent="flex-end">
-          <Image source={usuario.fotoCapa} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
-          <Image source={usuario.fotoPerfil} w={100} h={100} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} />
+          <Image source={usuario.fotoCapa || ''} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
+          <Image source={usuario.fotoPerfil || usuarioIcon} w={100} h={100} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} />
         </Box>
           <Box mt={60} alignItems="center" alignSelf="center" >
             <Text fontFamily='Poppins_600SemiBold' fontSize={26} color='$black' textAlign='center'>{usuario.nomeCompleto}</Text>

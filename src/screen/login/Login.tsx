@@ -1,27 +1,22 @@
 import { usuarioLogin, usuarioApi } from "../../api/apis";
 import SyncStorage from '@react-native-async-storage/async-storage';
-import { Box,  FormControl,  Image,  Input,  Link,  Text,  VStack} from "@gluestack-ui/themed-native-base";
-import { styled } from "@gluestack-style/react";
-import { ButtonText, Button } from "@gluestack-ui/themed";
+import { Box, Image,} from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
-import { ActivityIndicator } from 'react-native'
-import { ModalConfirmar } from "../../components/AlertDialogMoots";
 import { useUsuarioContext } from "../../context/UsuarioContext";
+import { Alert } from "react-native";
 
+const fecharIcon = require('../../assets/FecharIcon.png')
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
   const { usuario, setUsuario } = useUsuarioContext()
-  const ref = useRef(null)
 
-  const [errorDialog, setErrorDialog] = useState(false)
-  const [textoDialog, setTextoDialog] = useState('')
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
     
@@ -43,19 +38,20 @@ export default function Login({ navigation }) {
             setUsuario(buscarUsuario.data)
             SyncStorage.setItem('token', res.token);
             navigation.navigate("tabs")
-          }catch(error: any){
-            setTextoDialog(error.response.data.error)
-            setErrorDialog(true)
+            setEmail('')
+            setSenha('')
+          }catch(error: any){ 
+            Alert.alert('Erro no servidor', 'Não foi possível concluir a autenticação. Tente novamente mais tarde.')
           }
         }
       } catch (error: any) {
-        setTextoDialog(error.response.data.error)
-        setErrorDialog(true)
+        Alert.alert('Autenticação inválida', error.response.data.error,)
     }
   };
 
   return (
     <LinearGradientMoots display="flex" justifyContent="flex-end" w="100%" h="100%">
+              
       <StatusBar translucent={true}/>
       <Box display="flex" alignItems="center" h="40%" justifyContent="center">
         <Image source={image} alt='logo' w={200} h={200}/>
@@ -64,7 +60,7 @@ export default function Login({ navigation }) {
         <Titulo mt={5} fontSize={20}>Comece a aproveitar.</Titulo>
 
         <Box alignItems="center" w="85%">
-            <FormControlInput label="Email" loginOuCadastro={true} onChange={(text) => setEmail(text)}/>
+            <FormControlInput label="Email" loginOuCadastro={true} value={email} onChange={(text) => setEmail(text)}/>
             <Box flexDirection="row" justifyContent="center" mt={2.5} mb={2.5}>
               <TextoNegrito>Não tem uma conta? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
@@ -72,7 +68,7 @@ export default function Login({ navigation }) {
               </TouchableOpacity>
             </Box>
 
-            <FormControlInput label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)}/>
+            <FormControlInput label="Senha" loginOuCadastro={true} value={senha} onChange={(text) => setSenha(text)}/>
             <Box flexDirection="row" justifyContent="center" mt={2.5} mb={30}>
               <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
@@ -87,8 +83,5 @@ export default function Login({ navigation }) {
           </BotaoSecao>
         </Box>
       </Box>
-      <ModalConfirmar titulo="Autenticação inválida" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
-        {textoDialog}
-      </ModalConfirmar>
     </LinearGradientMoots >
 )}
