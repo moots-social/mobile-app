@@ -56,7 +56,7 @@ export default function Routes() {
         <StatusBar translucent={true}/>
         <Image source={splashScreen} w="100%" h="100%"/>
       </Box>
-  ) //splash screen
+  )
   }
 
   return (
