@@ -2,25 +2,28 @@ import { Box, Text, Image, Menu, Button, MenuItem, MenuItemLabel } from "@gluest
 import BotaoVoltar from "./BotaoVoltar"
 import { RoundedBottom } from "./Rounded"
 import { useNavigation } from "@react-navigation/native"
+import { useUsuarioContext } from "../context/UsuarioContext"
 
-const IconePerfil = require('../assets/UsuarioIcon.png')
+const usuarioIcon = require('../assets/UsuarioIcon.png')
 const MenuIcon = require('../assets/MenuIcon.png')
 
-type props = {
+interface ICabecalhoUsuarioProps{
     nome?: string,
     paginaContatos?: boolean
 }
 
-export default function CabecalhoUsuario({nome='Você', paginaContatos=true}: props) {
+export default function CabecalhoUsuario({nome='Você', paginaContatos=true}: ICabecalhoUsuarioProps) {
     const navigation = useNavigation()
-  return <RoundedBottom bg="$white" flexDirection="row"  w="100%" h={110} roundedTop={0}>
+    const {usuario, setUsuario} = useUsuarioContext()
+    return (
+        <RoundedBottom bg="$white" flexDirection="row"  w="100%" h={110} roundedTop={0}>
             <Box w="33.3%" justifyContent="center" pl={20}>
                 {!paginaContatos && (
                     <BotaoVoltar />
                 )}
             </Box>
             <Box w="33.3%" justifyContent="center" alignItems="center">
-                <Image source={IconePerfil} size="xs"/>
+                <Image source={usuario.fotoPerfil || usuarioIcon} size="xs" rounded={usuario.fotoPerfil && 30}/>
                 <Text fontFamily="Poppins_500Medium" mt={10} textAlign="center">{nome}</Text>
             </Box>
             <Box  w="33.3%" justifyContent="center" alignItems="flex-end">
@@ -46,4 +49,5 @@ export default function CabecalhoUsuario({nome='Você', paginaContatos=true}: pr
                 )}
             </Box>
         </RoundedBottom>
+    )
 }

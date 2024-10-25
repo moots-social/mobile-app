@@ -55,7 +55,6 @@ export default function Routes() {
       <Box>
         <StatusBar translucent={true}/>
         <Image source={splashScreen} w="100%" h="100%"/>
-        <Spinner color="$lightSete" size="large"/>
       </Box>
   ) //splash screen
   }

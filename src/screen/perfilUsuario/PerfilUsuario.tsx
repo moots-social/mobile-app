@@ -37,7 +37,7 @@ export default function PerfilUsuario({route}) {
           <Image source={usuario.fotoCapa || coverIcon} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
           <Image source={usuario.fotoPerfil || usuarioIcon} w={100} h={100} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} />
         </Box>
-          <Box mt={60} alignItems="center" alignSelf="center" >
+          <Box mt={60} alignItems="center" alignSelf="center" w="90%" >
             <Text fontFamily='Poppins_600SemiBold' fontSize={26} color='$black' textAlign='center'>{usuario.nomeCompleto}</Text>
             <Text fontFamily='Poppins_500Medium' fontSize={18} color='#B6B3B3' textAlign='center'>{usuario.tag}</Text>
             {usuario.descricao!=='' && <Text fontFamily='Poppins_500Medium' fontSize={18} color='#737373' textAlign='center'>{usuario.descricao}</Text>}
