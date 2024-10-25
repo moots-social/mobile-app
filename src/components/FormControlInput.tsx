@@ -10,7 +10,7 @@ interface Props extends ITextareaProps{
 
 export default function FormControlInput({label, loginOuCadastro=false, onChange, ...rest} : Props ){
     return (
-      <FormControl {...rest} w="100%" alignItems={!loginOuCadastro ? "center" : "flex-start"}>
+      <FormControl w="100%" alignItems={!loginOuCadastro ? "center" : "flex-start"}>
 
         <FormControl.Label>
           <Text color="#7D7D7D" fontFamily="Poppins_600SemiBold">

@@ -14,17 +14,17 @@ export default function InputPerfil({titulo, tituloSize=18, type="text",  placeh
         <Box alignItems="center">
             <TextoNegrito fontSize={tituloSize}>{titulo}</TextoNegrito>
             <Input variant="rounded" brw={1} brc="$black" {...rest} mt={10} h={30}>
-                <InputField type={type} placeholder={placeholder} fontFamily="Poppins_500Medium" on onChangeText={onChange ? onChange : ''}/>
+                <InputField type={type} placeholder={placeholder} fontFamily="Poppins_500Medium" on onChangeText={onChange ? onChange : ''} />
             </Input>
         </Box>
     )
 }
 
-export function MultiLinhaInputPerfil({titulo, tituloSize=18, placeholder='', onChange, ...rest}){
+export function MultiLinhaInputPerfil({titulo, tituloSize=18, placeholder='', onChange, ...rest}: IInputPerfilProps){
     return(
         <Box alignItems="center">
             {titulo!=='' && <TextoNegrito fontSize={tituloSize}>{titulo}</TextoNegrito>}
-            <Textarea brw={1} brc="$black" {...rest} mt={10}>
+            <Textarea brw={1} brc="$black"{...rest} mt={10}>
                 <TextareaInput placeholder={placeholder} fontFamily="Poppins_500Medium" onChangeText={onChange ? onChange : ''}/>
             </Textarea>
         </Box>

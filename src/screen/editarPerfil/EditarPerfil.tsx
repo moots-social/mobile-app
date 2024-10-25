@@ -18,9 +18,8 @@ export default function EditarPerfil({navigation}){
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [botaoDisabled, setBotaoDisabled] = useState<boolean>(true)
 
-    const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: '', curso: ''})
+    const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: '', curso: '', fotoPerfil: '', fotoCapa: ''})
 
     const handleOpcaoEscolhida = (opcao: string)=>{
         setOpcoesVisivel(false)
@@ -35,14 +34,9 @@ export default function EditarPerfil({navigation}){
             })
 
             if(!resultado.canceled){
-                if(opcao==='fotoPerfil'){
-                    setFotoPerfil(resultado.assets[0])
-                    return
-                }
-                setFotoCapa(resultado.assets[0])
-                return
+                if(opcao==='fotoPerfil') setUsuarioAtualizado({...usuarioAtualizado, fotoPerfil: resultado.assets[0].uri})
+                else setUsuarioAtualizado({...usuarioAtualizado, fotoCapa: resultado.assets[0].uri})
             }
-            return
         }, 300)
     }
 
@@ -75,37 +69,26 @@ export default function EditarPerfil({navigation}){
         const token = await SyncStorage.getItem('token')
 
         const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
-            nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
-            curso: usuarioAtualizado.curso || usuario.curso
+            nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao,
+            curso: usuarioAtualizado.curso || usuario.curso, fotoPerfil: usuarioAtualizado.fotoPerfil || usuario.fotoPerfil,
+            fotoCapa: usuarioAtualizado.fotoCapa || usuario.fotoCapa
         }, {headers: {Authorization: token}})
 
         if(resultado!==undefined){
-            setUsuario({...usuario, nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
-                curso: usuarioAtualizado.curso || usuario.curso
+            setUsuario({...usuario, nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao,
+                curso: usuarioAtualizado.curso || usuario.curso, fotoPerfil: usuarioAtualizado.fotoPerfil || usuario.fotoPerfil,
+                fotoCapa: usuarioAtualizado.fotoCapa || usuario.fotoCapa
             })
             setIsLoading(true)
             setTimeout(()=>{
-                Alert.alert('Edição de perfil', 'Usuário atualizado com sucesso.')
                 setIsLoading(false)
-            },1000)
-            setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: undefined})
+                setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: '', fotoPerfil: undefined, fotoCapa: undefined})
+            },500)
         }else throw new Error('Não foi possível editar seu perfil. Tente novamente.')
     }catch(error: any){
         console.warn(error.response.data.error)
     }
     }
-
-    useEffect(()=>{
-        setUsuarioAtualizado({...usuarioAtualizado, curso: usuario.novoCurso})
-    },[usuario.novoCurso])
-
-    useEffect(()=>{
-        if(usuarioAtualizado.nomeCompleto==='' && usuarioAtualizado.descricao==='' && usuarioAtualizado.curso===undefined){
-            setBotaoDisabled(true)
-        }else{
-            setBotaoDisabled(false)
-        }
-    }, [usuarioAtualizado.nomeCompleto, usuarioAtualizado.descricao, usuarioAtualizado.curso])
 
     return(
         <ScrollView w="100%" bg="$white" h="100%">
@@ -115,7 +98,7 @@ export default function EditarPerfil({navigation}){
                 <Box alignItems="center" mt={10}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$black">Perfil</Text>
                     <Box flexDirection="row" justifyContent="space-between" gap={20}>
-                        <Image source={usuario.fotoPerfil || UsuarioIcon} rounded={60}/>
+                        <Image source={usuarioAtualizado.fotoPerfil || usuario.fotoPerfil || UsuarioIcon} rounded={60}/>
                         <ActionCurso curso={usuario.curso} />
                     </Box>
                     <Pressable onPress={()=>setOpcoesVisivel(true)}>
@@ -136,7 +119,7 @@ export default function EditarPerfil({navigation}){
                 <Box alignItems="center">
                         <InputPerfil titulo="Nome completo" w="90%" placeholder={usuario.nomeCompleto} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, nomeCompleto: text})}/>
                         <Box w="100%" mt={20}>
-                            <MultiLinhaInputPerfil titulo="Descrição" w="90%" placeholder={usuario.descricao} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, descricao: text})}/>
+                            <MultiLinhaInputPerfil titulo="Descrição" w="90%" placeholder={usuario.descricao!=='' ? usuario.descricao : 'Apresentação, hobbies, gostos...'} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, descricao: text})}/>
                         </Box>
                 </Box>
                 <Box alignItems="center">
@@ -150,8 +133,8 @@ export default function EditarPerfil({navigation}){
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
-                        <Pressable alignItems="center" onPress={handleSubmit} disabled={botaoDisabled}>
-                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color={!botaoDisabled ? "$lightSete" : '$grey'} mt={3}>Salvar alterações</TextoNegrito>
+                        <Pressable alignItems="center" onPress={handleSubmit}>
+                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={20} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito>
                         </Pressable>
                 </Box>
                 <Pressable alignItems="center" onPress={()=>handleLogout()}>

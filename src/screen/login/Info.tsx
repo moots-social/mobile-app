@@ -81,7 +81,7 @@ export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
     const { email, senha } = sessao
-    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, fotoCapa: '', curso: "", roles: ["USER"], email, senha})
+    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, fotoCapa: '', curso: "", roles: ["USER"], descricao: '', email, senha})
     const [imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
     const [imagemCurso, setImagemCurso] = useState(imagemCursoDesenvolvimento)
 
@@ -97,6 +97,7 @@ export default function Info({navigation, route}){
         setImagens(resultado.assets)
         setCreate({...create, fotoPerfil: resultado.assets[0].uri})
       }
+      
     }
 
     function handleSelect(value: string) {

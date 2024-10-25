@@ -40,7 +40,7 @@ export default function PerfilUsuario({route}) {
           <Box mt={60} alignItems="center" alignSelf="center" >
             <Text fontFamily='Poppins_600SemiBold' fontSize={26} color='$black' textAlign='center'>{usuario.nomeCompleto}</Text>
             <Text fontFamily='Poppins_500Medium' fontSize={18} color='#B6B3B3' textAlign='center'>{usuario.tag}</Text>
-            <Text fontFamily='Poppins_500Medium' fontSize={18} color='#737373' textAlign='center'>{usuario.descricao}</Text>
+            {usuario.descricao!=='' && <Text fontFamily='Poppins_500Medium' fontSize={18} color='#737373' textAlign='center'>{usuario.descricao}</Text>}
           </Box>
         <Box flexDirection='row' alignItems="center" justifyContent="space-between" alignSelf="center" w={180} my={10}>
           <BotaoConfigurar w={35} imgW={15} imgH={15} />
