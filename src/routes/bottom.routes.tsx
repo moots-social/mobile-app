@@ -60,7 +60,7 @@ const tabs = [
               <Screen key={tab.id} name={tab.name} component={tab.component} options={{
                 headerShown: false, 
                 tabBarIcon: () => (
-                <Image source={tab.icon} w={30} h={30} rounded={usuario.fotoPerfil ? 30 : 0}/>
+                <Image source={tab.icon} w={30} h={30} rounded={tab.icon==usuario.fotoPerfil ? 30 : 0}/>
                 ), 
                 tabBarShowLabel: false,
                 }}
