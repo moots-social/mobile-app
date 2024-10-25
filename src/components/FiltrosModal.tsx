@@ -156,7 +156,7 @@ export default function FiltrosModal({...rest}){
 
                         <Box mt={20}>
                             <TextoNegrito fontSize={18}>Publicações</TextoNegrito>
-                            <Checkbox isDisabled={!eValidoPublicacoes} value='permitirPost' isChecked={valorCheckPublicacoes} onChange={setValorCheckPublicacoes} mt={10}>
+                            <Checkbox isDisabled={!eValidoPublicacoes} value='permitirPost' isChecked={valorCheckPublicacoes} onChange={setValorCheckPublicacoes} mt={10} size='md'>
                                 <CheckboxIndicator mr={4} borderColor="$black">
                                     <CheckboxIcon as={CheckIcon} color="$lightSete" bg="$white" rounded={2} />
                                 </CheckboxIndicator>

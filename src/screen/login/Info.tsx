@@ -89,6 +89,7 @@ export default function Info({navigation, route}){
       let resultado = await ImagePicker.launchImageLibraryAsync({
         allowsMultipleSelection: false,
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
         aspect: [4, 3],
         quality: 1
       })

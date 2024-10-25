@@ -4,28 +4,30 @@ import { TextoNegrito } from "./Texto";
 interface IInputPerfilProps{
     titulo: string,
     tituloSize?: number,
+    tituloColor?: string, 
     type?: string,
     placeholder?: string,
+    value?: string,
     onChange?: any
 }
 
-export default function InputPerfil({titulo, tituloSize=18, type="text",  placeholder='', onChange, ...rest}: IInputPerfilProps){
+export default function InputPerfil({titulo, tituloSize=18, tituloColor, type="text",  placeholder='', onChange, ...rest}: IInputPerfilProps){
     return (
         <Box alignItems="center">
-            <TextoNegrito fontSize={tituloSize}>{titulo}</TextoNegrito>
-            <Input variant="rounded" brw={1} brc="$black" {...rest} mt={10} h={30}>
+            <TextoNegrito fontSize={tituloSize} color={tituloColor}>{titulo}</TextoNegrito>
+            <Input variant="rounded" brw={1} brc="$black" {...rest} mt={5} h={30}>
                 <InputField type={type} placeholder={placeholder} fontFamily="Poppins_500Medium" on onChangeText={onChange ? onChange : ''} />
             </Input>
         </Box>
     )
 }
 
-export function MultiLinhaInputPerfil({titulo, tituloSize=18, placeholder='', onChange, ...rest}: IInputPerfilProps){
+export function MultiLinhaInputPerfil({titulo, tituloSize=18, tituloColor, placeholder='', value, onChange, ...rest}: IInputPerfilProps){
     return(
         <Box alignItems="center">
-            {titulo!=='' && <TextoNegrito fontSize={tituloSize}>{titulo}</TextoNegrito>}
-            <Textarea brw={1} brc="$black"{...rest} mt={10}>
-                <TextareaInput placeholder={placeholder} fontFamily="Poppins_500Medium" onChangeText={onChange ? onChange : ''}/>
+            {titulo!=='' && <TextoNegrito fontSize={tituloSize} color={tituloColor}>{titulo}</TextoNegrito>}
+            <Textarea brw={1} brc="$black" {...rest} mt={5} >
+                <TextareaInput placeholder={placeholder} fontFamily="Poppins_500Medium" onChangeText={onChange ? onChange : ''} value={value}/>
             </Textarea>
         </Box>
     )
