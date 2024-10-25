@@ -1,17 +1,15 @@
 import { usuarioLogin } from "../../api/apis";
-import SyncStorage from '@react-native-async-storage/async-storage';
-import { Box,  FormControl,  Image,  Input,  Link,  Text,  VStack} from "@gluestack-ui/themed-native-base";
-import { styled } from "@gluestack-style/react";
-import { ButtonText, Button } from "@gluestack-ui/themed";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Box, Image } from "@gluestack-ui/themed-native-base";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
-import { ActivityIndicator } from 'react-native'
 import { ModalConfirmar } from "../../components/AlertDialogMoots";
+import { CommonActions } from '@react-navigation/native';
 
 const image = require("../../assets/MootsIcon.png")
 
@@ -32,8 +30,17 @@ export default function Login({ navigation }) {
           const res = await dado.data;
           
           if(res.token){
-            SyncStorage.setItem('token', res.token);
-            navigation.navigate("tabs")
+            AsyncStorage.setItem('token', res.token);
+            AsyncStorage.setItem('email', res.login);
+            AsyncStorage.setItem('autentication', String(true));
+
+            // Use reset para limpar a pilha e ir para a tela de tabs
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'tabs' }],
+              })
+            );
           }
           else{
             setTextoDialog("Não foi possível realizar a autenticação. Tente novamente.")
@@ -64,7 +71,7 @@ export default function Login({ navigation }) {
               </TouchableOpacity>
             </Box>
 
-            <FormControlInput label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)}/>
+            <FormControlInput label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)} secureTextEntry={true}/>
             <Box flexDirection="row" justifyContent="center" mt={2.5} mb={30}>
               <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>

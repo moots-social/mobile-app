@@ -22,6 +22,7 @@
     "expo-linear-gradient": "^13.0.2",
     "expo-module-scripts": "^3.5.2",
     "expo-status-bar": "~1.12.1",
+    "jwt-decode": "^4.0.0",
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-gesture-handler": "^2.19.0",
@@ -67,6 +68,7 @@
     "@gluestack-ui/toast": "1.0.7",
     "@gluestack-ui/tooltip": "0.1.32",
     "@legendapp/motion": "latest",
+    "@types/jwt-decode": "^2.2.1",
     "@types/react": "~18.2.45",
     "lucide-react-native": "latest",
     "typescript": "^5.3.3"

@@ -140,7 +140,7 @@ export default function Info({navigation, route}){
         if (dado) {
           console.log(dado)
           alert('Usuario ' + dado.nomeCompleto + " criado com sucesso")
-          navigation.navigate("tabs")
+          navigation.navigate("login")
       } 
       } catch (error: any) {
         if(error.response.data.error === "Tag já está em uso."){
