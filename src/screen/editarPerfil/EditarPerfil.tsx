@@ -64,30 +64,33 @@ export default function EditarPerfil({navigation}){
         }
     }
 
-    const handleSubmit = async()=>{
-    try{
-        const token = await SyncStorage.getItem('token')
-
-        const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
-            nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao,
-            curso: usuarioAtualizado.curso || usuario.curso, fotoPerfil: usuarioAtualizado.fotoPerfil || usuario.fotoPerfil,
-            fotoCapa: usuarioAtualizado.fotoCapa || usuario.fotoCapa
-        }, {headers: {Authorization: token}})
-
-        if(resultado!==undefined){
-            setUsuario({...usuario, nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao,
-                curso: usuarioAtualizado.curso || usuario.curso, fotoPerfil: usuarioAtualizado.fotoPerfil || usuario.fotoPerfil,
+    const handleAtualizarUser = async()=>{
+        try{
+            const token = await SyncStorage.getItem('token')
+            const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
+                nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao,
+                curso: usuario.novoCurso || usuario.curso, fotoPerfil: usuarioAtualizado.fotoPerfil || usuario.fotoPerfil,
                 fotoCapa: usuarioAtualizado.fotoCapa || usuario.fotoCapa
-            })
-            setIsLoading(true)
-            setTimeout(()=>{
-                setIsLoading(false)
-                setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: '', fotoPerfil: undefined, fotoCapa: undefined})
-            },500)
-        }else throw new Error('Não foi possível editar seu perfil. Tente novamente.')
-    }catch(error: any){
-        console.warn(error.response.data.error)
+            }, {headers: {Authorization: token}})
+    
+            if(resultado!==undefined){
+                setUsuario({...usuario, nomeCompleto: resultado.data.nomeCompleto || usuario.nomeCompleto, descricao: resultado.data.descricao,
+                    curso: resultado.data.curso || usuario.curso, fotoPerfil: resultado.data.fotoPerfil || usuario.fotoPerfil,
+                    fotoCapa: resultado.data.fotoCapa || usuario.fotoCapa, novoCurso: ''
+                })
+                setIsLoading(true)
+                setTimeout(()=>{
+                    setIsLoading(false)
+                    setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: '', fotoPerfil: undefined, fotoCapa: undefined})
+                },500)
+            }else throw new Error('Não foi possível editar seu perfil. Tente novamente.')
+        }catch(error: any){
+            console.warn(error.response.data.error)
+        }
     }
+
+    const handleSubmit = ()=>{
+        if(usuarioAtualizado.nomeCompleto===usuario.curso) console.log('teste')
     }
 
     return(
