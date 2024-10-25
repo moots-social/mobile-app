@@ -13,8 +13,7 @@ import { Alert } from 'react-native';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
-export default function EditarPerfil(){
-    const navigation = useNavigation()
+export default function EditarPerfil({navigation}){
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
     const [botaoDisabled, setBotaoDisabled] = useState<boolean>(true)
@@ -45,7 +44,28 @@ export default function EditarPerfil(){
         }, 300)
     }
 
-    
+    const handleLogout = ()=>{
+        try {
+            Alert.alert('Sair', 'Tem certeza que deseja sair?', [
+                {
+                    text: 'Sim',
+                    onPress: async() =>{
+                        await SyncStorage.removeItem('token')
+                        Alert.alert('Saindo...', 'Ao retornar para a tela de login, clique fora desse alerta.', [], {cancelable: true})
+                        setTimeout(()=>{
+                            navigation.navigate('login')
+                        },2000)
+                    }
+                },
+                {
+                    text: 'Não',
+                    style: 'cancel'
+                }
+            ])
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     const handleSubmit = async()=>{
     try{
@@ -126,7 +146,7 @@ export default function EditarPerfil(){
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color={!botaoDisabled ? "$lightSete" : '$grey'} mt={3}>Salvar alterações</TextoNegrito>
                         </Pressable>
                 </Box>
-                <Pressable alignItems="center">
+                <Pressable alignItems="center" onPress={()=>handleLogout()}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Sair</Text>
                 </Pressable>
             </Box>
