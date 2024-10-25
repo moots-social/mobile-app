@@ -10,12 +10,14 @@ import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
 import { useUsuarioContext } from "../../context/UsuarioContext";
 import { Alert } from "react-native";
+import Loading from "../../components/Loading";
 
 const fecharIcon = require('../../assets/FecharIcon.png')
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
   const { usuario, setUsuario } = useUsuarioContext()
+  const [isLoading, setIsLoading] = useState(false)
 
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
@@ -37,9 +39,13 @@ export default function Login({ navigation }) {
             })
             setUsuario(buscarUsuario.data)
             SyncStorage.setItem('token', res.token);
-            navigation.navigate("tabs")
-            setEmail('')
-            setSenha('')
+            setIsLoading(true)
+            setTimeout(()=>{
+              navigation.navigate("tabs")
+              setEmail('')
+              setSenha('')
+              setIsLoading(false)
+            }, 2000)
           }catch(error: any){ 
             Alert.alert('Erro no servidor', 'Não foi possível concluir a autenticação. Tente novamente mais tarde.')
           }
@@ -53,6 +59,7 @@ export default function Login({ navigation }) {
     <LinearGradientMoots display="flex" justifyContent="flex-end" w="100%" h="100%">
               
       <StatusBar translucent={true}/>
+      <Loading isOpen={isLoading}/>
       <Box display="flex" alignItems="center" h="40%" justifyContent="center">
         <Image source={image} alt='logo' w={200} h={200}/>
       </Box>
@@ -68,7 +75,7 @@ export default function Login({ navigation }) {
               </TouchableOpacity>
             </Box>
 
-            <FormControlInput label="Senha" loginOuCadastro={true} value={senha} onChange={(text) => setSenha(text)}/>
+            <FormControlInput label="Senha" loginOuCadastro={true} value={senha} type="password" onChange={(text) => setSenha(text)}/>
             <Box flexDirection="row" justifyContent="center" mt={2.5} mb={30}>
               <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>

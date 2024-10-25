@@ -6,18 +6,23 @@ import { Alert } from "react-native";
 import { useUsuarioContext } from "../../context/UsuarioContext";
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from "../../api/apis";
+import Loading from "../../components/Loading";
 
 export default function ExcluirConta({navigation}){
     const {usuario, setUsuario} = useUsuarioContext()
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleExcluirConta = async()=>{
         try{
             const token = await SyncStorage.getItem('token')
             const resultado = await usuarioApi.delete(`/${usuario.id}`, {headers: {Authorization: token}})
             if(resultado!=undefined){
-                Alert.alert('Excluir conta', 'Conta excluída com sucesso. Muito obrigado por ter feito parte do Moots!')
+                Alert.alert('Conta excluída', 'Conta excluída com sucesso. Muito obrigado por ter feito parte do Moots!')
+                setIsLoading(true)
                 setTimeout(()=>{
                     navigation.navigate('login')
+                    setUsuario({})
+                    setIsLoading(false)
                 },2000)
             }
         }catch(error: any){
@@ -44,6 +49,7 @@ export default function ExcluirConta({navigation}){
     }
     return(
         <Box w="100%" bg="$white" h="100%">
+            <Loading isOpen={isLoading}/>
             <CabecalhoPerfil titulo='Excluir conta' />
             <Box w="100%" bg="$white" h="85%" justifyContent="space-between" alignItems="center">
                 <Box w="90%" alignItems="center" mt={20} >

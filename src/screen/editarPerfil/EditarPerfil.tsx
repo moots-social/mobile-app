@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker'
-import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Box, Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
+import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Box, Image, Pressable, ScrollView, Text, Modal, ModalBackdrop, Spinner, ModalContent } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";
@@ -10,12 +10,14 @@ import { usuarioApi } from '../../api/apis';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
+import Loading from '../../components/Loading';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function EditarPerfil({navigation}){
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [botaoDisabled, setBotaoDisabled] = useState<boolean>(true)
 
     const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: '', curso: ''})
@@ -51,9 +53,10 @@ export default function EditarPerfil({navigation}){
                     text: 'Sim',
                     onPress: async() =>{
                         await SyncStorage.removeItem('token')
-                        Alert.alert('Saindo...', 'Ao retornar para a tela de login, clique fora desse alerta.', [], {cancelable: true})
+                        setIsLoading(true)
                         setTimeout(()=>{
                             navigation.navigate('login')
+                            setIsLoading(false)
                         },2000)
                     }
                 },
@@ -80,8 +83,12 @@ export default function EditarPerfil({navigation}){
             setUsuario({...usuario, nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao || usuario.descricao,
                 curso: usuarioAtualizado.curso || usuario.curso
             })
+            setIsLoading(true)
+            setTimeout(()=>{
+                Alert.alert('Edição de perfil', 'Usuário atualizado com sucesso.')
+                setIsLoading(false)
+            },1000)
             setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: undefined})
-            Alert.alert('Edição de perfil', 'Usuário atualizado com sucesso.')
         }else throw new Error('Não foi possível editar seu perfil. Tente novamente.')
     }catch(error: any){
         console.warn(error.response.data.error)
@@ -102,12 +109,13 @@ export default function EditarPerfil({navigation}){
 
     return(
         <ScrollView w="100%" bg="$white" h="100%">
+            <Loading isOpen={isLoading}/>
             <CabecalhoPerfil titulo="Editar perfil"/>
             <Box gap={20}>
                 <Box alignItems="center" mt={10}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$black">Perfil</Text>
                     <Box flexDirection="row" justifyContent="space-between" gap={20}>
-                        <Image source={UsuarioIcon}/>
+                        <Image source={usuario.fotoPerfil || UsuarioIcon} rounded={60}/>
                         <ActionCurso curso={usuario.curso} />
                     </Box>
                     <Pressable onPress={()=>setOpcoesVisivel(true)}>
