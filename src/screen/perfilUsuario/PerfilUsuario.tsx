@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { usuarioApi } from '../../api/apis'
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
+const coverIcon = require('../../assets/CoverIcon.png')
 
 export default function PerfilUsuario({route}) {
   const {usuario} = useUsuarioContext()
@@ -33,7 +34,7 @@ export default function PerfilUsuario({route}) {
     <LinearGradientMoots>
       <ScrollView w="100%" display="flex">
         <Box display="flex" justifyContent="flex-end">
-          <Image source={usuario.fotoCapa || ''} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
+          <Image source={usuario.fotoCapa || coverIcon} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} bg={usuario.fotoCapa==='' && '$lightSete'} position="relative" zIndex={0}/>
           <Image source={usuario.fotoPerfil || usuarioIcon} w={100} h={100} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} />
         </Box>
           <Box mt={60} alignItems="center" alignSelf="center" >

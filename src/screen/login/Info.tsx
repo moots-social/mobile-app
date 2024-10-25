@@ -81,7 +81,7 @@ export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
     const { email, senha } = sessao
-    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, curso: "", roles: ["USER"], email, senha})
+    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, fotoCapa: '', curso: "", roles: ["USER"], email, senha})
     const [imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
     const [imagemCurso, setImagemCurso] = useState(imagemCursoDesenvolvimento)
 
