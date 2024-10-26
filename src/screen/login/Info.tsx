@@ -11,6 +11,7 @@ import { Select } from '@gluestack-ui/themed';
 import { usuarioApi } from "../../api/apis";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Alert } from "react-native";
 
 const imagemPerfil = "https://storageimagesmoots.blob.core.windows.net/artifact-image-container/68a77764-1c2e-4bc4-8d6b-c280ac593970.png";
 
@@ -77,13 +78,14 @@ export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
     const { email, senha } = sessao
-    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, curso: "", roles: ["USER"], email, senha})
+    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, fotoCapa: '', curso: "", roles: ["USER"], descricao: '', email, senha})
     const [imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
     const [imagemCurso, setImagemCurso] = useState(imagemCursoDesenvolvimento)
 
     const selecionarImagem = async() => {
       let resultado = await ImagePicker.launchImageLibraryAsync({
         allowsMultipleSelection: false,
+        allowsEditing: true,
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         aspect: [4, 3],
         quality: 1
@@ -122,7 +124,7 @@ export default function Info({navigation, route}){
 
     function functionOne(){
       if(create.tag === "" || create.nomeCompleto === ""){
-        alert("Seu nome e tag são obrigatorios")
+        Alert.alert('Campos vazios', "Seu nome e tag são obrigatórios.")
       } else {
         avancarSecao();
       }
@@ -131,23 +133,22 @@ export default function Info({navigation, route}){
     const handleSubmit = async() => {
       try {
         if(create.curso === ""){
-          alert("por favor, selecione seu curso")
+          Alert.alert('Campo vazio', "O seu curso é obrigatório.")
         }
         const res = await usuarioApi.post("/criar", create);
         const dado = await res.data;
 
-
         if (dado) {
           console.log(dado)
-          alert('Usuario ' + dado.nomeCompleto + " criado com sucesso")
+          Alert.alert('Cadastro', 'Sua conta foi criada com sucesso.')
           navigation.navigate("login")
       } 
       } catch (error: any) {
         if(error.response.data.error === "Tag já está em uso."){
-          alert(error.response.data.error)
+          Alert.alert('Erro', error.response.data.error)
           voltarSecao(2)
         }
-        console.log(error)
+        Alert.alert(error.response.data.error)
       }
     }; 
 
@@ -224,7 +225,7 @@ export default function Info({navigation, route}){
                   <TextoNegrito
                     color="#468B51"
                     mt={3}
-                    onPress={() => setCreate({...create, fotoPerfil: imagemPerfil})}
+                    onPress={() => {setCreate({...create, fotoPerfil: imagemPerfil}); Alert.alert('Prosseguir sem foto', 'Você decidiu não enviar uma foto agora. Basta clicar em continuar para seguir com o cadastro.')}}
                   >
                    Não usar imagem
                   </TextoNegrito>

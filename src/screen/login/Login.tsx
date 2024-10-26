@@ -3,21 +3,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Box, Image } from "@gluestack-ui/themed-native-base";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/BotaoSecao";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import FormControlInput from "../../components/FormControlInput";
-import { ModalConfirmar } from "../../components/AlertDialogMoots";
 import { CommonActions } from '@react-navigation/native';
+import { useAuthContext } from "../../context/AuthContext";
+import { Alert } from "react-native";
 
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
-  const ref = useRef(null)
-
-  const [errorDialog, setErrorDialog] = useState(false)
-  const [textoDialog, setTextoDialog] = useState('')
+  const {setAutentication} = useAuthContext()
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
     
@@ -28,30 +26,22 @@ export default function Login({ navigation }) {
               senha : senha
           });
           const res = await dado.data;
-          
-          if(res.token){
-            AsyncStorage.setItem('token', res.token);
-            AsyncStorage.setItem('email', res.login);
-            AsyncStorage.setItem('autentication', String(true));
-
-            // Use reset para limpar a pilha e ir para a tela de tabs
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'tabs' }],
-              })
-            );
+          if(res){
+            await AsyncStorage.setItem('token', res.token);
+            await AsyncStorage.setItem('email', res.login);
+            await AsyncStorage.setItem('id', String(res.id));
+            const auth = await AsyncStorage.setItem('autentication', String(true));
+            setAutentication(auth)
           }
-          else{
-            setTextoDialog("Não foi possível realizar a autenticação. Tente novamente.")
-            setErrorDialog(true)
-          }
-
+          else throw new Error("Não foi possível realizar a autenticação. Tente novamente.")
       } catch (error: any) {
-        setTextoDialog(error.response.data.error)
-        setErrorDialog(true)
+        Alert.alert('Erro', error.response.data.error)
     }
   };
+
+  useEffect(()=>{
+    async()=> alert(await AsyncStorage.getItem('autentication'))
+  }, [])
 
   return (
     <LinearGradientMoots display="flex" justifyContent="flex-end" w="100%" h="100%">
@@ -86,8 +76,5 @@ export default function Login({ navigation }) {
           </BotaoSecao>
         </Box>
       </Box>
-      <ModalConfirmar titulo="Autenticação inválida" isOpen={errorDialog} onClose={()=>setErrorDialog(false)} finalFocusRef={ref}>
-        {textoDialog}
-      </ModalConfirmar>
     </LinearGradientMoots >
 )}
