@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker'
-import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Box, Image, Pressable, ScrollView, Text, Modal, ModalBackdrop, Spinner, ModalContent, Checkbox, CheckboxIndicator, CheckboxIcon, CheckIcon, CheckboxLabel } from "@gluestack-ui/themed";
+import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Box, Image, Pressable, ScrollView, Text, Checkbox, CheckboxIndicator, CheckboxIcon, CheckIcon, CheckboxLabel } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/InputPerfil";
@@ -8,7 +8,6 @@ import { ActionCurso } from '../../components/BotoesPerfil';
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from '../../api/apis';
 import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import Loading from '../../components/Loading';
 
@@ -20,7 +19,9 @@ export default function EditarPerfil({navigation}){
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: usuario.descricao, curso: '', fotoPerfil: '', fotoCapa: ''})
+
     const [checkDescricao, setCheckDescricao] = useState<boolean>(false)
+    const [disabledSalvar, setDisabledSalvar] = useState<boolean>(true)
 
     const handleOpcaoEscolhida = (opcao: string)=>{
         setOpcoesVisivel(false)
@@ -61,7 +62,7 @@ export default function EditarPerfil({navigation}){
                 }
             ])
         } catch (error) {
-            console.error(error)
+            Alert.alert('Erro ao sair', `Não foi possível completar ação. ${error.response.data.error}`)
         }
     }
 
@@ -82,11 +83,14 @@ export default function EditarPerfil({navigation}){
                 setIsLoading(true)
                 setTimeout(()=>{
                     setIsLoading(false)
-                    setUsuarioAtualizado({nomeCompleto: '', descricao: '', curso: '', fotoPerfil: undefined, fotoCapa: undefined})
+                    setDisabledSalvar(true)
+                    handleCheckChange()
+                    setUsuarioAtualizado({nomeCompleto: '', descricao: usuario.descricao, curso: '', fotoPerfil: '', fotoCapa: ''})
+                    Alert.alert('Atualizar perfil', 'Alterações realizadas com sucesso.')
                 },500)
             }else throw new Error('Não foi possível editar seu perfil. Tente novamente mais tarde.')
         }catch(error: any){
-            console.warn(error.response.data.error)
+            Alert.alert('Erro ao atualizar', error.response.data.error)
         }
     }
 
@@ -94,12 +98,26 @@ export default function EditarPerfil({navigation}){
         setCheckDescricao(prevState => !prevState)
         
     }
+    useEffect(()=>{
+        setUsuarioAtualizado({...usuarioAtualizado, curso: usuario.novoCurso})
+    }, [usuario.novoCurso])
 
     useEffect(()=>{
         if(checkDescricao===false){
             setUsuarioAtualizado({...usuarioAtualizado, descricao: usuario.descricao})
         }
     }, [checkDescricao])
+
+    useEffect(()=>{
+        const {nomeCompleto, descricao, curso, fotoPerfil, fotoCapa} = usuarioAtualizado
+        if(nomeCompleto!=='' || (descricao!==usuario.descricao && checkDescricao) || checkDescricao || (curso!==usuario.curso && curso!=='')
+        || (fotoPerfil!==usuario.fotoPerfil && fotoPerfil!=='') || (fotoCapa!==usuario.fotoCapa && fotoCapa!=='')
+        ){
+            setDisabledSalvar(false)
+        }else{
+            setDisabledSalvar(true)
+        }
+    }, [usuarioAtualizado.nomeCompleto, usuarioAtualizado.descricao, usuarioAtualizado.curso, usuarioAtualizado.fotoPerfil, usuarioAtualizado.fotoCapa])
 
     return(
         <ScrollView w="100%" bg="$white" h="100%">
@@ -150,10 +168,11 @@ export default function EditarPerfil({navigation}){
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
-                        <Pressable alignItems="center" onPress={handleSubmit}>
-                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={20} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito>
-                        </Pressable>
-                <Pressable alignItems="center" onPress={()=>handleLogout()}>
+                        {/* ! */}
+                        {!disabledSalvar ? (<Pressable alignItems="center" isDisabled={disabledSalvar} onPress={handleSubmit}>
+                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito> 
+                        </Pressable>) : <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16}></TextoNegrito>}
+                <Pressable alignItems="center" onPress={()=>handleLogout()} mt={5}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Sair</Text>
                 </Pressable>
                 </Box>

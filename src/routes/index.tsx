@@ -27,8 +27,11 @@ import { Image } from "@gluestack-ui/themed-native-base";
 import { StatusBar } from "expo-status-bar";
 import { Box, Spinner } from "@gluestack-ui/themed";
 import { ProviderUsuarioContext } from "../context/UsuarioContext";
+import { LogBox } from "react-native";
+import { useEffect } from "react";
 
 export default function Routes() {
+  
   const [fontsLoaded] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -58,6 +61,10 @@ export default function Routes() {
       </Box>
   )
   }
+
+  useEffect(()=>{
+    LogBox.ignoreAllLogs(true)
+  }, [])
 
   return (
     <ProviderUsuarioContext>
