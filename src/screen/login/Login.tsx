@@ -1,5 +1,5 @@
 import { usuarioLogin, usuarioApi } from "../../api/apis";
-import SyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Box, Image,} from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -11,6 +11,7 @@ import FormControlInput from "../../components/FormControlInput";
 import { useUsuarioContext } from "../../context/UsuarioContext";
 import { Alert } from "react-native";
 import Loading from "../../components/Loading";
+import { CommonActions } from '@react-navigation/native';
 
 const fecharIcon = require('../../assets/FecharIcon.png')
 const image = require("../../assets/MootsIcon.png")
@@ -28,9 +29,9 @@ export default function Login({ navigation }) {
             email : email,
             senha : senha
         });
-        const res = dado.data;
+        const res = await dado.data;
         
-        if(res){
+        if(res.token){
           try{
             const buscarUsuario = await usuarioApi.get(`/buscar/${res.id}`, {
               headers: {
@@ -38,7 +39,11 @@ export default function Login({ navigation }) {
               }
             })
             setUsuario(buscarUsuario.data)
-            SyncStorage.setItem('token', res.token);
+            
+            AsyncStorage.setItem('token', res.token);
+            AsyncStorage.setItem('email', res.login);
+            AsyncStorage.setItem('autentication', String(true));
+
             setIsLoading(true)
             setTimeout(()=>{
               navigation.navigate("tabs")
@@ -46,6 +51,14 @@ export default function Login({ navigation }) {
               setSenha('')
               setIsLoading(false)
             }, 2000)
+          
+          // Use reset para limpar a pilha e ir para a tela de tabs
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'tabs' }],
+              })
+            );
           }catch(error: any){ 
             Alert.alert('Erro no servidor', 'Não foi possível concluir a autenticação. Tente novamente mais tarde.')
           }
@@ -75,7 +88,7 @@ export default function Login({ navigation }) {
               </TouchableOpacity>
             </Box>
 
-            <FormControlInput label="Senha" loginOuCadastro={true} value={senha} type="password" onChange={(text) => setSenha(text)}/>
+            <FormControlInput label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)} secureTextEntry={true}/>
             <Box flexDirection="row" justifyContent="center" mt={2.5} mb={30}>
               <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
               <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>

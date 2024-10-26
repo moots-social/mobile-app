@@ -17,61 +17,67 @@ export const StyledVStack = styled(VStack, {
 });
 
 export const StyledShadowBox = styled(Box, {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25, // 40% de opacidade
-    shadowRadius: 4,
-    elevation: 5, // Para Android
-    borderRadius: 30, // Para manter a borda arredondada
-    overflow: "hidden", // Para que o Input fique dentro da borda arredondada
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+  borderRadius: 30,
+  overflow: "hidden",
 });
 
 export default function Cadastro({ navigation }) {
   const [sessao, setSessao] = useState({email: "", senha: ""});
   const [confirmarSenha, setConfirmarSenha] = useState("");
-  
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async () => {
-    try{
-      if(sessao.email === "" || sessao.senha === "" || confirmarSenha === "") {
-        Alert.alert("Erro no cadastro", "Todos os campos necessitam ser preenchidos.");
+    try {
+      // Validação do email
+      if (!validateEmail(sessao.email)) {
+        Alert.alert("Email inválido", "Por favor, insira um email válido.");
+        return; // Para a execução se o email não for válido
+      }
+
+      if (sessao.email === "" || sessao.senha === "" || confirmarSenha === "") {
+        Alert.alert("Cadastro inválido", "Todos os campos necessitam ser preenchidos.");
       } else if (sessao.senha !== confirmarSenha) {
-        Alert.alert("Erro no cadastro","As senhas não correspondem.");
-      } else {
+        Alert.alert("Senha inválida", "As senhas não correspondem.");
+      } else if (sessao.senha.length < 8){
+        Alert.alert("Senha inválida", "sua senha tem que ter pelo menos 8 caracteres")
+      }else {
         try {
           const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
           const res = dado.data;
           
           if (res) {
-            Alert.alert("Erro no cadastro", "Esse email já está sendo utilizado. Tente com outro email.")
-            setSessao({...sessao, email: ""})
+            Alert.alert("Erro no cadastro", "Esse email já está sendo utilizado. Tente com outro email.");
+            setSessao({ ...sessao, email: "" });
+          } else {
+            navigation.navigate("info", { sessao }); // Navega para a tela de info
           }
         } catch (error: any) {
-          navigation.navigate("info", { sessao }); // Navega para a tela de info
+          Alert.alert("Erro", error.response.message.error);
         }
       }
-      
     }catch(error: any){
-      Alert.alert('Erro', error.response.data.error)
+      Alert.alert('Erro', error.response.message.error)
     }
   };
-  
 
   return (
     <Box flex={1}>
       <LinearGradientMoots>
         <StyledVStack>
-         <Box display="flex" alignItems="center" h="40%" justifyContent="center">
-         <Image source={image} h={200} w={200}/>
-         </Box>
+          <Box display="flex" alignItems="center" h="40%" justifyContent="center">
+            <Image source={image} h={200} w={200} />
+          </Box>
 
-          <Box
-            bg="white"
-            borderTopLeftRadius={50}
-            borderTopRightRadius={50}
-            width="100%"
-            height="60%"
-            alignItems="center"
-          >
+          <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="60%" alignItems="center">
             <Titulo mt={5} fontSize={20}>
               Faça parte agora.
             </Titulo>
@@ -84,13 +90,12 @@ export default function Cadastro({ navigation }) {
                   </Text>
                 </FormControl.Label>
                 <StyledShadowBox>
-
-                <Input
-                  borderRadius={30}
-                  fontFamily="Poppins_500Medium"
-                  bg="#FFFFFF"
-                  onChange = {(text) => setSessao({...sessao, email: text})}
-                />
+                  <Input
+                    borderRadius={30}
+                    fontFamily="Poppins_500Medium"
+                    bg="#FFFFFF"
+                    onChangeText={(text) => setSessao({ ...sessao, email: text })}
+                  />
                 </StyledShadowBox>
 
                 <FormControl.Label ml={2} mt={3}>
@@ -104,7 +109,7 @@ export default function Cadastro({ navigation }) {
                     fontFamily="Poppins_500Medium"
                     bg="#FFFFFF"
                     secureTextEntry={true}
-                    onChange = {(text) => setSessao({...sessao, senha: text})}
+                    onChangeText={(text) => setSessao({ ...sessao, senha: text })}
                   />    
                 </StyledShadowBox>
 
@@ -114,20 +119,19 @@ export default function Cadastro({ navigation }) {
                   </Text>
                 </FormControl.Label>
                 <StyledShadowBox>
-
-                <Input
-                  borderRadius={30}
-                  fontFamily="Poppins_500Medium"
-                  bg="#FFFFFF"
-                  secureTextEntry={true}
-                  onChange = {(text) => setConfirmarSenha(text)}
-                />
+                  <Input
+                    borderRadius={30}
+                    fontFamily="Poppins_500Medium"
+                    bg="#FFFFFF"
+                    secureTextEntry={true}
+                    onChangeText={(text) => setConfirmarSenha(text)}
+                  />
                 </StyledShadowBox>
               </FormControl>
               
               <Box flexDirection="row" mt={2.5} mb={65}>
                 <TextoNegrito>Já tem uma conta? </TextoNegrito>
-                <TextoNegrito color="#468B51" onPress={()=>navigation.navigate('login')}>Realizar login</TextoNegrito>
+                <TextoNegrito color="#468B51" onPress={() => navigation.navigate('login')}>Realizar login</TextoNegrito>
               </Box>
             </Box>
 

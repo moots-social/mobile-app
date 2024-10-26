@@ -14,7 +14,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { useUsuarioContext } from "../../context/UsuarioContext";
 
-
 const imagemPerfil = "https://storageimagesmoots.blob.core.windows.net/artifact-image-container/68a77764-1c2e-4bc4-8d6b-c280ac593970.png";
 
 const imagemCursoDesenvolvimento = require("../../assets/cursoIcons/DesenvolvimentoIcon.png")
@@ -117,6 +116,22 @@ export default function Info({navigation, route}){
       }
     }
 
+    function handleSelect(value: string) {
+      setCreate({ ...create, curso: value })
+
+      if(value === "DESENVOLVIMENTO"){
+        setImagemCurso(imagemCursoDesenvolvimento)
+      } else if (value === "MECANICA"){
+        setImagemCurso(imagemCursoMecanica)
+      } else if (value === "FIC"){
+        setImagemCurso(imagemCursoFic)
+      } else if (value === "QUALIDADE"){
+        setImagemCurso(imagemCursoQualidade)
+      } else if (value === "REDES") {
+        setImagemCurso(imagemCursoRedes)
+      }
+    }
+
     function avancarSecao() {
       if (numSecao < secoes.length - 1) 
         setNumSecao(numSecao + 1);
@@ -144,7 +159,7 @@ export default function Info({navigation, route}){
 
         if (dado) {
           console.log(dado)
-          alert('Usuario ' + dado.nomeCompleto + " criado com sucesso")
+          alert("Sua conta foi criada com sucesso.")
           const login = await usuarioLogin.post('', {
             email : email,
             senha : senha
