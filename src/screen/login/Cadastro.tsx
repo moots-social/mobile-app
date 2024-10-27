@@ -1,14 +1,11 @@
 import { Box, FormControl, Image, Input, ScrollView, Text, VStack,} from "@gluestack-ui/themed-native-base";
 import { styled } from "@gluestack-style/react";
-import { LinearGradient } from "expo-linear-gradient";
 import { TextoNegrito, Titulo } from "../../components/Texto";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { ButtonText, Button, SliderThumb } from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/LinearGradientMoots";
 import BotaoSecao from "../../components/BotaoSecao";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { usuarioApi } from "../../api/apis";
-import { ModalConfirmar } from "../../components/AlertDialogMoots";
+import { Alert } from "react-native";
 
 const image = require("../../assets/vectorizedGreenAttempt.png");
 
@@ -30,9 +27,6 @@ export const StyledShadowBox = styled(Box, {
 });
 
 export default function Cadastro({ navigation }) {
-  const ref = useRef(null);
-  const [errorDialog, setErrorDialog] = useState(false);
-  const [textoDialog, setTextoDialog] = useState('');
   const [sessao, setSessao] = useState({ email: "", senha: "" });
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
@@ -45,40 +39,39 @@ export default function Cadastro({ navigation }) {
     try {
       // Validação do email
       if (!validateEmail(sessao.email)) {
-        setTextoDialog("Por favor, insira um email válido.");
-        setErrorDialog(true);
+        Alert.alert('Email inválido', "Por favor, insira um email válido.");
         return; // Para a execução se o email não for válido
       }
 
       if (sessao.email === "" || sessao.senha === "" || confirmarSenha === "") {
-        setTextoDialog("Todos os campos necessitam ser preenchidos.");
-        setErrorDialog(true);
+        Alert.alert('Email inválido', "Todos os campos necessitam ser preenchidos.");
       } else if (sessao.senha !== confirmarSenha) {
-        setTextoDialog("As senhas não correspondem.");
-        setErrorDialog(true);
+        Alert.alert('Senha inválida', "As senhas não correspondem.");
       } else if (sessao.senha.length < 8){
-        setTextoDialog("sua senha tem que ter pelo menos 8 caracteres")
-        setErrorDialog(true)
+        Alert.alert('Senha inválida', "sua senha tem que ter pelo menos 8 caracteres")
       }else {
 
         try {
           const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
           const res = dado.data;
           if (res) {
-            setTextoDialog("Esse email já está sendo utilizado. Tente com outro email.");
+            Alert.alert('Email inválido', "Esse email já está sendo utilizado. Tente com outro email.");
             setSessao({ ...sessao, email: "" });
-            setErrorDialog(true);
-          } else {
+            
+          } else throw new Error()
+        } catch (error: any) {
+          if(error.response.data.error == 'Email e senha válidos'){
             navigation.navigate("info", { sessao }); // Navega para a tela de info
           }
-        } catch (error: any) {
-          setTextoDialog(error.response.message.error);
-          setErrorDialog(true);
+          else{
+            Alert.alert('Error', error.response.data.error);
+          }
+          
         }
       }
     } catch (e) {
-      setTextoDialog('' + e);
-      setErrorDialog(true);
+      Alert.alert('Email inválido', '' + e);
+      
     }
   };
 
@@ -155,9 +148,6 @@ export default function Cadastro({ navigation }) {
             </Box>
           </Box>
         </StyledVStack>
-        <ModalConfirmar titulo="Cadastro inválido" isOpen={errorDialog} onClose={() => setErrorDialog(false)} finalFocusRef={ref}>
-          {textoDialog}
-        </ModalConfirmar>
       </LinearGradientMoots>
     </Box>
   );

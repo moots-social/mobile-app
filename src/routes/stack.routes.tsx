@@ -14,11 +14,13 @@ import PesquisaPalavraChave from "../screen/pesquisa/PesquisaPalavraChave";
 import NovoPost from "../screen/post/NovoPost";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ActivityIndicator, View } from "react-native";
+import { useAuthContext } from "../context/AuthContext";
+import Loading from "../components/Loading";
 
 const { Screen, Navigator } = createStackNavigator();
 
 export default function Stack() {
+  const {autentication} = useAuthContext()
   const [autenticado, setAutenticado] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -28,17 +30,12 @@ export default function Stack() {
       setAutenticado(authStatus === 'true');
       setLoading(false);
     };
-    
     checarAutenticacao();
-  }, []);
+  }, [autentication]);
 
   // Enquanto está carregando, exibe um indicador de carregamento
   if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading isOpen={loading}/>
   }
 
   return (
@@ -61,16 +58,6 @@ export default function Stack() {
           <Screen name="login" component={Login} options={{ headerShown: false }} />
           <Screen name="cadastro" component={Cadastro} options={{ headerShown: false }} />
           <Screen name="info" component={Info} options={{ headerShown: false }} />
-          <Screen name="tabs" component={Bottom} options={{ headerShown: false }} />
-          <Screen name="chat" component={Chat} options={{ headerShown: false }} />
-          <Screen name="contatos" component={Contatos} options={{ headerShown: false }} />
-          <Screen name="editar" component={EditarPerfil} options={{ headerShown: false }} />
-          <Screen name="redefinir" component={RedefinirSenha} options={{ headerShown: false }} />
-          <Screen name="excluir" component={ExcluirConta} options={{ headerShown: false }} />
-          <Screen name="colecao" component={Colecao} options={{ headerShown: false }} />
-          <Screen name="expandido" component={PostExpandido} options={{ headerShown: false }} />
-          <Screen name="novoPost" component={NovoPost} options={{ headerShown: false }} />
-          <Screen name="pesquisaPalavraChave" component={PesquisaPalavraChave} options={{ headerShown: false }} />
         </>
       )}
     </Navigator>
