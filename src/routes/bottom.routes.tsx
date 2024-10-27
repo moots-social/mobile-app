@@ -10,6 +10,8 @@ import { useEffect } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useUsuarioContext } from "../context/UsuarioContext"
 import { usuarioApi } from "../api/apis"
+import { Alert } from "react-native"
+import { useAuthContext } from "../context/AuthContext"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const contatoIcon = require('../assets/ChatIcon.png')
@@ -20,6 +22,7 @@ const perfilIcon = require('../assets/UsuarioIcon.png')
 const {Screen, Navigator} = createBottomTabNavigator()
 
 export default function Bottom(){
+    const {autentication, setAutentication} = useAuthContext()
     const {usuario, setUsuario} = useUsuarioContext()
     const tabs = [
         {
@@ -61,11 +64,15 @@ export default function Bottom(){
                 const resultado = await usuarioApi.get(`/buscar/${id}`,{
                     headers: {Authorization: token}
                 })
-                if(resultado.data){
-                    setUsuario(resultado.data)
-                }else throw new Error('')
-            }catch(error){
-                console.error(error)
+                if(resultado.data) setUsuario(resultado.data)
+                }catch(error: any){
+                    if(error.response.data.error ==='Token inválido ou expirado.') {
+                        Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
+                        await AsyncStorage.multiRemove(['token', 'id', 'email'])
+                        await AsyncStorage.setItem('autentication', String(false))
+                        setAutentication('false')
+                        }
+                    console.error(error.response.data.error)
             }
         }
         
@@ -79,8 +86,10 @@ export default function Bottom(){
                 headerShown: false, 
                 tabBarIcon: () => (
                 <Image source={tab.icon} w={30} h={30} rounded={tab.icon==usuario.fotoPerfil ? 30 : 0}/>
-                ), 
+                ),
                 tabBarShowLabel: false,
+                tabBarInactiveBackgroundColor: '#F5F5F5',
+                tabBarHideOnKeyboard: true,
                 }}
                />  
  

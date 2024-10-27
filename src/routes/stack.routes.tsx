@@ -30,6 +30,7 @@ export default function Stack() {
       setAutenticado(authStatus === 'true');
       setLoading(false);
     };
+    
     checarAutenticacao();
   }, [autentication]);
 
@@ -43,7 +44,7 @@ export default function Stack() {
       {autenticado ? (
         <>
           <Screen name="tabs" component={Bottom} options={{ headerShown: false }} />
-          <Screen name="chat" component={Chat} options={{ headerShown: false }} />
+          <Screen name="chat" component={Chat} options={{ headerShown: false,  }} />
           <Screen name="contatos" component={Contatos} options={{ headerShown: false }} />
           <Screen name="editar" component={EditarPerfil} options={{ headerShown: false }} />
           <Screen name="redefinir" component={RedefinirSenha} options={{ headerShown: false }} />

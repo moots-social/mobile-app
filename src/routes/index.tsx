@@ -28,10 +28,11 @@ import { StatusBar } from "expo-status-bar";
 import { Box, Spinner } from "@gluestack-ui/themed";
 import { ProviderAuthContext } from "../context/AuthContext";
 import { ProviderUsuarioContext } from "../context/UsuarioContext";
-import { useEffect } from "react";
 import { LogBox } from "react-native";
 
 export default function Routes() {
+  LogBox.ignoreAllLogs(true)
+
   const [fontsLoaded] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -53,9 +54,6 @@ export default function Routes() {
     Poppins_900Black_Italic,
   });
 
-  useEffect(()=>{
-    LogBox.ignoreAllLogs(false)
-  }, [])
 
   if (!fontsLoaded) {
     return (

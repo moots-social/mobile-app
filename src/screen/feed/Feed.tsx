@@ -11,10 +11,11 @@ import Loading from '../../components/Loading'
 
 export default function Feed() {
   const [isLoading, setIsLoading] = useState(true)
+  
   useEffect(()=>{
     setTimeout(()=>{
       setIsLoading(false)
-    }, 200)
+    }, 150)
   }, [])
   return (
     <LinearGradientMoots>

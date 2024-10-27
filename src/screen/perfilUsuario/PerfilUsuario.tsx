@@ -1,4 +1,4 @@
-import { Box, Image, Text, ScrollView} from '@gluestack-ui/themed'
+import { Box, Image, Text, ScrollView, Pressable} from '@gluestack-ui/themed'
 import LinearGradientMoots from '../../components/LinearGradientMoots'
 import { Titulo } from '../../components/Texto'
 import { BotaoConfigurar, BotaoCurso, BotaoListaSeguidores, BotaoSeguir } from '../../components/BotoesPerfil'
@@ -15,7 +15,7 @@ export default function PerfilUsuario({route}) {
     useEffect(()=>{
         setTimeout(()=>{
         setIsLoading(false)
-        }, 200)
+        }, 150)
     }, [])
   return (<>
     <Loading isOpen={isLoading}/>
@@ -37,6 +37,9 @@ export default function PerfilUsuario({route}) {
         </Box>
         <Box alignItems="center">
           <Titulo>Publicações</Titulo>
+          <Pressable>
+            <Text>oi</Text>
+          </Pressable>
         </Box>
       </ScrollView>
     </LinearGradientMoots>

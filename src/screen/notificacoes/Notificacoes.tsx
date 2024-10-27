@@ -10,7 +10,7 @@ export default function Notificacoes(){
     useEffect(()=>{
         setTimeout(()=>{
         setIsLoading(false)
-        }, 200)
+        }, 150)
     }, [])
     return (
             <LinearGradientMoots>
