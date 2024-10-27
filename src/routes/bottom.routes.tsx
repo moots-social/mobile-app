@@ -1,17 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
-import Contatos from "../screen/contatos/Contatos"
-import Pesquisa from "../screen/pesquisa/Pesquisa"
+import Contatos from "../screen/contatos/ContatosScreen"
+import Pesquisa from "../screen/pesquisa/PesquisaScreen"
 import { Image } from "@gluestack-ui/themed"
-import Feed from "../screen/feed/Feed"
-import PerfilUsuario from "../screen/perfilUsuario/PerfilUsuario"
-import Notificacoes from "../screen/notificacoes/Notificacoes"
+import Feed from "../screen/feed/FeedScreen"
+import PerfilUsuario from "../screen/perfil/PerfilScreen"
+import Notificacoes from "../screen/notificacoes/NotificacoesScreen"
 import { useEffect } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useUsuarioContext } from "../context/UsuarioContext"
 import { usuarioApi } from "../api/apis"
 import { Alert } from "react-native"
 import { useAuthContext } from "../context/AuthContext"
+import { logoutUser } from "../utils/logoutUser"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const contatoIcon = require('../assets/ChatIcon.png')
@@ -68,9 +69,7 @@ export default function Bottom(){
                 }catch(error: any){
                     if(error.response.data.error ==='Token inválido ou expirado.') {
                         Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
-                        await AsyncStorage.multiRemove(['token', 'id', 'email'])
-                        await AsyncStorage.setItem('autentication', String(false))
-                        setAutentication('false')
+                        await logoutUser(setAutentication, setUsuario)
                         }
                     console.error(error.response.data.error)
             }
