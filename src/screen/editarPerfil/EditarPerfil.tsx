@@ -16,6 +16,42 @@ import { useAuthContext } from '../../context/AuthContext';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
+export const handleUpdateImage = async(uri: string)=>{
+    
+    let novaPerfilURL = ''
+    try {
+        const token = await SyncStorage.getItem('token')
+        const containerName ="artifact-image-container"
+
+        const formData = new FormData()
+        formData.append('file', {
+            uri: uri,
+            name: 'perfil.jpeg',
+            type: 'image/jpeg'
+        })
+        
+        const config = {
+            params: {
+                containerName: containerName
+            },
+            headers: {
+                Authorization: `${token}`,
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        
+        const dado = await usuarioApi.post(`/images`, formData, config);
+        const req = await dado.data;
+        
+        if (req!=undefined) {
+            novaPerfilURL = req.data
+        }
+    } catch (error) {
+        console.error(error)
+    }
+    return novaPerfilURL
+}
+
 export default function EditarPerfil({navigation}){
     const {autentication, setAutentication} = useAuthContext()
     const {usuario, setUsuario} = useUsuarioContext()
@@ -71,18 +107,30 @@ export default function EditarPerfil({navigation}){
                     style: 'cancel'
                 }
             ])
-        } catch (error) {
+        } catch (error: any) {
             Alert.alert('Erro ao sair', `Não foi possível completar ação. ${error.response.data.error}`)
         }
     }
 
+
     const handleSubmit = async()=>{
+        
         try{
             const token = await SyncStorage.getItem('token')
+            let imagem = ''
+            let imagem2= ''
+            if(usuarioAtualizado.fotoPerfil!=='') {
+                imagem = await handleUpdateImage(usuarioAtualizado.fotoPerfil)
+            }
+            if(usuarioAtualizado.fotoCapa!==''){
+                imagem2 = await handleUpdateImage(usuarioAtualizado.fotoCapa)
+            }
+            
+        
             const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
                 nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao,
-                curso: usuario.novoCurso || usuario.curso, fotoPerfil: usuarioAtualizado.fotoPerfil || usuario.fotoPerfil,
-                fotoCapa: usuarioAtualizado.fotoCapa || usuario.fotoCapa
+                curso: usuario.novoCurso || usuario.curso, fotoPerfil: imagem || usuario.fotoPerfil,
+                fotoCapa: imagem2 || usuario.fotoCapa
             }, {headers: {Authorization: token}})
     
             if(resultado!==undefined){
@@ -98,9 +146,10 @@ export default function EditarPerfil({navigation}){
                     setUsuarioAtualizado({nomeCompleto: '', descricao: usuario.descricao, curso: '', fotoPerfil: '', fotoCapa: ''})
                     Alert.alert('Atualizar perfil', 'Alterações realizadas com sucesso.')
                 },500)
-            }else throw new Error('Não foi possível editar seu perfil. Tente novamente mais tarde.')
+           }else throw new Error('Não foi possível editar seu perfil. Tente novamente mais tarde.')
+            
         }catch(error: any){
-            Alert.alert('Erro ao atualizar', error.response.data.error)
+            console.error(error)
         }
     }
 

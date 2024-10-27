@@ -25,7 +25,6 @@ export default function ExcluirConta({navigation}){
                     await SyncStorage.multiRemove(['token', 'email', 'id'])
                     await SyncStorage.setItem('autentication', String(false))
                     setAutentication('false')
-                    navigation.navigate('login')
                     setUsuario({curso: ''})
                     setIsLoading(false)
                 },2000)

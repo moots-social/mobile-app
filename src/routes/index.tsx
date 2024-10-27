@@ -54,7 +54,7 @@ export default function Routes() {
   });
 
   useEffect(()=>{
-    LogBox.ignoreAllLogs(true)
+    LogBox.ignoreAllLogs(false)
   }, [])
 
   if (!fontsLoaded) {

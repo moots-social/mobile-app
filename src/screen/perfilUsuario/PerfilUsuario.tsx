@@ -6,8 +6,8 @@ import { useUsuarioContext } from '../../context/UsuarioContext'
 import { useEffect, useState } from 'react'
 import Loading from '../../components/Loading'
 
-const usuarioIcon = require('../../assets/UsuarioIcon.png')
-const coverIcon = require('../../assets/CoverIcon.png')
+const usuarioIcon = "https://storageimagesmoots.blob.core.windows.net/artifact-image-container/68a77764-1c2e-4bc4-8d6b-c280ac593970.png"
+const coverIcon = 'https://storageimagesmoots.blob.core.windows.net/artifact-image-container/6d682b11-f1c0-48cb-976d-19b0db2f2681.png'
 
 export default function PerfilUsuario({route}) {
   const {usuario} = useUsuarioContext()
