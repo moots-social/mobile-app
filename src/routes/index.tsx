@@ -62,7 +62,7 @@ export default function Routes() {
         <Image source={splashScreen} w="100%" h="100%"/>
         <Spinner color="$lightSete" size="large"/>
       </Box>
-  ) //splash screen
+    ) //splash screen
   }
 
   return (
