@@ -131,6 +131,39 @@ export default function Info({navigation, route}){
     }
 
     const handleSubmit = async() => {
+      if(create.fotoPerfil != imagemPerfil){
+        let novaPerfilURL = ''
+        try {
+          const containerName ="artifact-image-container"
+  
+          const formData = new FormData()
+          formData.append('file', {
+              uri: imagens[0].uri,
+              name: 'perfil.jpeg',
+              type: 'image/jpeg'
+          })
+          
+          const config = {
+              params: {
+                  containerName: containerName
+              },
+              headers: {
+                  'Content-Type': 'multipart/form-data',
+              },
+          };
+          
+          const dado = await usuarioApi.post(`/images`, formData, config);
+          const req = await dado.data;
+
+          if (req!=undefined) {
+            novaPerfilURL = req.data  
+            setCreate({...create, fotoPerfil: novaPerfilURL})
+        }
+      } catch (error: any) {
+          Alert.alert(error)
+      }
+      }
+
       try {
         if(create.curso === ""){
           Alert.alert('Campo vazio', "O seu curso é obrigatório.")
@@ -140,8 +173,6 @@ export default function Info({navigation, route}){
 
         if (dado) {
           console.log(dado)
-          Alert.alert('Cadastro', 'Sua conta foi criada com sucesso.')
-          navigation.navigate("login")
       } 
       } catch (error: any) {
         if(error.response.data.error === "Tag já está em uso."){
