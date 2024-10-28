@@ -7,6 +7,7 @@ import { useState } from "react";
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from "../../api/apis";
 import { useUsuarioContext } from "../../context/UsuarioContext";
+import { Alert } from "react-native";
 
 export default function RedefinirSenha({navigation}){
     const {usuario, setUsuario} = useUsuarioContext()
@@ -32,11 +33,15 @@ export default function RedefinirSenha({navigation}){
             const resultado = await usuarioApi.patch(`/redefinir-senha/${usuario.id}`, {
                 senhaAntiga: senhaAntiga, senhaNova: novaSenha
             }, {headers: {Authorization: token}})
-            setUsuario(resultado.data)
-            alert('Senha alterada com sucesso.')
-            navigation.goBack()
-        }catch(error){
-            console.error(error)
+            if(resultado){
+                setUsuario(resultado.data)
+                alert('Senha alterada com sucesso.')
+                navigation.goBack()
+            }
+        }catch(error: any){
+            //AxiosError: Request failed with status code 409
+            if(error.response.data.statusCode==409) {Alert.alert('Senha incorreta', 'Sua senha está incorreta. Tente novamente com a senha correta.'); return}
+            Alert.alert('Erro ao atualizar senha', String(error || error.response.data.error))
         }
     }
     return(
