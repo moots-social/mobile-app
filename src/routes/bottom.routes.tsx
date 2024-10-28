@@ -67,7 +67,7 @@ export default function Bottom(){
                 })
                 if(resultado.data) setUsuario(resultado.data)
                 }catch(error: any){
-                    if(error.response.data.error ==='Token inválido ou expirado.') {
+                    if(error.response.data.error === 'Token inválido ou expirado.') {
                         Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
                         await logoutUser(setAutentication, setUsuario)
                         }
@@ -76,6 +76,26 @@ export default function Bottom(){
         }
         
         getUser()
+    }, [])
+
+    useEffect(()=>{
+        const getSeguindoSeguidores = async()=>{
+            try {
+                const token = await AsyncStorage.getItem('token')
+                const id = await AsyncStorage.getItem('id')
+                const resultadoSeguindo = await usuarioApi.get(`/buscar-quem-segue/${id}`, {headers: {Authorization: token}})
+                const resultadoSeguidores = await usuarioApi.get(`/buscar-seguidores/${id}`, {headers: {Authorization: token}})
+                
+                if(resultadoSeguindo.data && resultadoSeguidores.data){
+                    setUsuario({...usuario, seguindo: resultadoSeguindo.data})
+                    setUsuario({...usuario, seguidores: resultadoSeguidores.data})
+                }
+            } catch (error) {
+                alert(String(error))
+            }
+        }
+
+        getSeguindoSeguidores()
     }, [])
     return(
         <Navigator>

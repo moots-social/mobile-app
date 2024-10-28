@@ -23,10 +23,12 @@ export default function CartaoUsuario({cor="$lightSeis", corSecundaria="$lightSe
             </Avatar>
             <Text color="$white" fontFamily="Poppins_700Bold" textAlign="center">{usuarioRenderizadoNoCartao.nomeCompleto}</Text>
         </Box>
-        <Box flexDirection="row" justifyContent="space-around" bg={corSecundaria} rounded={15} w="70%" py='$1' >
-            <BotaoSeguir w={25} h={25} rounded={20} imgW={10.5} imgH={8.5} id1={usuario.id} id2={usuarioRenderizadoNoCartao.id} nomeCompleto={usuarioRenderizadoNoCartao.nomeCompleto}/>
-            {!vemDeLista ? <BotaoListaSeguidores w={25} h={25} rounded={20} imgW={10} imgH={10} getUsuario={usuarioRenderizadoNoCartao}/> : ''}
-        </Box>
+        {usuario.id!==usuarioRenderizadoNoCartao.id && (
+            <Box flexDirection="row" justifyContent="space-around" bg={corSecundaria} rounded={15} w="70%" py='$1' >
+                <BotaoSeguir w={25} h={25} rounded={20} imgW={10.5} imgH={8.5} id1={usuario.id} id2={usuarioRenderizadoNoCartao.id} nomeCompleto={usuarioRenderizadoNoCartao.nomeCompleto}/>
+                {!vemDeLista ? <BotaoListaSeguidores w={25} h={25} rounded={20} imgW={10} imgH={10} getUsuario={usuarioRenderizadoNoCartao}/> : ''}
+            </Box>
+        )}
     </Pressable>
     )
 }

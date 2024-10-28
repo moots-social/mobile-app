@@ -79,21 +79,31 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
                     Authorization: token
                 }
             })
-            if(resultado) Alert.alert('Seguir usuário', `Agora você está seguindo ${nomeCompleto}.`)
+            if(resultado){
+                Alert.alert('Seguir usuário', `Agora você está seguindo ${nomeCompleto}.`)
+                setIsSeguindo(true)
+            }
         } catch (error: any) {
-            console.error(error.response.data.error)
+            if(error=='AxiosError: Request failed with status code 400'){
+                Alert.alert('Erro', 'Você já está seguindo esse usuário.')
+                setIsSeguindo(true)
+            }
         }
     }
     const handleSubmit = async()=>{
         try {
-            console.log('')
+            seguirUsuario()
         } catch (error) {
             console.error(error)
         }
     }
+
+    useEffect(()=>{
+        handleIsSeguindo()
+    }, [setIsSeguindo])
     
     return(
-        <Pressable bg={isSeguindo ? "$lightTres" : '#FF5050'} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+        <Pressable onPress={handleSubmit} bg={!isSeguindo ? "$lightTres" : '#FF5050'} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>
         </Pressable>
     )
