@@ -1,25 +1,32 @@
-import { Box, Text, Avatar, AvatarImage} from "@gluestack-ui/themed";
+import { Box, Text, Avatar, AvatarImage, Pressable} from "@gluestack-ui/themed";
 import { BotaoListaSeguidores, BotaoSeguir } from "./PerfilBotoes";
 import { usuarioIcon } from "./PerfilComponents";
+import { Alert } from "react-native";
+import { useUsuarioContext } from "../../context/UsuarioContext";
+import { useNavigation } from "@react-navigation/native";
 
 interface ICartaoUsuarioProps{
     cor?: string,
-    corSecundaria?: string
+    corSecundaria?: string,
+    usuario: any,
+    usuarioRenderizadoNoCartao: any,
+    vemDeLista: boolean
 }
 
-export default function CartaoUsuario({cor="$lightSeis", corSecundaria="$lightSete", ...rest}: ICartaoUsuarioProps){
+export default function CartaoUsuario({cor="$lightSeis", corSecundaria="$lightSete", usuario, usuarioRenderizadoNoCartao, vemDeLista, ...rest}: ICartaoUsuarioProps){
+
     return(
-    <Box w={100} h={120} bg={cor} rounded={15} alignItems="center" {...rest}>
-        <Box alignItems="center" mt={5}>
+    <Pressable w={120} bg={cor} rounded={15} alignItems="center" py={10} {...rest}>
+        <Box alignItems="center">
             <Avatar >
-                <AvatarImage source={usuarioIcon} bg={corSecundaria} alt='foto do usuário'/>
+                <AvatarImage source={usuarioRenderizadoNoCartao.fotoPerfil || usuarioIcon} bg={corSecundaria} alt='foto do usuário'/>
             </Avatar>
-            <Text color="$white" fontFamily="Poppins_700Bold">Usuario</Text>
+            <Text color="$white" fontFamily="Poppins_700Bold" textAlign="center">{usuarioRenderizadoNoCartao.nomeCompleto}</Text>
         </Box>
-        <Box flexDirection="row" bg={corSecundaria} rounded={15}>
-            <Box m={5} mr={2.5}><BotaoSeguir w={25} h={25} rounded={20} imgW={10.5} imgH={8.5}/></Box>
-            <Box m={5} ml={2.5}><BotaoListaSeguidores w={25} h={25} rounded={20} imgW={10} imgH={10}/></Box>
+        <Box flexDirection="row" justifyContent="space-around" bg={corSecundaria} rounded={15} w="70%" py='$1' >
+            <BotaoSeguir w={25} h={25} rounded={20} imgW={10.5} imgH={8.5} id1={usuario.id} id2={usuarioRenderizadoNoCartao.id} nomeCompleto={usuarioRenderizadoNoCartao.nomeCompleto}/>
+            {!vemDeLista ? <BotaoListaSeguidores w={25} h={25} rounded={20} imgW={10} imgH={10} getUsuario={usuarioRenderizadoNoCartao}/> : ''}
         </Box>
-    </Box>
+    </Pressable>
     )
 }

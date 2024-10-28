@@ -16,11 +16,12 @@ interface ITextoBoxProps{
 
 interface IBotoesPerfilBoxProps{
     curso: string,
-    seguir: boolean
+    seguir: boolean,
+    usuario: any
 }
 interface IPerfilBox{
     objetoARenderizar: any,
-    seguir: boolean
+    seguir: boolean,
 }
 
 export const usuarioIcon = "https://storageimagesmoots.blob.core.windows.net/artifact-image-container/68a77764-1c2e-4bc4-8d6b-c280ac593970.png"
@@ -42,11 +43,11 @@ export function TextoBox({nomeCompleto, tag, descricao , ...rest}: ITextoBoxProp
             </Box>
 }
 
-export function BotoesPerfilBox({curso, seguir}: IBotoesPerfilBoxProps){
+export function BotoesPerfilBox({curso, seguir, usuario}: IBotoesPerfilBoxProps){
     return <Box flexDirection='row' alignItems="center" justifyContent="space-between" alignSelf="center" w={180} my={10}>
             {!seguir ? <BotaoConfigurar w={35} imgW={15} imgH={15} /> : <BotaoSeguir rounded={20} imgW={15} imgH={12} />}
             <BotaoCurso curso={curso}/>
-            <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12}/> 
+            <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12} getUsuario={usuario} /> 
         </Box>
 }
 
@@ -61,7 +62,7 @@ export function PerfilBox({objetoARenderizar, seguir}: IPerfilBox){
         <ScrollView w="100%" display="flex">
             <FotoCapaBox fotoPerfilSource={objetoARenderizar.fotoPerfil || ''} fotoCapaSource={objetoARenderizar.fotoCapa || ''} />
             <TextoBox nomeCompleto={objetoARenderizar.nomeCompleto || ''} tag={objetoARenderizar.tag || ''} descricao={objetoARenderizar.descricao || ''}/>
-            <BotoesPerfilBox curso={objetoARenderizar.curso || ''} seguir={seguir}/>
+            <BotoesPerfilBox curso={objetoARenderizar.curso || ''} seguir={seguir} usuario={objetoARenderizar}/>
             <PublicacoesBox />
         </ScrollView>
     )
