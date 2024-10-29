@@ -57,45 +57,31 @@ export default function Bottom(){
             icon: usuario.fotoPerfil || perfilIcon
         }
     ]
-    useEffect(()=>{
-        const getUser = async()=>{
-            try{
-                const token = await AsyncStorage.getItem('token')
-                const id = await AsyncStorage.getItem('id')
-                const resultado = await usuarioApi.get(`/buscar/${id}`,{
-                    headers: {Authorization: token}
-                })
-                if(resultado.data) setUsuario(resultado.data)
-                }catch(error: any){
-                    if(error.response.data.error === 'Token inválido ou expirado.') {
-                        Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
-                        await logoutUser(setAutentication, setUsuario)
-                        }
-                    console.error(error.response.data.error)
+
+    const getUser = async()=>{
+        try{
+            const token = await AsyncStorage.getItem('token')
+            const id = await AsyncStorage.getItem('id')
+            const resultado = await usuarioApi.get(`/buscar/${id}`,{
+                headers: {Authorization: token}
+            })
+            const resData = resultado.data
+            if(resData){
+                setUsuario(resData)
             }
+        }catch(error: any){
+            if(error.response.data.error === 'Token inválido ou expirado.') {
+                Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
+                await logoutUser(setAutentication, setUsuario)
+                return
+            }
+            alert(String(error))
         }
+    }
+    
+    useEffect(()=>{
         
         getUser()
-    }, [])
-
-    useEffect(()=>{
-        const getSeguindoSeguidores = async()=>{
-            try {
-                const token = await AsyncStorage.getItem('token')
-                const id = await AsyncStorage.getItem('id')
-                const resultadoSeguindo = await usuarioApi.get(`/buscar-quem-segue/${id}`, {headers: {Authorization: token}})
-                const resultadoSeguidores = await usuarioApi.get(`/buscar-seguidores/${id}`, {headers: {Authorization: token}})
-                
-                if(resultadoSeguindo.data && resultadoSeguidores.data){
-                    setUsuario({...usuario, seguindo: resultadoSeguindo.data})
-                    setUsuario({...usuario, seguidores: resultadoSeguidores.data})
-                }
-            } catch (error) {
-                alert(String(error))
-            }
-        }
-
-        getSeguindoSeguidores()
     }, [])
     return(
         <Navigator>
@@ -107,7 +93,6 @@ export default function Bottom(){
                 <Image source={tab.icon} w={30} h={30} rounded={tab.icon==usuario.fotoPerfil ? 30 : 0}/>
                 ),
                 tabBarShowLabel: false,
-                tabBarInactiveBackgroundColor: '#F5F5F5',
                 tabBarHideOnKeyboard: true,
                 }}
                />  

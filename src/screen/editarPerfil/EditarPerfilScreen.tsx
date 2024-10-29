@@ -23,7 +23,6 @@ export const handleUpdateImage = async(uri: string)=>{
     
     let novaPerfilURL = ''
     try {
-        const token = await SyncStorage.getItem('token')
         const containerName ="artifact-image-container"
 
         const formData = new FormData()
@@ -38,7 +37,6 @@ export const handleUpdateImage = async(uri: string)=>{
                 containerName: containerName
             },
             headers: {
-                Authorization: `${token}`,
                 'Content-Type': 'multipart/form-data',
             },
         };
@@ -49,8 +47,8 @@ export const handleUpdateImage = async(uri: string)=>{
         if (req!=undefined) {
             novaPerfilURL = req.data
         }
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        console.error(error.response.data.error)
     }
     return novaPerfilURL
 }
