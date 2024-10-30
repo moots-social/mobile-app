@@ -8,8 +8,8 @@ export default function PerfilOutroUsuario({navigation, route}){
     const {usuario} = useUsuarioContext()
 
     useEffect(()=>{
-        if(outroUsuario.id==usuario.id){
-            navigation.goBack()
+        if(outroUsuario.userId==usuario.id){
+            navigation.navigate('perfil')
         }
     }, [route.params])
 

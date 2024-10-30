@@ -130,7 +130,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
     const getSeguindo = async()=>{
         try {
             const token = await AsyncStorage.getItem('token')
-            const resultado = await usuarioApi.get(`/buscar-quem-segue/${getUsuario.id}`, {headers:{Authorization: token}})
+            const resultado = await usuarioApi.get(`/buscar-quem-segue/${getUsuario.userId}`, {headers:{Authorization: token}})
             if(resultado){
                 setSeguindo(resultado.data)
             }
@@ -143,7 +143,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
         try {
             
             const token = await AsyncStorage.getItem('token')
-            const resultado = await usuarioApi.get(`/buscar-seguidores/${getUsuario.id}`, {headers:{Authorization: token}})
+            const resultado = await usuarioApi.get(`/buscar-seguidores/${getUsuario.userId}`, {headers:{Authorization: token}})
             if(resultado){
                 setSeguidores(resultado.data)
             }
