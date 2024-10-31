@@ -27,7 +27,7 @@ export default function CartaoUsuario({cor="$lightSeis", corSecundaria="$lightSe
         </Box>
         {usuario.id!==usuarioRenderizadoNoCartao.userId && (
             <Box flexDirection="row" justifyContent="space-around" bg={corSecundaria} rounded={15} w="70%" py='$1' >
-                {!seguir ? '' : <BotaoSeguir w={25} h={25} rounded={20} imgW={10.5} imgH={8.5} id1={usuario.id} id2={usuarioRenderizadoNoCartao.id} nomeCompleto={usuarioRenderizadoNoCartao.nomeCompleto}/>}
+                {!seguir ? '' : <BotaoSeguir w={25} h={25} rounded={20} imgW={10.5} imgH={8.5} id1={usuario.id} id2={usuarioRenderizadoNoCartao.userId} nomeCompleto={usuarioRenderizadoNoCartao.nomeCompleto}/>}
                 {!vemDeLista ? <BotaoListaSeguidores w={25} h={25} rounded={20} imgW={10} imgH={10} getUsuario={usuarioRenderizadoNoCartao}/> : ''}
             </Box>
         )}
