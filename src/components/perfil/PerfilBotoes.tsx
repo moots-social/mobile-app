@@ -47,7 +47,7 @@ interface IBotaoListaSeguidores{
 export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}: IBotaoSeguirProps){
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
 
-    const handlePararDeSeguir = async()=>{
+    const pararDeSeguir = async()=>{
         const token = await getTokenStorage()
         try {
             const resultado = await usuarioApi.put(`/seguir`, {}, {
@@ -62,6 +62,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
             })
             if(resultado.data){
                 Alert.alert('Parar de seguir', `Você parou de seguir ${nomeCompleto}.`)
+                setIsSeguindo(false)
             }
         } catch (error) {
             alert(String(error))
@@ -83,13 +84,14 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
             })
             if(resultado){
                 Alert.alert('Seguir usuário', `Agora você está seguindo ${nomeCompleto}.`)
+                setIsSeguindo(true)
             } 
         } catch (error: any) {
             if(error.response.data.error==='Acesso negado. Você não tem permissão para acessar este recurso.'){
                 Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
                     {
                         text: 'Sim',
-                        onPress: async()=>await handlePararDeSeguir()
+                        onPress: async()=>await pararDeSeguir()
                     },
                     {
                         text: 'Não'
@@ -116,7 +118,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
         };
     
         handleIsSeguindo();
-    }, [isSeguindo, id1, id2])
+    }, [id1, id2])
     return(
         <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={seguirUsuario} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>

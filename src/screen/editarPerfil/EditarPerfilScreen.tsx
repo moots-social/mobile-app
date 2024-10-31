@@ -54,7 +54,7 @@ export const handleUpdateImage = async(uri: string)=>{
 }
 
 export default function EditarPerfil({navigation}){
-    const {autentication, setAutentication} = useAuthContext()
+    const {auth, setAuth} = useAuthContext()
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -90,9 +90,9 @@ export default function EditarPerfil({navigation}){
                     text: 'Sim',
                     onPress: async() =>{
                         try {
-                            const autenticado = await AsyncStorage.getItem('autentication')
+                            const autenticado = await AsyncStorage.getItem('auth')
                             if(autenticado==='true'){
-                                await logoutUser(setAutentication, setUsuario)
+                                await logoutUser(setAuth, setUsuario)
                             }
                         } catch (error) {
                             console.error(error)

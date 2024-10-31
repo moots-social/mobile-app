@@ -54,7 +54,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                     Authorization: token
                 }
             })
-            if(resultadoPerfil.data){
+            if(resultadoPerfil){
                 navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil.data || null})
                 setTimeout(()=>{
                     setTermos([...termos, valor])

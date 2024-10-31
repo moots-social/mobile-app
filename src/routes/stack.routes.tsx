@@ -12,29 +12,29 @@ import PostExpandido from "../screen/post/PostExpandidoScreen";
 import PesquisaPalavraChave from "../screen/pesquisa/PesquisaPalavraChaveScreen";
 import NovoPost from "../screen/post/NovoPostScreen";
 import { useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthContext } from "../context/AuthContext";
 import Loading from "../components/geral/Loading";
 import PerfilOutroUsuario from "../screen/perfil/PerfilOutroUsuarioScreen";
+import { getAnyItemStorage } from "../utils/storageUtils";
 
 const { Screen, Navigator } = createStackNavigator();
 
 export default function Stack() {
-  const {autentication} = useAuthContext()
+  const {auth} = useAuthContext()
   const [autenticado, setAutenticado] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checarAutenticacao = async () => {
-      const authStatus = await AsyncStorage.getItem('autentication');
+      const authStatus = await getAnyItemStorage('auth');
       setAutenticado(authStatus === 'true');
       setLoading(false);
     };
     
     checarAutenticacao();
-  }, [autentication]);
+  }, [auth]);
 
-  // Enquanto está carregando, exibe um indicador de carregamento
+  
   if (loading) {
     return <Loading isOpen={loading}/>
   }

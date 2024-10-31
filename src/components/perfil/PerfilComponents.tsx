@@ -47,7 +47,7 @@ export function TextoBox({nomeCompleto, tag, descricao , ...rest}: ITextoBoxProp
 export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxProps){
     const {usuario} = useUsuarioContext()
     return <Box flexDirection='row' alignItems="center" justifyContent="space-between" alignSelf="center" w={180} my={10}>
-            {!seguir ? <BotaoConfigurar w={35} imgW={15} imgH={15} /> : <BotaoSeguir rounded={20} imgW={15} imgH={12} id1={usuario.id} id2={getUsuario.id} nomeCompleto={getUsuario.nomeCompleto}/>}
+            {!seguir ? <BotaoConfigurar w={35} imgW={15} imgH={15} /> : <BotaoSeguir rounded={20} imgW={15} imgH={12} id1={usuario.id} id2={getUsuario.userId} nomeCompleto={getUsuario.nomeCompleto}/>}
             <BotaoCurso curso={curso}/>
             <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12} getUsuario={getUsuario} /> 
         </Box>

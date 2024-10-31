@@ -138,7 +138,7 @@ export default function Info({navigation, route}){
         if(create.fotoPerfil!==usuarioIcon){
           imagem = await handleUpdateImage(create.fotoPerfil)
         }else{
-          imagem = usuarioIcon
+          imagem = ''
         }
         const res = await usuarioApi.post("/criar", {...create, fotoPerfil: imagem});
         const dado = await res.data;

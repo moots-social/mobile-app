@@ -1,48 +1,26 @@
-import { usuarioLogin } from "../../api/apis";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Box, Image } from "@gluestack-ui/themed-native-base";
 import { Titulo, TextoNegrito } from "../../components/geral/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/botao/BotaoSecao";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import FormControlInput from "../../components/geral/FormControlInput";
-import { CommonActions } from '@react-navigation/native';
 import { useAuthContext } from "../../context/AuthContext";
-import { Alert } from "react-native";
-import { ScrollView } from "@gluestack-ui/themed";
+import { login } from "../../utils/usuarioUtils";
+import { getAnyItemStorage } from "../../utils/storageUtils";
 
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
-  const {setAutentication} = useAuthContext()
+  const {setAuth} = useAuthContext()
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
     
   const handleSubmit = async () => {
-      try {
-          const dado = await usuarioLogin.post("", {
-              email : email,
-              senha : senha
-          });
-          const res = await dado.data;
-          if(res){
-            await AsyncStorage.setItem('token', res.token);
-            await AsyncStorage.setItem('email', res.login);
-            await AsyncStorage.setItem('id', String(res.id));
-            const auth = await AsyncStorage.setItem('autentication', String(true));
-            setAutentication(auth)
-          }
-          else throw new Error("Não foi possível realizar a autenticação. Tente novamente.")
-      } catch (error: any) {
-        Alert.alert('Erro', error.response.data.error)
-    }
+      await login(email, senha)
+      setAuth(await getAnyItemStorage('auth'))
   };
-
-  useEffect(()=>{
-    async()=> alert(await AsyncStorage.getItem('autentication'))
-  }, [])
 
   return (
     
