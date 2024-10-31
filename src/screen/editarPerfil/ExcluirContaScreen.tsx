@@ -8,7 +8,7 @@ import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from "../../api/apis";
 import Loading from "../../components/geral/Loading";
 import { useAuthContext } from "../../context/AuthContext";
-import { logoutUser } from "../../utils/logoutUser";
+import { logoutUser } from "../../utils/storageUtils";
 
 export default function ExcluirConta(){
     const {usuario, setUsuario} = useUsuarioContext()

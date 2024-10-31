@@ -14,7 +14,7 @@ import { useAuthContext } from '../../context/AuthContext';
 import { useUsuarioContext } from '../../context/UsuarioContext';
 
 import { usuarioApi } from '../../api/apis';
-import { logoutUser } from '../../utils/logoutUser';
+import { logoutUser } from '../../utils/storageUtils';
 
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')

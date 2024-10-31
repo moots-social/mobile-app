@@ -12,7 +12,7 @@ import { useUsuarioContext } from "../context/UsuarioContext"
 import { usuarioApi } from "../api/apis"
 import { Alert } from "react-native"
 import { useAuthContext } from "../context/AuthContext"
-import { logoutUser } from "../utils/logoutUser"
+import { invalidToken, logoutUser } from "../utils/storageUtils"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const contatoIcon = require('../assets/ChatIcon.png')
@@ -70,12 +70,8 @@ export default function Bottom(){
                 setUsuario(resData)
             }
         }catch(error: any){
-            if(error.response.data.error === 'Token inválido ou expirado.') {
-                Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
-                await logoutUser(setAutentication, setUsuario)
-                return
-            }
-            alert(String(error))
+            if(error.response?.data?.error === 'Token inválido ou expirado.') await invalidToken(setAutentication, setUsuario)
+            else alert(String(error))
         }
     }
     

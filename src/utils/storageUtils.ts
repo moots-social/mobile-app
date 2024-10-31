@@ -43,3 +43,17 @@ export const setAnyItemStorage = async(item: string, value: any)=>{
         Alert.alert('Erro', `Algo deu errado. ${String(error)}`)
     }
 }
+
+export const logoutUser = async(setAutentication: any, setUsuario: any): Promise<void> =>{
+    await AsyncStorage.multiRemove(['token', 'id', 'email'])
+    await AsyncStorage.setItem('autentication', String(false))
+    setAutentication('false')
+    setTimeout(()=>{
+        setUsuario({curso: ''})
+    }, 100)
+}
+
+export const invalidToken = async(setAutentication: any, setUsuario: any)=>{
+    Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
+    logoutUser(setAutentication, setUsuario)
+}
