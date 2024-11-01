@@ -33,3 +33,45 @@ export const buscar = async()=>{
         return error.response?.data?.error
     }
 }
+
+export const pararDeSeguir = async(nomeCompleto: string, id1: number, id2:number)=>{
+    const token = await Storage.getTokenStorage()
+    try {
+        const resultado = await Service.usuarioApi.put(`/seguir`, {}, {
+            params: {
+                id1: id1,
+                id2: id2,
+                follow: false
+            },
+            headers: {
+                Authorization: token
+            }
+        })
+        if(resultado.data){
+            return `Você parou de seguir ${nomeCompleto}.`
+        }
+    } catch (error: any) {
+        return error.response?.data?.error
+    }
+}
+
+export const seguirUsuario = async(nomeCompleto: string, id1: number, id2: number)=>{
+    const token = await Storage.getTokenStorage()
+    
+    try {
+        const resultado = await Service.usuarioApi.put(`/seguir`, {}, {
+            params:{
+                id1: id1,
+                id2: id2
+            },
+            headers: {
+                Authorization: token
+            }
+        })
+        if(resultado){
+            return `Agora você está seguindo ${nomeCompleto}.`
+        } 
+    } catch (error: any) {
+        return error.response?.data?.error
+    }
+}

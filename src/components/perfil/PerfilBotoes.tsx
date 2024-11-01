@@ -11,6 +11,7 @@ import CartaoUsuario from "./CartaoUsuario"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Alert } from "react-native"
 import { getTokenStorage } from "../../utils/storageUtils"
+import { pararDeSeguir, seguirUsuario } from "../../utils/usuarioUtils"
 
 const seguirIcon = require('../../assets/SeguirIcon.png')
 const listaIcon = require('../../assets/ListaIcon.png')
@@ -47,59 +48,31 @@ interface IBotaoListaSeguidores{
 export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}: IBotaoSeguirProps){
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
 
-    const pararDeSeguir = async()=>{
-        const token = await getTokenStorage()
-        try {
-            const resultado = await usuarioApi.put(`/seguir`, {}, {
-                params: {
-                    id1: id1,
-                    id2: id2,
-                    follow: false
-                },
-                headers: {
-                    Authorization: token
-                }
-            })
-            if(resultado.data){
-                Alert.alert('Parar de seguir', `Você parou de seguir ${nomeCompleto}.`)
-                setIsSeguindo(false)
-            }
-        } catch (error) {
-            alert(String(error))
-        }
+    const handlePararDeSeguir = async()=>{
+        const resultado = await pararDeSeguir(nomeCompleto, id1, id2)
+        if(resultado===`Você parou de seguir ${nomeCompleto}.`) setIsSeguindo(false)
+        Alert.alert(`Resultado`, resultado)
     }
 
-    const seguirUsuario = async()=>{
-        const token = await getTokenStorage()
-        
-        try {
-            const resultado = await usuarioApi.put(`/seguir`, {}, {
-                params:{
-                    id1: id1,
-                    id2: id2
+    const handleSeguirUsuario = async()=>{
+        const resultado = await seguirUsuario(nomeCompleto, id1, id2)
+        if(resultado === `Agora você está seguindo ${nomeCompleto}.`){
+            setIsSeguindo(true)
+            Alert.alert('Seguir usuário', resultado)
+        }
+        else if(resultado === 'Acesso negado. Você não tem permissão para acessar este recurso.'){
+            Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
+                {
+                    text: 'Sim',
+                    onPress: async()=>await handlePararDeSeguir()
                 },
-                headers: {
-                    Authorization: token
+                {
+                    text: 'Não'
                 }
-            })
-            if(resultado){
-                Alert.alert('Seguir usuário', `Agora você está seguindo ${nomeCompleto}.`)
-                setIsSeguindo(true)
-            } 
-        } catch (error: any) {
-            if(error.response.data.error==='Acesso negado. Você não tem permissão para acessar este recurso.'){
-                Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
-                    {
-                        text: 'Sim',
-                        onPress: async()=>await pararDeSeguir()
-                    },
-                    {
-                        text: 'Não'
-                    }
-                ])
-            }else console.log(error.response.data.error)
+            ])
         }
     }
+    
     useEffect(() => {
         const handleIsSeguindo = async () => {
             try {
@@ -120,7 +93,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
         handleIsSeguindo();
     }, [id1, id2])
     return(
-        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={seguirUsuario} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>
         </Pressable>
     )
