@@ -76,7 +76,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
     useEffect(() => {
         const handleIsSeguindo = async () => {
             try {
-                const token = await AsyncStorage.getItem('token');
+                const token = await getTokenStorage();
                 const resultado = await usuarioApi.get(`/buscar-quem-segue/${id1}`, {
                     headers: { Authorization: token },
                 });
@@ -127,7 +127,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
 
     const getSeguindo = async()=>{
         try {
-            const token = await AsyncStorage.getItem('token')
+            const token = await getTokenStorage()
             const resultado = await usuarioApi.get(`/buscar-quem-segue/${getUsuario.userId}`, {headers:{Authorization: token}})
             if(resultado){
                 setSeguindo(resultado.data)
@@ -140,7 +140,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
     const getSeguidores = async()=>{
         try {
             
-            const token = await AsyncStorage.getItem('token')
+            const token = await getTokenStorage()
             const resultado = await usuarioApi.get(`/buscar-seguidores/${getUsuario.userId}`, {headers:{Authorization: token}})
             if(resultado){
                 setSeguidores(resultado.data)
