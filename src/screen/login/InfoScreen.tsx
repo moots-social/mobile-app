@@ -130,6 +130,7 @@ export default function Info({navigation, route}){
     }
 
     const handleSubmit = async() => {
+
       let imagem = ''
       try {
         if(create.curso === ""){
@@ -145,8 +146,6 @@ export default function Info({navigation, route}){
 
         if (dado) {
           console.log(dado)
-          Alert.alert('Cadastro', 'Sua conta foi criada com sucesso.')
-          navigation.navigate("login")
       } 
       } catch (error: any) {
         if(error.response.data.error === "Tag já está em uso."){
