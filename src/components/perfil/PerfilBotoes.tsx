@@ -5,12 +5,12 @@ import { TextoNegrito } from "../geral/Texto"
 import { useEffect, useState } from "react"
 import { useUsuarioContext } from "../../context/UsuarioContext"
 import { usuarioApi } from "../../api/apis"
-import { useRoute } from "@react-navigation/native"
 
 import BotaoSecao from "../botao/BotaoSecao"
 import CartaoUsuario from "./CartaoUsuario"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Alert } from "react-native"
+import { getTokenStorage } from "../../utils/storageUtils"
 
 const seguirIcon = require('../../assets/SeguirIcon.png')
 const listaIcon = require('../../assets/ListaIcon.png')
@@ -47,27 +47,30 @@ interface IBotaoListaSeguidores{
 export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}: IBotaoSeguirProps){
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
 
-    const handleIsSeguindo = async()=>{
-        try{
-            const token = await AsyncStorage.getItem('token')
-            const resultado = await usuarioApi.get(`/buscar-quem-segue/${id1}`, {headers:{Authorization: token}})
-            
-            if(resultado){
-                const dados = resultado.data
-                dados.map((dado: any)=> {
-                    if(dado.id===id2) {
-                        setIsSeguindo(true)
-                        return
-                    }else setIsSeguindo(false)
-                })
-            } 
-        }catch(error){
-            console.error(error.response.data.error)
+    const pararDeSeguir = async()=>{
+        const token = await getTokenStorage()
+        try {
+            const resultado = await usuarioApi.put(`/seguir`, {}, {
+                params: {
+                    id1: id1,
+                    id2: id2,
+                    follow: false
+                },
+                headers: {
+                    Authorization: token
+                }
+            })
+            if(resultado.data){
+                Alert.alert('Parar de seguir', `Você parou de seguir ${nomeCompleto}.`)
+                setIsSeguindo(false)
+            }
+        } catch (error) {
+            alert(String(error))
         }
     }
 
     const seguirUsuario = async()=>{
-        const token = await AsyncStorage.getItem('token')
+        const token = await getTokenStorage()
         
         try {
             const resultado = await usuarioApi.put(`/seguir`, {}, {
@@ -79,21 +82,45 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
                     Authorization: token
                 }
             })
-            if(resultado) Alert.alert('Seguir usuário', `Agora você está seguindo ${nomeCompleto}.`)
+            if(resultado){
+                Alert.alert('Seguir usuário', `Agora você está seguindo ${nomeCompleto}.`)
+                setIsSeguindo(true)
+            } 
         } catch (error: any) {
-            console.error(error.response.data.error)
+            if(error.response.data.error==='Acesso negado. Você não tem permissão para acessar este recurso.'){
+                Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
+                    {
+                        text: 'Sim',
+                        onPress: async()=>await pararDeSeguir()
+                    },
+                    {
+                        text: 'Não'
+                    }
+                ])
+            }else console.log(error.response.data.error)
         }
     }
-    const handleSubmit = async()=>{
-        try {
-            console.log('')
-        } catch (error) {
-            console.error(error)
-        }
-    }
+    useEffect(() => {
+        const handleIsSeguindo = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                const resultado = await usuarioApi.get(`/buscar-quem-segue/${id1}`, {
+                    headers: { Authorization: token },
+                });
     
+                if (resultado.data) {
+                    const checkIsSeguindo = resultado.data.some(dado => dado.id === id2);
+                    setIsSeguindo(checkIsSeguindo);
+                }
+            } catch (error: any) {
+                console.error(error.response?.data?.error || error);
+            }
+        };
+    
+        handleIsSeguindo();
+    }, [id1, id2])
     return(
-        <Pressable bg={isSeguindo ? "$lightTres" : '#FF5050'} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={seguirUsuario} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>
         </Pressable>
     )
@@ -109,7 +136,7 @@ export function BotaoConfigurar({imgW=10, imgH=10, ...rest}: IBotaoConfigurarPro
     )
 }
 export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IBotaoListaSeguidores){
-    const {usuario, setUsuario} = useUsuarioContext()
+    const {usuario} = useUsuarioContext()
     const navigation = useNavigation()
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const[botaoSelecionado, setBotaoSelecionado] = useState<string>('seguindo')
@@ -125,29 +152,40 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
         setBotaoSelecionado('seguidores')
     }
 
-    
-    const getSeguindoSeguidores = async()=>{
+    const getSeguindo = async()=>{
         try {
-            let resultado: any = ''
-            if(isModalVisivel && usuario.seguindo===undefined && usuario.seguidores===undefined){
-                if(botaoSelecionado==='seguindo'){
-                    const token = await AsyncStorage.getItem('token')
-                    
-                    resultado = await usuarioApi.get(`/buscar-quem-segue/${getUsuario.id}`, {headers:{Authorization: token}})
-                    if(resultado) {setSeguindo(resultado.data);}
-                }else if(botaoSelecionado==='seguidores'){
-                    resultado = await usuarioApi.get(`/buscar-seguidores/${getUsuario.id}`, {headers:{Authorization: await AsyncStorage.getItem('token')}})
-                    if(resultado) {setSeguidores(resultado.data);}
-                }
+            const token = await AsyncStorage.getItem('token')
+            const resultado = await usuarioApi.get(`/buscar-quem-segue/${getUsuario.userId}`, {headers:{Authorization: token}})
+            if(resultado){
+                setSeguindo(resultado.data)
             }
         } catch (error) {
-            console.error(error.response.data.error)
+            setSeguindo([])
+            console.log(error)
         }
     }
+    const getSeguidores = async()=>{
+        try {
+            
+            const token = await AsyncStorage.getItem('token')
+            const resultado = await usuarioApi.get(`/buscar-seguidores/${getUsuario.userId}`, {headers:{Authorization: token}})
+            if(resultado){
+                setSeguidores(resultado.data)
+            }
+            
+        } catch (error) {
+            setSeguidores([])
+            console.log(error)
+        }
+    }
+    
     useEffect(()=>{
-
-        getSeguindoSeguidores()
-        
+        if(botaoSelecionado==='seguindo'){
+            getSeguindo()
+        } 
+        else if (botaoSelecionado==='seguidores'){
+            getSeguidores()
+        }
     }, [isModalVisivel, botaoSelecionado])
     
     return(
@@ -166,13 +204,13 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
                     </Box>
                         {botaoSelecionado==='seguindo' && seguindo ? (
                          <FlatList data={seguindo} renderItem={({item})=> 
-                            <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} navigation={navigation} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {outroUsuario: item}); setModalVisivel(false)}}/>
+                            <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} navigation={navigation} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {outroUsuario: item}); setModalVisivel(false); setBotaoSelecionado('seguindo')}}/>
                             } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20}}/>   
                         )
                           : ''}
                         {botaoSelecionado==='seguidores' && seguidores ? (
                             <FlatList data={seguidores} renderItem={({item})=> 
-                            <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {outroUsuario: item}); setModalVisivel(false)}}/>
+                            <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {outroUsuario: item}); setModalVisivel(false); setBotaoSelecionado('seguindo')}}/>
                         } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20}}/>) : ''}
                 </ModalContent>
             </Modal>

@@ -14,7 +14,7 @@ import { useAuthContext } from '../../context/AuthContext';
 import { useUsuarioContext } from '../../context/UsuarioContext';
 
 import { usuarioApi } from '../../api/apis';
-import { logoutUser } from '../../utils/logoutUser';
+import { logoutUser } from '../../utils/storageUtils';
 
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
@@ -23,7 +23,6 @@ export const handleUpdateImage = async(uri: string)=>{
     
     let novaPerfilURL = ''
     try {
-        const token = await SyncStorage.getItem('token')
         const containerName ="artifact-image-container"
 
         const formData = new FormData()
@@ -38,7 +37,6 @@ export const handleUpdateImage = async(uri: string)=>{
                 containerName: containerName
             },
             headers: {
-                Authorization: `${token}`,
                 'Content-Type': 'multipart/form-data',
             },
         };
@@ -50,14 +48,14 @@ export const handleUpdateImage = async(uri: string)=>{
             novaPerfilURL = req.data
             
         }
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        console.error(error.response.data.error)
     }
     return novaPerfilURL
 }
 
 export default function EditarPerfil({navigation}){
-    const {autentication, setAutentication} = useAuthContext()
+    const {auth, setAuth} = useAuthContext()
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -93,9 +91,9 @@ export default function EditarPerfil({navigation}){
                     text: 'Sim',
                     onPress: async() =>{
                         try {
-                            const autenticado = await AsyncStorage.getItem('autentication')
+                            const autenticado = await AsyncStorage.getItem('auth')
                             if(autenticado==='true'){
-                                await logoutUser(setAutentication, setUsuario)
+                                await logoutUser(setAuth, setUsuario)
                             }
                         } catch (error) {
                             console.error(error)

@@ -68,9 +68,9 @@ export default function Routes() {
   return (
     <ProviderAuthContext>
       <ProviderUsuarioContext>
-        <NavigationContainer>
-            <Stack />
-        </NavigationContainer>
+          <NavigationContainer>
+              <Stack />
+          </NavigationContainer>
       </ProviderUsuarioContext>
     </ProviderAuthContext>
   );
