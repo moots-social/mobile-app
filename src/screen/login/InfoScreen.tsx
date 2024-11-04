@@ -130,6 +130,7 @@ export default function Info({navigation, route}){
     }
 
     const handleSubmit = async() => {
+
       let imagem = ''
       try {
         if(create.curso === ""){

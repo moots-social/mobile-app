@@ -67,7 +67,7 @@ export default function Bottom(){
                 setUsuario(getUsuario)
             } else throw new Error(getUsuario)
         }catch(error: any){
-            if(error == 'Token inválido ou expirado.') {
+            if(error == 'Error: Token inválido ou expirado.') {
                 Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
                 logoutUser(setAuth, setUsuario)
             }
