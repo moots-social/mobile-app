@@ -32,7 +32,6 @@ export const BottomRadiusShadowBox = styled(StyledShadowBox, {
 
 export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const navigation = useNavigation()
-    const {usuario, setUsuario} = useUsuarioContext()
     const [isExtended, setIsExtended] = useState<boolean>(extended)
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>('')
@@ -41,28 +40,29 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const handlePesquisar = async()=>{
         if(valor==='' && valorParam===''){
             setIsInvalid(true)
-            return
         }
-        setIsInvalid(false)
-        try {
-            const token = await getTokenStorage()
-            const resultadoPerfil = await searchApi.get(`/user`, {
-                params: {
-                    query: valor
-                },
-                headers: {
-                    Authorization: token
+        else{
+            setIsInvalid(false)
+            try {
+                const token = await getTokenStorage()
+                const resultadoPerfil = await searchApi.get(`/user`, {
+                    params: {
+                        query: valor
+                    },
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                if(resultadoPerfil){
+                    navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil.data || null, dataPost: null})
+                    setTimeout(()=>{
+                        setTermos([...termos, valor])
+                    }, 100)
+                    setValor('')
                 }
-            })
-            if(resultadoPerfil){
-                navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil.data || null})
-                setTimeout(()=>{
-                    setTermos([...termos, valor])
-                }, 100)
-                setValor('')
+            } catch (error) {
+                alert(String(error))
             }
-        } catch (error) {
-            alert(String(error))
         }
     }
 

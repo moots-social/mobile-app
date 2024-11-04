@@ -46,6 +46,7 @@ export const handleUpdateImage = async(uri: string)=>{
         
         if (req!=undefined) {
             novaPerfilURL = req.data
+            
         }
     } catch (error: any) {
         console.error(error.response.data.error)
