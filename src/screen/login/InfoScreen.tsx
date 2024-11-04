@@ -1,5 +1,4 @@
 import { VStack, Text, Box, FormControl, Input, Image } from "@gluestack-ui/themed-native-base";
-import { LinearGradient } from "expo-linear-gradient";
 import { AlertCircleIcon, Button, ButtonText, ChevronDownIcon, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlLabel, FormControlLabelText, Icon, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger, styled } from "@gluestack-ui/themed";
 import { useState } from "react";
 import { TextoNegrito } from "../../components/geral/Texto";
@@ -12,8 +11,8 @@ import { usuarioApi } from "../../api/apis";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "react-native";
-
-const imagemPerfil = "https://storageimagesmoots.blob.core.windows.net/artifact-image-container/68a77764-1c2e-4bc4-8d6b-c280ac593970.png";
+import { usuarioIcon } from "../../components/perfil/PerfilComponents";
+import { handleUpdateImage } from "../editarPerfil/EditarPerfilScreen";
 
 const imagemCursoDesenvolvimento = require("../../assets/cursoIcons/DesenvolvimentoIcon.png")
 const imagemCursoFic = require("../../assets/cursoIcons/FicIcon.png")
@@ -78,7 +77,7 @@ export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
     const { email, senha } = sessao
-    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: imagemPerfil, fotoCapa: '', curso: "", roles: ["USER"], descricao: '', email, senha})
+    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: usuarioIcon, fotoCapa: '', curso: "", roles: ["USER"], descricao: '', email, senha})
     const [imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
     const [imagemCurso, setImagemCurso] = useState(imagemCursoDesenvolvimento)
 
@@ -131,44 +130,17 @@ export default function Info({navigation, route}){
     }
 
     const handleSubmit = async() => {
-      if(create.fotoPerfil != imagemPerfil){
-        let novaPerfilURL = ''
-        try {
-          const containerName ="artifact-image-container"
-  
-          const formData = new FormData()
-          formData.append('file', {
-              uri: imagens[0].uri,
-              name: 'perfil.jpeg',
-              type: 'image/jpeg'
-          })
-          
-          const config = {
-              params: {
-                  containerName: containerName
-              },
-              headers: {
-                  'Content-Type': 'multipart/form-data',
-              },
-          };
-          
-          const dado = await usuarioApi.post(`/images`, formData, config);
-          const req = await dado.data;
-
-          if (req!=undefined) {
-            novaPerfilURL = req.data  
-            setCreate({...create, fotoPerfil: novaPerfilURL})
-        }
-      } catch (error: any) {
-          Alert.alert(error)
-      }
-      }
-
+      let imagem = ''
       try {
         if(create.curso === ""){
           Alert.alert('Campo vazio', "O seu curso é obrigatório.")
         }
-        const res = await usuarioApi.post("/criar", create);
+        if(create.fotoPerfil!==usuarioIcon){
+          imagem = await handleUpdateImage(create.fotoPerfil)
+        }else{
+          imagem = ''
+        }
+        const res = await usuarioApi.post("/criar", {...create, fotoPerfil: imagem});
         const dado = await res.data;
 
         if (dado) {
@@ -256,7 +228,7 @@ export default function Info({navigation, route}){
                   <TextoNegrito
                     color="#468B51"
                     mt={3}
-                    onPress={() => {setCreate({...create, fotoPerfil: imagemPerfil}); Alert.alert('Prosseguir sem foto', 'Você decidiu não enviar uma foto agora. Basta clicar em continuar para seguir com o cadastro.')}}
+                    onPress={() => {setCreate({...create, fotoPerfil: usuarioIcon}); Alert.alert('Prosseguir sem foto', 'Você decidiu não enviar uma foto agora. Basta clicar em continuar para seguir com o cadastro.')}}
                   >
                    Não usar imagem
                   </TextoNegrito>

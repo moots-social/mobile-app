@@ -8,11 +8,11 @@ import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from "../../api/apis";
 import Loading from "../../components/geral/Loading";
 import { useAuthContext } from "../../context/AuthContext";
-import { logoutUser } from "../../utils/logoutUser";
+import { logoutUser } from "../../utils/storageUtils";
 
 export default function ExcluirConta(){
     const {usuario, setUsuario} = useUsuarioContext()
-    const {setAutentication} = useAuthContext()
+    const {setAuth} = useAuthContext()
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleExcluirConta = async()=>{
@@ -23,7 +23,7 @@ export default function ExcluirConta(){
                 Alert.alert('Conta excluída', 'Conta excluída com sucesso. Muito obrigado por ter feito parte do Moots!')
                 setIsLoading(true)
                 setTimeout(async()=>{
-                    await logoutUser(setAutentication, setUsuario)
+                    await logoutUser(setAuth, setUsuario)
                     setIsLoading(false)
                 },2000)
             }

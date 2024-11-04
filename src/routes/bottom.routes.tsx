@@ -12,7 +12,8 @@ import { useUsuarioContext } from "../context/UsuarioContext"
 import { usuarioApi } from "../api/apis"
 import { Alert } from "react-native"
 import { useAuthContext } from "../context/AuthContext"
-import { logoutUser } from "../utils/logoutUser"
+import { invalidToken, logoutUser } from "../utils/storageUtils"
+import { buscar } from "../utils/usuarioUtils"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const contatoIcon = require('../assets/ChatIcon.png')
@@ -23,7 +24,7 @@ const perfilIcon = require('../assets/UsuarioIcon.png')
 const {Screen, Navigator} = createBottomTabNavigator()
 
 export default function Bottom(){
-    const {autentication, setAutentication} = useAuthContext()
+    const {auth, setAuth} = useAuthContext()
     const {usuario, setUsuario} = useUsuarioContext()
     const tabs = [
         {
@@ -57,23 +58,24 @@ export default function Bottom(){
             icon: usuario.fotoPerfil || perfilIcon
         }
     ]
-    useEffect(()=>{
-        const getUser = async()=>{
-            try{
-                const token = await AsyncStorage.getItem('token')
-                const id = await AsyncStorage.getItem('id')
-                const resultado = await usuarioApi.get(`/buscar/${id}`,{
-                    headers: {Authorization: token}
-                })
-                if(resultado.data) setUsuario(resultado.data)
-                }catch(error: any){
-                    if(error.response.data.error ==='Token inválido ou expirado.') {
-                        Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
-                        await logoutUser(setAutentication, setUsuario)
-                        }
-                    console.error(error.response.data.error)
+
+    //to-do: arrumar sessão expirada
+    const getUser = async()=>{
+        try{
+            const getUsuario = await buscar()
+            if(getUsuario.nomeCompleto){
+                setUsuario(getUsuario)
+            } else throw new Error(getUsuario)
+        }catch(error: any){
+            if(error == 'Token inválido ou expirado.') {
+                Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
+                logoutUser(setAuth, setUsuario)
             }
+            else alert(String(error))
         }
+    }
+    
+    useEffect(()=>{
         
         getUser()
     }, [])
@@ -87,7 +89,6 @@ export default function Bottom(){
                 <Image source={tab.icon} w={30} h={30} rounded={tab.icon==usuario.fotoPerfil ? 30 : 0}/>
                 ),
                 tabBarShowLabel: false,
-                tabBarInactiveBackgroundColor: '#F5F5F5',
                 tabBarHideOnKeyboard: true,
                 }}
                />  

@@ -1,4 +1,4 @@
-import { Box, Image, Input, InputField, InputIcon, InputSlot, Pressable,  styled } from "@gluestack-ui/themed";
+import { Box, FlatList, Image, Input, InputField, InputIcon, InputSlot, Pressable,  styled } from "@gluestack-ui/themed";
 import FiltrosModal from "../modal/FiltrosModal";
 import { TextoNegrito } from "../geral/Texto";
 import { useState } from "react";
@@ -7,6 +7,9 @@ import { StyledShadowBox } from "../../screen/login/CadastroScreen";
 import BotaoVoltar from "../botao/BotaoVoltar";
 import { useNavigation} from "@react-navigation/native";
 import { RoundedBottomSemSombra } from "../geral/Rounded";
+import { searchApi } from "../../api/apis";
+import { getTokenStorage } from "../../utils/storageUtils";
+import { useUsuarioContext } from "../../context/UsuarioContext";
 
 const botaoEnviar = require('../../assets/EnviarIconRounded.png')
 const pesquisaIcon = require('../../assets/PesquisaIcon.png')
@@ -27,23 +30,44 @@ export const BottomRadiusShadowBox = styled(StyledShadowBox, {
     borderBottomRightRadius: 10
 })
 
-export default function BarraPesquisa({extended=true, valorParam=''}){
+export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const navigation = useNavigation()
+    const {usuario, setUsuario} = useUsuarioContext()
     const [isExtended, setIsExtended] = useState<boolean>(extended)
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>('')
+    const [termos, setTermos] = useState<Array<String>>([])
 
-    const handlePesquisar = ()=>{
+    const handlePesquisar = async()=>{
         if(valor==='' && valorParam===''){
             setIsInvalid(true)
             return
         }
         setIsInvalid(false)
-        navigation.navigate('pesquisaPalavraChave', {valor: valor})
+        try {
+            const token = await getTokenStorage()
+            const resultadoPerfil = await searchApi.get(`/user`, {
+                params: {
+                    query: valor
+                },
+                headers: {
+                    Authorization: token
+                }
+            })
+            if(resultadoPerfil){
+                navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil.data || null})
+                setTimeout(()=>{
+                    setTermos([...termos, valor])
+                }, 100)
+                setValor('')
+            }
+        } catch (error) {
+            alert(String(error))
+        }
     }
 
     return(
-            <BottomRadiusShadowBox>
+            <BottomRadiusShadowBox {...rest}>
                 <Box  flexDirection="row" justifyContent={!isExtended ? "space-around" : "space-between"} alignItems="center" py={10}>
                     {!isExtended && (
                         <Box>
@@ -61,6 +85,7 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
                                 placeholder={valorParam!='' ? valorParam : "Pesquise algo..."} 
                                 ml={-10} 
                                 pt={5} 
+                                value={valor}
                                 onChangeText={(novoValor)=>setValor(novoValor)}
                             />
                             <InputSlot>
@@ -79,10 +104,11 @@ export default function BarraPesquisa({extended=true, valorParam=''}){
 
                 </Box>
 
-                {isExtended && <Box flexDirection="row" gap={5}>
-                    <TextoNegrito>Recentes:</TextoNegrito>
-                    <TermoRecente termo='oi'/>
-                    <TermoRecente termo='teste'/>
+                {isExtended && <Box flexDirection="row" display="flex">
+                    <TextoNegrito mr={2.5} display="flex">Recentes:</TextoNegrito>
+                    {termos[0] ? <FlatList data={termos} renderItem={({item})=>(
+                        <TermoRecente termo={item}/>
+                    )} contentContainerStyle={{flexDirection: 'row', gap: 5, flexWrap: 'wrap', maxHeight: 80}}/> : <TextoNegrito>Nenhuma pesquisa recente.</TextoNegrito>}
                 </Box>}
                 
             </BottomRadiusShadowBox>
@@ -118,8 +144,24 @@ export function BarraPesquisaChat(){
 
 export function TermoRecente({termo, ...rest}: ITermoProps){
     const navigation = useNavigation()
+    const handlePress = async()=>{
+        try {
+            const token = await getTokenStorage()
+            const resultado = await searchApi.get('/user', {
+                params:{
+                    query: termo
+                },
+                headers: {Authorization: token}
+            })
+            if(resultado.data){
+                navigation.navigate('pesquisaPalavraChave', {valor: termo, dataPerfil: resultado.data || null})
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return(
-        <Pressable bg= "$add1" alignItems= "center" rounded= {15} px={10} onPress={()=>navigation.navigate('pesquisaPalavraChave', {valor: termo})} onLongPress={()=>alert(termo)} {...rest}>
+        <Pressable bg="$add1" alignItems= "center" rounded= {15} px={10} onPress={handlePress} onLongPress={()=>alert(termo)} {...rest}>
             <TextoNegrito color="$lightSeis">{termo}</TextoNegrito>
         </Pressable>
     )
