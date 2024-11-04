@@ -1,6 +1,7 @@
 import { FormControl, Input, Text } from "@gluestack-ui/themed-native-base";
 import { StyledShadowBox } from "../../screen/login/CadastroScreen";
 import { ITextareaProps } from "@gluestack-ui/textarea/lib/typescript/types";
+import React from "react";
 
 interface Props extends ITextareaProps{
     label: string,
@@ -10,7 +11,8 @@ interface Props extends ITextareaProps{
 }
 
 export default function FormControlInput({label, loginOuCadastro=false, onChange, mbb, ...rest} : Props ){
-    return (
+    
+  return (
       <FormControl mb={mbb} {...rest} w="100%" alignItems={!loginOuCadastro ? "center" : "flex-start"}>
 
         <FormControl.Label>

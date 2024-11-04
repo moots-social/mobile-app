@@ -33,3 +33,4 @@ export const buscar = async()=>{
         return error.response?.data?.error
     }
 }
+

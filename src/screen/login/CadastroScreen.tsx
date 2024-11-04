@@ -48,7 +48,7 @@ export default function Cadastro({ navigation }) {
       } else if (sessao.senha !== confirmarSenha) {
         Alert.alert('Senha inválida', "As senhas não correspondem.");
       } else if (sessao.senha.length < 8){
-        Alert.alert('Senha inválida', "sua senha tem que ter pelo menos 8 caracteres")
+        Alert.alert('Senha inválida', "Sua senha deve ter pelo menos 8 caracteres.")
       }else {
 
         try {
