@@ -11,36 +11,32 @@ import { getIdStorage, getTokenStorage } from '../../utils/storageUtils'
 import { Alert } from 'react-native'
 
 
-export default async function Feed({navigation}) {
-  const token = await getTokenStorage()
-  const id = await getIdStorage()
+export default function Feed({navigation}) {
   const [isLoading, setIsLoading] = useState(true)
-  const [post, setPost] = useState([]);
 
   useEffect(()=>{
     setTimeout(()=>{
       setIsLoading(false)
-    }, 150)
+    }, 150)})
 
-    const reqPosts = async() => {
-      try{
-        const req = await postApi.get("/find-all", {
-        headers: {
-          Authorization: token
-          }
-        })
-        const data = await req.data;
+    // const reqPosts = async() => {
+    //   try{
+    //     const req = await postApi.get("/find-all", {
+    //     headers: {
+    //       Authorization: token
+    //       }
+    //     })
+    //     const data = await req.data;
 
-        if (data){
-          console.log(data)
-        }
-      }catch(error: any){
-        console.log(error.response.data.error)
-      }
-    }
+    //     if (data){
+    //       console.log(data)
+    //     }
+    //   }catch(error: any){
+    //     console.log(error.response.data.error)
+    //   }
+    // }
 
-    reqPosts()
-  }, [])
+    // reqPosts()
   return (
     <LinearGradientMoots>
       <Loading isOpen={isLoading}/>

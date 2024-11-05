@@ -12,7 +12,7 @@ import { useUsuarioContext } from "../context/UsuarioContext"
 import { usuarioApi } from "../api/apis"
 import { Alert } from "react-native"
 import { useAuthContext } from "../context/AuthContext"
-import { invalidToken, logoutUser } from "../utils/storageUtils"
+import { logoutUser } from "../utils/storageUtils"
 import { buscar } from "../utils/usuarioUtils"
 
 const homeIcon = require('../assets/HomeIcon.png')
@@ -59,23 +59,23 @@ export default function Bottom(){
         }
     ]
 
-    //to-do: arrumar sessão expirada
-    const getUser = async()=>{
-        try{
-            const getUsuario = await buscar()
-            if(getUsuario.nomeCompleto){
-                setUsuario(getUsuario)
-            } else throw new Error(getUsuario)
-        }catch(error: any){
-            if(error == 'Error: Token inválido ou expirado.') {
-                Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
-                logoutUser(setAuth, setUsuario)
-            }
-            else alert(String(error))
-        }
-    }
     
     useEffect(()=>{
+        //to-do: arrumar sessão expirada
+        const getUser = async()=>{
+            try{
+                const getUsuario = await buscar()
+                if(getUsuario.nomeCompleto){
+                    setUsuario(getUsuario)
+                } else throw new Error(getUsuario)
+            }catch(error: any){
+                if(error == 'Error: Token inválido ou expirado.') {
+                    Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
+                    logoutUser(setAuth, setUsuario)
+                }
+                else alert(String(error))
+            }
+        }
         
         getUser()
     }, [])

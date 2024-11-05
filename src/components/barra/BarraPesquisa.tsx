@@ -1,5 +1,4 @@
 import { Box, FlatList, Image, Input, InputField, InputIcon, InputSlot, Pressable,  styled, useToast } from "@gluestack-ui/themed";
-import FiltrosModal from "../modal/FiltrosModal";
 import { TextoNegrito } from "../geral/Texto";
 import { useRef, useState } from "react";
 import { StyledShadowBox } from "../../screen/login/CadastroScreen";
@@ -11,6 +10,7 @@ import { searchApi } from "../../api/apis";
 import { getTokenStorage } from "../../utils/storageUtils";
 import { Keyboard } from "react-native";
 import { abrirToast } from "../geral/ToastMoots";
+import FiltrosModal from "../modal/FiltrosModal";
 const botaoEnviar = require('../../assets/EnviarIconRounded.png')
 const pesquisaIcon = require('../../assets/PesquisaIcon.png')
 
