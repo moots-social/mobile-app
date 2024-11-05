@@ -14,10 +14,10 @@ export default function PesquisaPalavraChave({navigation, route}: any){
     return(
         <LinearGradientMoots>
             <ScrollView>
-                <Box flex={1} justifyContent="space-between">
-                    <BarraPesquisa extended={false} valorParam={valor} />
-                    <RoundedTop bg="$white" pt={5} pb={40} alignItems="center" h="90%">
-                        <Box alignItems="center" h={250}>
+                <Box flex={1}>
+                    <BarraPesquisa extended={false} valorParam={valor} mb={20}/>
+                    <RoundedTop bg="$white" pt={5} pb={20} alignItems="center" h="100%">
+                        <Box alignItems="center" minHeight={100} maxHeight={245}>
                             <Titulo fontFamily="Poppins_500Medium">Perfis</Titulo>
                             {dataPerfil[0] ? (
                                 <FlatList data={dataPerfil} renderItem={({item})=>(
@@ -26,17 +26,12 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                             ): <TextoNegrito fontFamily="Poppins_500Medium">Nenhum perfil encontrado.</TextoNegrito>}
                         </Box>
                         <Divider w="80%" my={10}/>
-                        <Box alignItems="center">
+                        <Box alignItems="center" minHeight={545}>
                             <Titulo fontFamily="Poppins_500Medium">Publicações</Titulo>
-                            {!dataPost ? 
+                            {dataPost ? 
                             <>
-                                <Post />
-                                <Post />
-                                <Post />
-                                <Post />
-                                <Post />
-                                <Post />
-                                <Post />
+                                <Post mb={20}/>
+                                <Post mb={20}/>
                             </>: <TextoNegrito fontFamily="Poppins_500Medium" >Nenhuma publicação encontrada.</TextoNegrito>}
                         </Box>
                     </RoundedTop>

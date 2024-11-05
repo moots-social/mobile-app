@@ -1,7 +1,7 @@
-import { Box, FlatList, Image, Input, InputField, InputIcon, InputSlot, Pressable,  styled } from "@gluestack-ui/themed";
+import { Box, FlatList, Image, Input, InputField, InputIcon, InputSlot, Pressable,  styled, useToast } from "@gluestack-ui/themed";
 import FiltrosModal from "../modal/FiltrosModal";
 import { TextoNegrito } from "../geral/Texto";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { StyledShadowBox } from "../../screen/login/CadastroScreen";
 
 import BotaoVoltar from "../botao/BotaoVoltar";
@@ -9,8 +9,8 @@ import { useNavigation} from "@react-navigation/native";
 import { RoundedBottomSemSombra } from "../geral/Rounded";
 import { searchApi } from "../../api/apis";
 import { getTokenStorage } from "../../utils/storageUtils";
-import { useUsuarioContext } from "../../context/UsuarioContext";
-
+import { Keyboard } from "react-native";
+import { abrirToast } from "../geral/ToastMoots";
 const botaoEnviar = require('../../assets/EnviarIconRounded.png')
 const pesquisaIcon = require('../../assets/PesquisaIcon.png')
 
@@ -30,16 +30,26 @@ export const BottomRadiusShadowBox = styled(StyledShadowBox, {
     borderBottomRightRadius: 10
 })
 
+
 export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
+    const toast = useToast()
     const navigation = useNavigation()
+    const input = useRef(null)
     const [isExtended, setIsExtended] = useState<boolean>(extended)
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>('')
     const [termos, setTermos] = useState<Array<String>>([])
 
+    const desfocarInput = () => {
+        input.current.blur()
+        Keyboard.dismiss()
+    }
+
     const handlePesquisar = async()=>{
         if(valor==='' && valorParam===''){
             setIsInvalid(true)
+            abrirToast(toast, 'error', 'Para pesquisar um usuário ou uma publicação, você deve digitar algo no campo de pesquisa.')
+            desfocarInput()
         }
         else{
             setIsInvalid(false)
@@ -76,7 +86,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                     )}
 
                     <Box w={!isExtended ? "70%" : "85%"}>
-                        <Input variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid}>
+                        <Input ref={input} onBlur={desfocarInput} variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid} onSubmitEditing={handlePesquisar}>
                             <InputSlot>
                                 <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20} alt='pesquisa'/></InputIcon>
                             </InputSlot>

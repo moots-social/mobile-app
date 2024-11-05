@@ -2,7 +2,7 @@ import { Alert } from "react-native";
 import * as Service from "../api/apis";
 import * as Storage from "./storageUtils";
 
-export const login = async(email: string, senha: string): Promise<void> =>{
+export const login = async(email: string, senha: string) =>{
     try {
         const dado = await Service.usuarioLogin.post("", {
             email : email,
@@ -15,8 +15,9 @@ export const login = async(email: string, senha: string): Promise<void> =>{
             await Storage.setAnyItemStorage('id', String(res.id))
             await Storage.setAnyItemStorage('auth', String(true))
         }
+        return 'Autenticado com sucesso.'
     } catch (error: any) {
-      Alert.alert('Erro', error.response.data.error)
+      return error.response.data.error
   }
 }
 

@@ -9,11 +9,12 @@ import FormControlInput from "../../components/geral/FormControlInput";
 import { useAuthContext } from "../../context/AuthContext";
 import { login } from "../../utils/usuarioUtils";
 import { getAnyItemStorage } from "../../utils/storageUtils";
-import { ScrollView } from "@gluestack-ui/themed";
-
+import { ScrollView, useToast } from "@gluestack-ui/themed";
+import { abrirToast} from "../../components/geral/ToastMoots";
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
+  const toast = useToast()
   const {setAuth} = useAuthContext()
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
@@ -21,8 +22,13 @@ export default function Login({ navigation }) {
   const inputEmail = useRef(null)
   const inputSenha = useRef(null)
   const handleSubmit = async () => {
-      await login(email, senha)
-      setAuth(await getAnyItemStorage('auth'))
+      const res = await login(email, senha)
+      if(res!=='Autenticado com sucesso.'){
+        abrirToast(toast, 'error', res, '', 1500, false)
+      }else{
+        abrirToast(toast, 'success', 'Autenticado com sucesso. Entrando...', '', 800, false)
+        setAuth(await getAnyItemStorage('auth'))
+      }
   };
 
   const handleNextInput = (nextRef) => {
