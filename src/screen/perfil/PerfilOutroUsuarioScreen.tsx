@@ -4,7 +4,7 @@ import {PerfilBox} from "../../components/perfil/PerfilComponents";
 import { useUsuarioContext } from "../../context/UsuarioContext";
 
 export default function PerfilOutroUsuario({navigation, route}){
-    const {outroUsuario} = route.params
+    const {userId} = route.params
     const {usuario} = useUsuarioContext()
 
     useEffect(()=>{
