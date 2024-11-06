@@ -8,9 +8,11 @@ import { useNavigation} from "@react-navigation/native";
 import { RoundedBottomSemSombra } from "../geral/Rounded";
 import { searchApi } from "../../api/apis";
 import { getTokenStorage } from "../../utils/storageUtils";
-import { Keyboard } from "react-native";
+import { Alert, Keyboard } from "react-native";
 import { abrirToast } from "../geral/ToastMoots";
 import FiltrosModal from "../modal/FiltrosModal";
+import { ScrollView } from "react-native-gesture-handler";
+import { useMiscContext } from "../../context/MiscContext";
 const botaoEnviar = require('../../assets/EnviarIconRounded.png')
 const pesquisaIcon = require('../../assets/PesquisaIcon.png')
 
@@ -35,10 +37,14 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const toast = useToast()
     const navigation = useNavigation()
     const input = useRef(null)
+    const {termos, setTermos} = useMiscContext()
     const [isExtended, setIsExtended] = useState<boolean>(extended)
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
-    const [valor, setValor] = useState<string>('')
-    const [termos, setTermos] = useState<Array<String>>([])
+    const [valor, setValor] = useState<string>(valorParam || '')
+
+    const voltar = () =>{
+        navigation.goBack()
+    }
 
     const desfocarInput = () => {
         input.current.blur()
@@ -66,12 +72,12 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                 if(resultadoPerfil){
                     navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil.data || null, dataPost: null})
                     setTimeout(()=>{
-                        setTermos([...termos, valor])
+                        if(!termos.includes(valor)) setTermos([...termos, valor])
                     }, 100)
                     setValor('')
                 }
             } catch (error) {
-                alert(String(error))
+                console.error(error)
             }
         }
     }
@@ -81,7 +87,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                 <Box  flexDirection="row" justifyContent={!isExtended ? "space-around" : "space-between"} alignItems="center" py={10}>
                     {!isExtended && (
                         <Box>
-                            <BotaoVoltar onPress={()=>{navigation.goBack(); setIsExtended(true); setValor('')}}/>
+                            <BotaoVoltar onPress={()=>voltar()}/>
                         </Box>
                     )}
 
@@ -92,7 +98,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                             </InputSlot>
                             <InputField 
                                 fontFamily="Poppins_500Medium" 
-                                placeholder={valorParam!='' ? valorParam : "Pesquise algo..."} 
+                                placeholder={valor!='' ? valor : "Pesquise algo..."} 
                                 ml={-10} 
                                 pt={5} 
                                 value={valor}
@@ -115,10 +121,12 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                 </Box>
 
                 {isExtended && <Box flexDirection="row" display="flex">
-                    <TextoNegrito mr={2.5} display="flex">Recentes:</TextoNegrito>
-                    {termos[0] ? <FlatList data={termos} renderItem={({item})=>(
-                        <TermoRecente termo={item}/>
-                    )} contentContainerStyle={{flexDirection: 'row', gap: 5, flexWrap: 'wrap', maxHeight: 80}}/> : <TextoNegrito>Nenhuma pesquisa recente.</TextoNegrito>}
+                    <TextoNegrito mr='$2.5' display="flex">Recentes:</TextoNegrito>
+                    <ScrollView contentContainerStyle={{gap: 5}} showsHorizontalScrollIndicator={false} horizontal>
+                    {termos[0] ? termos.map((termo)=>{
+                        return <TermoRecente termo={termo}/>
+                    }): <TextoNegrito>Nenhuma pesquisa recente.</TextoNegrito>}
+                    </ScrollView>
                 </Box>}
                 
             </BottomRadiusShadowBox>
@@ -154,6 +162,7 @@ export function BarraPesquisaChat(){
 
 export function TermoRecente({termo, ...rest}: ITermoProps){
     const navigation = useNavigation()
+    const {termos, setTermos} = useMiscContext()
     const handlePress = async()=>{
         try {
             const token = await getTokenStorage()
@@ -170,8 +179,23 @@ export function TermoRecente({termo, ...rest}: ITermoProps){
             console.log(error)
         }
     }
+    const handleLongPress = () =>{
+        Alert.alert('Remover termo', `Deseja remover o termo ${termo}?`, [
+            {
+                text: 'Sim',
+                onPress: ()=>{
+                    const index: number = termos.lastIndexOf(termo)
+                    const novoArrayTermo = termos.slice(0, index).concat(termos.slice(index+1))
+                    setTermos(novoArrayTermo)
+                }
+            },
+            {
+                text: 'Não',
+            }
+        ])
+    }
     return(
-        <Pressable bg="$add1" alignItems= "center" rounded= {15} px={10} onPress={handlePress} onLongPress={()=>alert(termo)} {...rest}>
+        <Pressable bg="$add1" alignItems= "center" rounded= {15} px={10} onPress={handlePress} onLongPress={handleLongPress} {...rest}>
             <TextoNegrito color="$lightSeis">{termo}</TextoNegrito>
         </Pressable>
     )
