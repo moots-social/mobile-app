@@ -180,7 +180,7 @@ export function TermoRecente({termo, ...rest}: ITermoProps){
         }
     }
     const handleLongPress = () =>{
-        Alert.alert('Remover termo', `Deseja remover o termo ${termo}?`, [
+        Alert.alert('Remover pesquisa', `Deseja remover a pesquisa recente "${termo}"?`, [
             {
                 text: 'Sim',
                 onPress: ()=>{
