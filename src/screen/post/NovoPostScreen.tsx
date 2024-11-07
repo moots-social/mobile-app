@@ -3,14 +3,13 @@ import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { RoundedBottom } from "../../components/geral/Rounded";
 import { TextoNegrito } from "../../components/geral/Texto";
-import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria, TesteContext } from "../../components/botao/BotoesPostComentario";
-import { useContext, useEffect, useState } from "react";
-import { ImagemContext } from "../../context/PostContext";
+import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria} from "../../components/botao/BotoesPostComentario";
+import { useUsuarioContext } from "../../context/UsuarioContext";
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function NovoPost(){
-
+    const {usuario} = useUsuarioContext()
     return(
             <LinearGradientMoots>
                 <ScrollView>
@@ -19,8 +18,8 @@ export default function NovoPost(){
                         <Box p={20} display="flex" justifyContent="space-between" minHeight={500}>
                             <Box display="flex">
                                 <Box flexDirection="row" alignItems="center">
-                                    <Image source={usuarioIcon} w={40} h={40}/>
-                                    <TextoNegrito ml={2}>Usuário</TextoNegrito>
+                                    <Image source={usuario.fotoPerfil} w={40} h={40} rounded={30}/>
+                                    <TextoNegrito ml={2}>{usuario.nomeCompleto}</TextoNegrito>
                                 </Box>
                                 <Box justifyContent="center" >
                                     <Textarea ml={38} brw={0} w="85%" h={200} bottom={10}>
