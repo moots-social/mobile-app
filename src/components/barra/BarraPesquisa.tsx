@@ -1,6 +1,6 @@
 import { Box, FlatList, Image, Input, InputField, InputIcon, InputSlot, Pressable,  styled, useToast } from "@gluestack-ui/themed";
 import { TextoNegrito } from "../geral/Texto";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyledShadowBox } from "../../screen/login/CadastroScreen";
 
 import BotaoVoltar from "../botao/BotaoVoltar";
@@ -37,7 +37,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const toast = useToast()
     const navigation = useNavigation()
     const input = useRef(null)
-    const {termos, setTermos} = useMiscContext()
+    const {termos, setTermos, filtros, setFiltros} = useMiscContext()
     const [isExtended, setIsExtended] = useState<boolean>(extended)
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>(valorParam || '')
@@ -45,6 +45,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const voltar = () =>{
         navigation.goBack()
     }
+    
 
     const desfocarInput = () => {
         input.current.blur()

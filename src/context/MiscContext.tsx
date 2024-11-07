@@ -4,9 +4,15 @@ export const MiscContext = createContext()
 
 export const ProviderMiscContext = ({children}: any)=>{
     const [termos, setTermos] = useState([])
+    const [filtros, setFiltros] = useState({
+        radio: 'tudo',
+        usuario: 'qualquerUm',
+        selectUsuario: 'Qualquer',
+        checkPost: true
+    })
 
     return(
-        <MiscContext.Provider value={{termos, setTermos}}>
+        <MiscContext.Provider value={{termos, setTermos, filtros, setFiltros}}>
             {children}
         </MiscContext.Provider>
     )
