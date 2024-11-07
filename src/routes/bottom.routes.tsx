@@ -1,17 +1,18 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-
-import Contatos from "../screen/contatos/ContatosScreen"
-import Pesquisa from "../screen/pesquisa/PesquisaScreen"
-import { Box, Icon, Image } from "@gluestack-ui/themed"
 import Feed from "../screen/feed/FeedScreen"
+import Pesquisa from "../screen/pesquisa/PesquisaScreen"
 import PerfilUsuario from "../screen/perfil/PerfilScreen"
 import Notificacoes from "../screen/notificacoes/NotificacoesScreen"
+import Contatos from "../screen/contatos/ContatosScreen"
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+
+import { Box, Image } from "@gluestack-ui/themed"
 import { useEffect } from "react"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useUsuarioContext } from "../context/UsuarioContext"
-import { usuarioApi } from "../api/apis"
 import { Alert } from "react-native"
+
+import { useUsuarioContext } from "../context/UsuarioContext"
 import { useAuthContext } from "../context/AuthContext"
+
 import { logoutUser } from "../utils/storageUtils"
 import { buscar } from "../utils/usuarioUtils"
 
