@@ -145,7 +145,8 @@ export default function Info({navigation, route}){
         const dado = await res.data;
 
         if (dado) {
-          console.log(dado)
+          Alert.alert(`Usuario ${dado.tag} criado com sucesso. Faça login e proveite o app!`)
+          navigation.navigate("login")
       } 
       } catch (error: any) {
         if(error.response.data.error === "Tag já está em uso."){
