@@ -71,7 +71,8 @@
     "@types/jwt-decode": "^2.2.1",
     "@types/react": "~18.2.45",
     "lucide-react-native": "latest",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "@expo/ngrok": "^4.1.0"
   },
   "private": true
 }

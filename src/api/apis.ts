@@ -25,3 +25,11 @@ export const searchApi = axios.create({
         "Content-Type": "application/json"
     }
 });
+
+export const postApi = axios.create({
+    baseURL: "http://192.168.1.77:8080/post", // ou /user ou /post
+    headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+    }
+});

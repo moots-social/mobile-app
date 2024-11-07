@@ -11,10 +11,10 @@ const menuIcon = require('../../assets/MenuIcon.png')
 //como esse componente vai ser renderizado antes e depois de ser clicado,
 //passamos várias propriedades que verificarão onde o componente está sendo renderizado
 interface IPostProps{
-    descricaoPost?: string,
-    imagemPost?: string,
+    descricaoPost: string,
+    imagemPost?: string[],
     imagemPerfil?: string,
-    userId?: number,
+    userId?: any,
     menu?: boolean,
     botaoComentario?: boolean,
     expandivel?: boolean,
@@ -30,7 +30,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
             <FullRounded bg="$white" w={menu ? "90%" : "100%"} py={20} px={10}>
                 <Box flexDirection="row" w="100%">
                     <Box>
-                        <Image source={imagemPerfil} w={40} h={40} alt='foto do usuário' size={60}/>
+                        <Image source={imagemPerfil} w={40} h={40} alt='foto do usuário' size={50} borderRadius={50}/>
                     </Box>
 
                     <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">

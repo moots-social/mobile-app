@@ -28,16 +28,16 @@ export default function Feed({navigation}) {
     const reqPosts = async() => {
       try{
         const req = await postApi.get("/find-all", {
-        headers: {
+          headers: {
           Authorization: await token
-          }
+        }
         })
         
         const data = await req.data;
-  
+        
         if (data){
           console.log(data)
-          setPublics([...publics, data]);
+          setPublics(data);
         }
       }catch(error: any){
         console.log(error.response.data.error)
@@ -54,8 +54,17 @@ export default function Feed({navigation}) {
       <ScrollView h="100%">
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
         <Box alignItems="center" mt={35}>
-          {publics.map((e) => (
-            <Post descricaoPost={e.texto} nomeUsuario={e.nomeCompleto}tagUsuario={e.tag} mb={10} imagemPerfil={e.fotoPerfil} userId={1}/>
+          {publics.map((e: any, index: number) => (
+            <Post 
+              key={index}
+              descricaoPost={e.texto} 
+              nomeUsuario={e.nomeCompleto}
+              tagUsuario={e.tag} 
+              mb={10} 
+              imagemPerfil={e.fotoPerfil} 
+              userId={e.userId}
+              {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens[0] })}
+            />
           ))}
         </Box>
       </ScrollView>
