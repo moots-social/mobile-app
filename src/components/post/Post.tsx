@@ -14,6 +14,7 @@ interface IPostProps{
     descricaoPost?: string,
     imagemPost?: string,
     imagemPerfil?: string,
+    userId?: number,
     menu?: boolean,
     botaoComentario?: boolean,
     expandivel?: boolean,
@@ -21,7 +22,7 @@ interface IPostProps{
     tagUsuario: string
 }
 
-export default function Post({descricaoPost, imagemPost, imagemPerfil, menu=true, botaoComentario=true, nomeUsuario, tagUsuario, ...rest}:IPostProps){
+export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, menu=true, botaoComentario=true, nomeUsuario, tagUsuario, ...rest}:IPostProps){
     const navigation = useNavigation()
 
     return(
@@ -50,7 +51,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, menu=true
                             <BotaoComentar justifyContent="flex-end" size="2xs" />
                         </Box>
                     </Box>
-                    {menu && <MenuPost userId={1}/>}
+                    {menu && <MenuPost userId={userId}/>}
                 </Box>
             </FullRounded>
         </Pressable>

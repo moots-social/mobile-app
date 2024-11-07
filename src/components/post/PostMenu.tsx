@@ -7,11 +7,13 @@ import BotaoSecao from "../botao/BotaoSecao"
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
-interface modalProps{
-    userId: number;
+interface userId{
+    userId: number
 }
- 
-export function MenuPost({userId}: modalProps){
+
+export function MenuPost({userId}: userId){
+
+    console.log(userId)
 
     const navigation = useNavigation()
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
@@ -43,7 +45,7 @@ export function MenuPost({userId}: modalProps){
                 </Pressable>
             )
             }}>
-            <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={()=>navigation.navigate('outro-perfil')}>
+            <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={()=>navigation.navigate('outro-perfil', {userId})}>
                 <MenuItemLabel>Visitar perfil</MenuItemLabel>
             </MenuItem>
             <MenuItem key="Denunciar" textValue="Denunciar" onPress={()=>handleAbrir('Carregando...')}>

@@ -22,7 +22,6 @@ export default function Feed({navigation}) {
     setTimeout(()=>{
       setIsLoading(false)
       
-      
       reqPosts()
     }, 150)
 
@@ -55,7 +54,9 @@ export default function Feed({navigation}) {
       <ScrollView h="100%">
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
         <Box alignItems="center" mt={35}>
-          <Post descricaoPost='ola' nomeUsuario="teste" tagUsuario='olá' imagemPost='https://media.gettyimages.com/id/1668971338/pt/foto/belem-brazil-neymar-jr-of-brazil-celebrates-after-scoring-the-fifth-goal-of-his-team-during-a.jpg?s=612x612&w=gi&k=20&c=fTYuoteShqXBDE1yp0ByGaczwd2KbpcpQRxd4OninZ4=' mb={10} imagemPerfil='https://storageimagesmoots.blob.core.windows.net/artifact-image-container/68a77764-1c2e-4bc4-8d6b-c280ac593970.png'/>
+          {publics.map((e) => (
+            <Post descricaoPost={e.texto} nomeUsuario={e.nomeCompleto}tagUsuario={e.tag} mb={10} imagemPerfil={e.fotoPerfil} userId={1}/>
+          ))}
         </Box>
       </ScrollView>
         <BotaoNovoPost position="absolute" top="85%" right="5%" />
