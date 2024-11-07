@@ -3,7 +3,7 @@ import { styled } from "@gluestack-style/react";
 import { TextoNegrito, Titulo } from "../../components/geral/Texto";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import BotaoSecao from "../../components/botao/BotaoSecao";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usuarioApi } from "../../api/apis";
 import { Alert } from "react-native";
 
@@ -30,9 +30,21 @@ export default function Cadastro({ navigation }) {
   const [sessao, setSessao] = useState({ email: "", senha: "" });
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
+  const inputEmail = useRef(null)
+  const inputSenha = useRef(null)
+  const inputConfirmar = useRef(null)
+
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const handleNextInput = (nextRef) => {
+    if (nextRef.current) {
+      nextRef.current.focus();
+    } else {
+      handleSubmit();
+    }
   };
 
   const handleSubmit = async () => {
@@ -48,7 +60,7 @@ export default function Cadastro({ navigation }) {
       } else if (sessao.senha !== confirmarSenha) {
         Alert.alert('Senha inválida', "As senhas não correspondem.");
       } else if (sessao.senha.length < 8){
-        Alert.alert('Senha inválida', "sua senha tem que ter pelo menos 8 caracteres")
+        Alert.alert('Senha inválida', "Sua senha deve ter pelo menos 8 caracteres.")
       }else {
 
         try {
@@ -76,6 +88,8 @@ export default function Cadastro({ navigation }) {
   };
 
   return (
+    <ScrollView>
+
     <Box flex={1}>
       <LinearGradientMoots>
         <StyledVStack>
@@ -97,11 +111,13 @@ export default function Cadastro({ navigation }) {
                 </FormControl.Label>
                 <StyledShadowBox>
                   <Input
+                    ref={inputEmail}
                     borderRadius={30}
                     fontFamily="Poppins_500Medium"
                     bg="#FFFFFF"
+                    onSubmitEditing={() => handleNextInput(inputSenha)}
                     onChangeText={(text) => setSessao({ ...sessao, email: text })}
-                  />
+                    />
                 </StyledShadowBox>
 
                 <FormControl.Label ml={2} mt={3}>
@@ -111,12 +127,14 @@ export default function Cadastro({ navigation }) {
                 </FormControl.Label>
                 <StyledShadowBox>
                   <Input
+                    ref={inputSenha}
                     borderRadius={30}
                     fontFamily="Poppins_500Medium"
                     bg="#FFFFFF"
+                    onSubmitEditing={() => handleNextInput(inputConfirmar)}
                     secureTextEntry={true}
                     onChangeText={(text) => setSessao({ ...sessao, senha: text })}
-                  />    
+                    />    
                 </StyledShadowBox>
 
                 <FormControl.Label ml={2} mt={3}>
@@ -126,12 +144,14 @@ export default function Cadastro({ navigation }) {
                 </FormControl.Label>
                 <StyledShadowBox>
                   <Input
+                    ref={inputConfirmar}
                     borderRadius={30}
                     fontFamily="Poppins_500Medium"
                     bg="#FFFFFF"
                     secureTextEntry={true}
                     onChangeText={(text) => setConfirmarSenha(text)}
-                  />
+                    onSubmitEditing={()=> handleSubmit()}
+                    />
                 </StyledShadowBox>
               </FormControl>
               
@@ -141,7 +161,7 @@ export default function Cadastro({ navigation }) {
               </Box>
             </Box>
 
-            <Box alignItems="center" w="100%">
+            <Box alignItems="center" w="100%" mb={160}>
               <BotaoSecao onPress={() => handleSubmit()}>
                 Confirmar
               </BotaoSecao>
@@ -150,5 +170,6 @@ export default function Cadastro({ navigation }) {
         </StyledVStack>
       </LinearGradientMoots>
     </Box>
+                    </ScrollView>
   );
 }

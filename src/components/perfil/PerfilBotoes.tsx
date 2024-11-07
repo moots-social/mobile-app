@@ -1,4 +1,4 @@
-import { Pressable, Image, Modal, ModalBackdrop, ModalContent, Box, Text, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Actionsheet, ScrollView, FlatList} from "@gluestack-ui/themed"
+import { Pressable, Image, Modal, ModalBackdrop, ModalContent, Box, Text, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Actionsheet, ScrollView, FlatList, useToast} from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
 import { LinearGreenGradientMoots } from "../geral/LinearGradientMoots"
 import { TextoNegrito } from "../geral/Texto"
@@ -8,9 +8,10 @@ import { usuarioApi } from "../../api/apis"
 
 import BotaoSecao from "../botao/BotaoSecao"
 import CartaoUsuario from "./CartaoUsuario"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Alert } from "react-native"
 import { getTokenStorage } from "../../utils/storageUtils"
+import { pararDeSeguir, seguirUsuario } from "../../utils/usuarioUtils"
+import { abrirToastSucesso } from "../geral/ToastMoots"
 
 const seguirIcon = require('../../assets/SeguirIcon.png')
 const listaIcon = require('../../assets/ListaIcon.png')
@@ -46,64 +47,39 @@ interface IBotaoListaSeguidores{
 }
 export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}: IBotaoSeguirProps){
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
+    const toast = useToast()
 
-    const pararDeSeguir = async()=>{
-        const token = await getTokenStorage()
-        try {
-            const resultado = await usuarioApi.put(`/seguir`, {}, {
-                params: {
-                    id1: id1,
-                    id2: id2,
-                    follow: false
-                },
-                headers: {
-                    Authorization: token
-                }
-            })
-            if(resultado.data){
-                Alert.alert('Parar de seguir', `Você parou de seguir ${nomeCompleto}.`)
-                setIsSeguindo(false)
-            }
-        } catch (error) {
-            alert(String(error))
-        }
+    const handlePararDeSeguir = async()=>{
+        const resultado = await pararDeSeguir(nomeCompleto, id1, id2)
+        if(resultado===`Você parou de seguir ${nomeCompleto}.`){
+            setIsSeguindo(false)
+            abrirToastSucesso(toast, resultado)
+        } 
     }
 
-    const seguirUsuario = async()=>{
-        const token = await getTokenStorage()
-        
-        try {
-            const resultado = await usuarioApi.put(`/seguir`, {}, {
-                params:{
-                    id1: id1,
-                    id2: id2
+    const handleSeguirUsuario = async()=>{
+        const resultado = await seguirUsuario(nomeCompleto, id1, id2)
+        if(resultado === `Agora você está seguindo ${nomeCompleto}.`){
+            setIsSeguindo(true)
+            abrirToastSucesso(toast, resultado)
+        }
+        else if(resultado === 'Acesso negado. Você não tem permissão para acessar este recurso.'){
+            Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
+                {
+                    text: 'Sim',
+                    onPress: async()=>await handlePararDeSeguir()
                 },
-                headers: {
-                    Authorization: token
+                {
+                    text: 'Não'
                 }
-            })
-            if(resultado){
-                Alert.alert('Seguir usuário', `Agora você está seguindo ${nomeCompleto}.`)
-                setIsSeguindo(true)
-            } 
-        } catch (error: any) {
-            if(error.response.data.error==='Acesso negado. Você não tem permissão para acessar este recurso.'){
-                Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
-                    {
-                        text: 'Sim',
-                        onPress: async()=>await pararDeSeguir()
-                    },
-                    {
-                        text: 'Não'
-                    }
-                ])
-            }else console.log(error.response.data.error)
+            ])
         }
     }
+    
     useEffect(() => {
         const handleIsSeguindo = async () => {
             try {
-                const token = await AsyncStorage.getItem('token');
+                const token = await getTokenStorage();
                 const resultado = await usuarioApi.get(`/buscar-quem-segue/${id1}`, {
                     headers: { Authorization: token },
                 });
@@ -120,7 +96,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
         handleIsSeguindo();
     }, [id1, id2])
     return(
-        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={seguirUsuario} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>
         </Pressable>
     )
@@ -154,20 +130,19 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
 
     const getSeguindo = async()=>{
         try {
-            const token = await AsyncStorage.getItem('token')
+            const token = await getTokenStorage()
             const resultado = await usuarioApi.get(`/buscar-quem-segue/${getUsuario.userId}`, {headers:{Authorization: token}})
             if(resultado){
                 setSeguindo(resultado.data)
             }
         } catch (error) {
             setSeguindo([])
-            console.log(error)
         }
     }
     const getSeguidores = async()=>{
         try {
             
-            const token = await AsyncStorage.getItem('token')
+            const token = await getTokenStorage()
             const resultado = await usuarioApi.get(`/buscar-seguidores/${getUsuario.userId}`, {headers:{Authorization: token}})
             if(resultado){
                 setSeguidores(resultado.data)
@@ -175,7 +150,6 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
             
         } catch (error) {
             setSeguidores([])
-            console.log(error)
         }
     }
     

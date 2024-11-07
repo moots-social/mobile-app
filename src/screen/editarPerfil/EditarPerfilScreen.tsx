@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker'
-import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Box, Image, Pressable, ScrollView, Text, Checkbox, CheckboxIndicator, CheckboxIcon, CheckIcon, CheckboxLabel } from "@gluestack-ui/themed";
+import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Box, Image, Pressable, ScrollView, Text, Checkbox, CheckboxIndicator, CheckboxIcon, CheckIcon, CheckboxLabel, useToast } from "@gluestack-ui/themed";
 import { Alert } from 'react-native';
 import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/geral/Texto";
@@ -9,6 +9,8 @@ import SyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Loading from '../../components/geral/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { abrirToast} from '../../components/geral/ToastMoots';
+
 
 import { useAuthContext } from '../../context/AuthContext';
 import { useUsuarioContext } from '../../context/UsuarioContext';
@@ -55,6 +57,7 @@ export const handleUpdateImage = async(uri: string)=>{
 }
 
 export default function EditarPerfil({navigation}){
+    const toast = useToast()
     const {auth, setAuth} = useAuthContext()
     const {usuario, setUsuario} = useUsuarioContext()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
@@ -106,7 +109,7 @@ export default function EditarPerfil({navigation}){
                 }
             ])
         } catch (error: any) {
-            Alert.alert('Erro ao sair', `Não foi possível completar ação. ${error.response.data.error}`)
+            abrirToastErro(toast, `Não foi possível completar ação. ${error.response.data.error}`)
         }
     }
 
@@ -142,12 +145,12 @@ export default function EditarPerfil({navigation}){
                     setDisabledSalvar(true)
                     setCheckDescricao(false)
                     setUsuarioAtualizado({nomeCompleto: '', descricao: usuario.descricao, curso: '', fotoPerfil: '', fotoCapa: ''})
-                    Alert.alert('Atualizar perfil', 'Alterações realizadas com sucesso.')
+                    abrirToast(toast, 'success', 'Alterações realizadas com sucesso.', '', 800, false)
                 },500)
            }else throw new Error('Não foi possível editar seu perfil. Tente novamente mais tarde.')
             
         }catch(error: any){
-            console.error(error)
+            abrirToast(toast, 'error', error)
         }
     }
 
