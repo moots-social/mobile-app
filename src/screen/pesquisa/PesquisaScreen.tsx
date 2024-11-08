@@ -3,9 +3,11 @@ import LinearGradientMoots from '../../components/geral/LinearGradientMoots'
 import BarraPesquisa, { BottomRadiusShadowBox } from '../../components/barra/BarraPesquisa'
 import { TextoNegrito, Titulo } from '../../components/geral/Texto'
 import CartaoUsuario from '../../components/perfil/CartaoUsuario'
+import { useMiscContext } from '../../context/MiscContext'
+import { useEffect } from 'react'
 
 export default function Pesquisa() {
-
+  
   return (
     <LinearGradientMoots>
       <Box zIndex={2}>

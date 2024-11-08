@@ -2,10 +2,12 @@ import { Box, Image, Modal, ModalBackdrop, ModalContent, ModalHeader, Pressable,
 import React, { useState, useEffect } from "react";
 import { TextoNegrito, Titulo } from "../geral/Texto";
 import BotaoSecao from "../botao/BotaoSecao";
+import { useMiscContext } from "../../context/MiscContext";
 
 const filtroIcon = require('../../assets/filtroIcon.png')
 
 export default function FiltrosModal({...rest}){
+    const {filtros, setFiltros} = useMiscContext()
 
     const [textoBotaoAcao, setTextoBotaoAcao] = useState('Confirmando...')
 
@@ -22,7 +24,7 @@ export default function FiltrosModal({...rest}){
     const [eValidoUsuario, setEValidoUsuario] = useState(true)
     const [eValidoPublicacoes, setEValidoPublicacoes] = useState(true)
     const ref = React.useRef(null)
-
+    
     const handleRadioGeral = ()=>{
         if(valorRadioGeral==='tudo'){
             setEValidoUsuario(true)
@@ -44,6 +46,8 @@ export default function FiltrosModal({...rest}){
     const handleFechar = (textoBotao: string) => {
         setBotaoVisivel(false)
         setTextoBotaoAcao(textoBotao)
+        if(textoBotao==='Confirmando...') setFiltros({radio: valorRadioGeral, usuario: valorRadioUsuario, selectUsuario: valorSelectUsuario, checkPost: valorCheckPublicacoes})
+        else setFiltros({radio: 'tudo', usuario: 'qualquerUm', selectUsuario: 'Qualquer', checkPost: true})
         setTimeout(()=>{
             setModalVisivel(false)
         }, 0.1)

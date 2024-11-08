@@ -16,6 +16,7 @@
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
+    "@reduxjs/toolkit": "^2.3.0",
     "axios": "^1.7.7",
     "expo": "~51.0.28",
     "expo-image-picker": "~15.0.7",
@@ -26,9 +27,12 @@
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-gesture-handler": "^2.19.0",
+    "react-native-image-viewing": "^0.2.2",
     "react-native-safe-area-context": "^4.11.0",
     "react-native-svg": "^13.14.1",
-    "react-native-vector-icons": "^10.2.0"
+    "react-native-vector-icons": "^10.2.0",
+    "react-redux": "^9.1.2",
+    "redux": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -67,7 +71,7 @@
     "@gluestack-ui/themed": "^1.1.43",
     "@gluestack-ui/toast": "1.0.7",
     "@gluestack-ui/tooltip": "0.1.32",
-    "@legendapp/motion": "latest",
+    "@legendapp/motion": "^2.4.0",
     "@types/jwt-decode": "^2.2.1",
     "@types/react": "~18.2.45",
     "lucide-react-native": "latest",

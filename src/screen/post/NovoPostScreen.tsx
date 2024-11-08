@@ -7,34 +7,13 @@ import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria, TesteContext } from "..
 import { getIdStorage, getTokenStorage } from "../../utils/storageUtils";
 import { usuarioApi } from "../../api/apis";
 import { useEffect, useState } from "react";
+import { useUsuarioContext } from "../../context/UsuarioContext";
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function NovoPost(){
-    const [user, setUser] = useState()
 
-    const token = getTokenStorage();
-    const id = getIdStorage();
-
-    useEffect(() => {
-        const reqUser = async() => {
-            try{
-                const user = await usuarioApi.get(`/buscar/${await id}`, {headers: {Authorization: await token}})
-
-                const data = await user.data
-
-                if(data){
-                    setUser(data)
-                    
-                }
-            }catch(e: any){
-                alert(e.error.message.error)
-            }
-        }
-        reqUser()
-
-    }, [])
-
+    const {usuario} = useUsuarioContext()
     return(
             <LinearGradientMoots>
                 <ScrollView>
@@ -43,8 +22,8 @@ export default function NovoPost(){
                         <Box p={20} display="flex" justifyContent="space-between" minHeight={500}>
                             <Box display="flex">
                                 <Box flexDirection="row" alignItems="center">
-                                    <Image source={usuarioIcon} w={40} h={40}/>
-                                    <TextoNegrito ml={2}>{user.nomeCompleto}</TextoNegrito>
+                                    <Image source={usuario.fotoPerfil} w={40} h={40} rounded={30}/>
+                                    <TextoNegrito ml={2}>{usuario.nomeCompleto}</TextoNegrito>
                                 </Box>
                                 <Box justifyContent="center" >
                                     <Textarea ml={38} brw={0} w="85%" h={200} bottom={10}>

@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import * as Service from "../api/apis";
 import * as Storage from "./storageUtils";
 
@@ -36,8 +35,8 @@ export const buscar = async()=>{
 }
 
 export const pararDeSeguir = async(nomeCompleto: string, id1: number, id2:number)=>{
-    const token = await Storage.getTokenStorage()
     try {
+        const token = await Storage.getTokenStorage()
         const resultado = await Service.usuarioApi.put(`/seguir`, {}, {
             params: {
                 id1: id1,
@@ -57,9 +56,8 @@ export const pararDeSeguir = async(nomeCompleto: string, id1: number, id2:number
 }
 
 export const seguirUsuario = async(nomeCompleto: string, id1: number, id2: number)=>{
-    const token = await Storage.getTokenStorage()
-    
     try {
+        const token = await Storage.getTokenStorage()
         const resultado = await Service.usuarioApi.put(`/seguir`, {}, {
             params:{
                 id1: id1,
@@ -74,5 +72,32 @@ export const seguirUsuario = async(nomeCompleto: string, id1: number, id2: numbe
         } 
     } catch (error: any) {
         return error.response?.data?.error
+    }
+}
+
+export const buscarQuemSegue = async()=>{
+    try {
+        const token = await Storage.getTokenStorage()
+        const id = await Storage.getIdStorage()
+        const resultado = await Service.usuarioApi.get(`/buscar-quem-segue/${id}`, {
+            headers: { Authorization: token },
+        });
+
+        if (resultado.data) return resultado.data
+    } catch (error: any) {
+        return []
+    }
+}
+export const buscarSeguidores = async()=>{
+    try {
+        const token = await Storage.getTokenStorage()
+        const id = await Storage.getIdStorage()
+        const resultado = await Service.usuarioApi.get(`/buscar-seguidores/${id}`, {
+            headers: { Authorization: token },
+        });
+
+        if (resultado.data) return resultado.data
+    } catch (error: any) {
+        return []
     }
 }

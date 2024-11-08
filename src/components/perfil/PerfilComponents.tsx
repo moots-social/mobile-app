@@ -1,8 +1,11 @@
-import { Box, Image, Text } from "@gluestack-ui/themed";
+import { Box, Image, Pressable, Text } from "@gluestack-ui/themed";
 import { BotaoConfigurar, BotaoCurso, BotaoSeguir, BotaoListaSeguidores } from "./PerfilBotoes";
 import { Titulo } from "../geral/Texto";
 import { ScrollView } from "@gluestack-ui/themed-native-base";
 import { useUsuarioContext } from "../../context/UsuarioContext";
+import { useState } from "react";
+
+import ImageView from "react-native-image-viewing"
 
 interface IFotoCapaBoxProps{
     fotoPerfilSource: any,
@@ -30,9 +33,27 @@ export const coverIcon = 'https://storageimagesmoots.blob.core.windows.net/artif
 
 
 export function FotoCapaBox({fotoPerfilSource, fotoCapaSource, ...rest}: IFotoCapaBoxProps){
+    const [isVisible, setIsVisible] = useState(false)
+    const [index, setIndex] = useState<number>(0)
+
+    const handleExpandirFoto = (novoIndex: number) =>{
+        setIndex(novoIndex)
+        setIsVisible(true)
+    }
+
     return <Box display="flex" justifyContent="flex-end" {...rest}>
-                <Image source={fotoCapaSource || coverIcon} w="100%" h={220} brw={1} borderBottomLeftRadius={10} borderBottomRightRadius={10} position="relative" zIndex={0} alt='capa'/>
-                <Image source={fotoPerfilSource || usuarioIcon} w={100} h={100} brw={1} rounded={60} alignSelf="center" zIndex={1} position="absolute" top={170} alt='foto de perfil'/>
+                <Pressable onPress={()=>handleExpandirFoto(0)}>            
+                    <Image source={fotoCapaSource} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} position="relative" zIndex={0} alt='capa'/>
+                </Pressable>
+                <Pressable alignSelf="center" zIndex={1} position="absolute" top={170} onPress={()=>handleExpandirFoto(1)}>
+                    <Image source={fotoPerfilSource || usuarioIcon} w={100}  h={100} rounded={60}alt='foto de perfil'/>
+                </Pressable>
+                <ImageView 
+                    images={[{uri: fotoCapaSource}, {uri: fotoPerfilSource || usuarioIcon}]}
+                    imageIndex={index}
+                    visible={isVisible}
+                    onRequestClose={()=>setIsVisible(false)}
+                />
             </Box>
 }
 

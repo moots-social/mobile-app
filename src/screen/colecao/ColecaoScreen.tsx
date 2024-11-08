@@ -5,8 +5,8 @@ import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 export default function Colecao(){
     return(
         <LinearGradientMoots>
-            <ScrollView h="100%">
-                <CabecalhoPerfil titulo="Sua coleção" mb={10}/>
+            <ScrollView>
+                <CabecalhoPerfil titulo="Sua coleção" temBotaoVoltar={false}/>
             </ScrollView>
         </LinearGradientMoots>
     )
