@@ -12,8 +12,14 @@ import { useUsuarioContext } from "../../context/UsuarioContext";
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function NovoPost(){
+    const [text, setText] = useState<string>()
+
+    const handleSubmit = async()=>{
+        
+    }
 
     const {usuario} = useUsuarioContext()
+
     return(
             <LinearGradientMoots>
                 <ScrollView>
@@ -22,7 +28,7 @@ export default function NovoPost(){
                         <Box p={20} display="flex" justifyContent="space-between" minHeight={500}>
                             <Box display="flex">
                                 <Box flexDirection="row" alignItems="center">
-                                    <Image source={usuario.fotoPerfil} w={40} h={40} rounded={30}/>
+                                    <Image source={usuario.fotoPerfil || usuarioIcon} w={40} h={40} rounded={30}/>
                                     <TextoNegrito ml={2}>{usuario.nomeCompleto}</TextoNegrito>
                                 </Box>
                                 <Box justifyContent="center" >

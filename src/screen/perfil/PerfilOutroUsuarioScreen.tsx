@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import {PerfilBox} from "../../components/perfil/PerfilComponents";
 import { useUsuarioContext } from "../../context/UsuarioContext";
-import { Box, ScrollView, Text } from "@gluestack-ui/themed";
+import {  ScrollView,} from "@gluestack-ui/themed";
 
 export default function PerfilOutroUsuario({navigation, route}){
     // const { userId } = route.params;  // Aqui você acessa o userId
