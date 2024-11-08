@@ -1,7 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../screen/login/LoginScreen";
 import Cadastro from "../screen/login/CadastroScreen";
-import Chat from "../screen/chat/ChatScreen";
 import Info from "../screen/login/InfoScreen";
 import Bottom from "./bottom.routes";
 import EditarPerfil from "../screen/editarPerfil/EditarPerfilScreen";
@@ -47,7 +46,6 @@ export default function Stack() {
         <Screen name="expandido" component={PostExpandido} options={{ headerShown: false }} />
         <Screen name="novoPost" component={NovoPost} options={{ headerShown: false }} />
         <Screen name="pesquisaPalavraChave" component={PesquisaPalavraChave} options={{ headerShown: false }} />
-        <Screen name="chat" component={Chat} options={{ headerShown: false,  }} />
         <Screen name="editar" component={EditarPerfil} options={{ headerShown: false }} />
         <Screen name="redefinir" component={RedefinirSenha} options={{ headerShown: false }} />
         <Screen name="excluir" component={ExcluirConta} options={{ headerShown: false }} />
