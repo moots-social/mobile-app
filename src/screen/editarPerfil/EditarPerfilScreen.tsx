@@ -222,9 +222,6 @@ export default function EditarPerfil({navigation}){
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('redefinir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Redefinir senha</TextoNegrito>
                         </Pressable>
-                        <Pressable alignItems="center" onPress={()=>navigation.navigate('colecao')}>
-                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Acessar sua coleção de posts</TextoNegrito>
-                        </Pressable>
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
@@ -232,7 +229,7 @@ export default function EditarPerfil({navigation}){
                         {!disabledSalvar ? (<Pressable alignItems="center" isDisabled={disabledSalvar} onPress={handleSubmit}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito> 
                         </Pressable>) : <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16}></TextoNegrito>}
-                <Pressable alignItems="center" onPress={()=>handleLogout()} mt={5}>
+                <Pressable alignItems="center" onPress={()=>handleLogout()} mt={20}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Sair</Text>
                 </Pressable>
                 </Box>
