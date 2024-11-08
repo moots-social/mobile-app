@@ -13,30 +13,40 @@ import { Alert } from 'react-native'
 
 export default function Feed({navigation}) {
   const [isLoading, setIsLoading] = useState(true)
+  const [publics, setPublics] = useState<any>([])
+  const token = getTokenStorage();
+  const id = getIdStorage();
+
 
   useEffect(()=>{
     setTimeout(()=>{
       setIsLoading(false)
-    }, 150)})
+      
+      reqPosts()
+    }, 150)
 
-    // const reqPosts = async() => {
-    //   try{
-    //     const req = await postApi.get("/find-all", {
-    //     headers: {
-    //       Authorization: token
-    //       }
-    //     })
-    //     const data = await req.data;
+    const reqPosts = async() => {
+      try{
+        const req = await postApi.get("/find-all", {
+          headers: {
+          Authorization: await token
+        }
+        })
+        
+        const data = await req.data;
+        
+        if (data){
+          console.log(data)
+          setPublics(data);
+        }
+      }catch(error: any){
+        console.log(error.response.data.error)
+      }
+    }
+    reqPosts();
+    
+  }, [])
 
-    //     if (data){
-    //       console.log(data)
-    //     }
-    //   }catch(error: any){
-    //     console.log(error.response.data.error)
-    //   }
-    // }
-
-    // reqPosts()
   return (
     <LinearGradientMoots>
       <Loading isOpen={isLoading}/>
@@ -44,7 +54,18 @@ export default function Feed({navigation}) {
       <ScrollView h="100%">
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
         <Box alignItems="center" mt={35}>
-          <Post conteudoUsuario='' mb={10}/>
+          {publics.map((e: any, index: number) => (
+            <Post 
+              key={index}
+              nomeUsuario={e.nomeCompleto}
+              tagUsuario={e.tag} 
+              mb={10} 
+              imagemPerfil={e.fotoPerfil} 
+              userId={e.userId}
+              {...(e.texto && { descricaoPost: e.texto })}
+              {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens[0] })}
+            />
+          ))}
         </Box>
       </ScrollView>
         <BotaoNovoPost position="absolute" top="85%" right="5%" />

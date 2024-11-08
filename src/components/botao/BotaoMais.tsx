@@ -1,8 +1,12 @@
 import { Box, Pressable, Icon, Image, Modal, ModalBackdrop, ModalBody, ModalContent, ModalHeader, Text } from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
+import { Pressable } from "react-native"
 import { BarraPesquisaChat } from "../barra/BarraPesquisa"
+import { getIdStorage, getTokenStorage } from "../../utils/storageUtils"
+import { usuarioApi } from "../../api/apis"
 import {EditIcon} from 'lucide-react-native'
+import { UsuarioContext } from "../../context/UsuarioContext"
 
 const maisIcon = require('../../assets/MaisIcon.png')
 

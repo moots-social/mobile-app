@@ -3,12 +3,16 @@ import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { RoundedBottom } from "../../components/geral/Rounded";
 import { TextoNegrito } from "../../components/geral/Texto";
-import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria} from "../../components/botao/BotoesPostComentario";
+import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria, TesteContext } from "../../components/botao/BotoesPostComentario";
+import { getIdStorage, getTokenStorage } from "../../utils/storageUtils";
+import { usuarioApi } from "../../api/apis";
+import { useEffect, useState } from "react";
 import { useUsuarioContext } from "../../context/UsuarioContext";
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function NovoPost(){
+
     const {usuario} = useUsuarioContext()
     return(
             <LinearGradientMoots>

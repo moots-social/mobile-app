@@ -4,7 +4,7 @@ import { TextoNegrito, Titulo } from "../geral/Texto";
 import BotaoSecao from "../botao/BotaoSecao";
 import { useMiscContext } from "../../context/MiscContext";
 
-const filtroIcon = require('../../assets/FiltroIcon.png')
+const filtroIcon = require('../../assets/filtroIcon.png')
 
 export default function FiltrosModal({...rest}){
     const {filtros, setFiltros} = useMiscContext()
