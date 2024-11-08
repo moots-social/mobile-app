@@ -57,12 +57,12 @@ export default function Feed({navigation}) {
           {publics.map((e: any, index: number) => (
             <Post 
               key={index}
-              descricaoPost={e.texto} 
               nomeUsuario={e.nomeCompleto}
               tagUsuario={e.tag} 
               mb={10} 
               imagemPerfil={e.fotoPerfil} 
               userId={e.userId}
+              {...(e.texto && { descricaoPost: e.texto })}
               {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens[0] })}
             />
           ))}

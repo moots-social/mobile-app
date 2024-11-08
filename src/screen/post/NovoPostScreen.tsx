@@ -4,12 +4,36 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { RoundedBottom } from "../../components/geral/Rounded";
 import { TextoNegrito } from "../../components/geral/Texto";
 import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria, TesteContext } from "../../components/botao/BotoesPostComentario";
-import { useContext, useEffect, useState } from "react";
-import { ImagemContext } from "../../context/PostContext";
+import { getIdStorage, getTokenStorage } from "../../utils/storageUtils";
+import { usuarioApi } from "../../api/apis";
+import { useEffect, useState } from "react";
 
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
 export default function NovoPost(){
+    const [user, setUser] = useState()
+
+    const token = getTokenStorage();
+    const id = getIdStorage();
+
+    useEffect(() => {
+        const reqUser = async() => {
+            try{
+                const user = await usuarioApi.get(`/buscar/${await id}`, {headers: {Authorization: await token}})
+
+                const data = await user.data
+
+                if(data){
+                    setUser(data)
+                    
+                }
+            }catch(e: any){
+                alert(e.error.message.error)
+            }
+        }
+        reqUser()
+
+    }, [])
 
     return(
             <LinearGradientMoots>
@@ -20,7 +44,7 @@ export default function NovoPost(){
                             <Box display="flex">
                                 <Box flexDirection="row" alignItems="center">
                                     <Image source={usuarioIcon} w={40} h={40}/>
-                                    <TextoNegrito ml={2}>Usuário</TextoNegrito>
+                                    <TextoNegrito ml={2}>{user.nomeCompleto}</TextoNegrito>
                                 </Box>
                                 <Box justifyContent="center" >
                                     <Textarea ml={38} brw={0} w="85%" h={200} bottom={10}>

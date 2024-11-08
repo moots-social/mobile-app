@@ -38,7 +38,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
                             <TextoNegrito>{nomeUsuario}</TextoNegrito>
                             <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>{tagUsuario}</Text>
                         </Box>
-                        <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text>
+                        {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text> }
                         {imagemPost && <Image key={imagemPost} size={300} borderRadius={20} source={{ uri: imagemPost }} />}
 
 
