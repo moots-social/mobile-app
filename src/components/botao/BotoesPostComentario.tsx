@@ -69,24 +69,9 @@ export function BotaoComentar({size, ...rest}: IBotaoPostProps){
 
 //abaixo somente para novopost
 export function BotaoGaleria({...rest}){
-    const [ imagens, setImagens ]= useState<ImagePicker.ImagePickerAsset[]>([])
     
-    const selecionarImagem= async()=>{
-        let resultado = await ImagePicker.launchImageLibraryAsync({
-            allowsMultipleSelection: true,
-            selectionLimit: 4,
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            aspect: [4, 3],
-            quality: 1,
-        })
-
-        if (!resultado.canceled) {
-            setImagens(resultado.assets)
-        }
-    }
-
     return(
-        <Pressable w={30} h={20} {...rest} onPress={selecionarImagem}>
+        <Pressable w={30} h={20} {...rest}>
             <Image source={galeriaIcon} w={26} h={20} alt='abrir galeria'/>
         </Pressable>
     )
