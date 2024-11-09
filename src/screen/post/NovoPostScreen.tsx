@@ -47,7 +47,8 @@ export default function NovoPost({navigation}) {
   }, []);
 
   const atualizarImagens = (novasImagens: ImagePicker.ImagePickerAsset[]) => {
-    setImagens(novasImagens);
+    const uris = novasImagens.map(imagem => imagem.uri);
+    setImagens(uris);
   };
 
   if (!user) {
@@ -104,7 +105,7 @@ export default function NovoPost({navigation}) {
                 </Textarea>
                 <Box>
                     {imagens.map((e, index) => (
-                        <Image source={{uri: e.uri}} key={index}/>
+                        <Image source={{uri: e}} key={index}/>
                     ))}
                 </Box>
               </Box>
