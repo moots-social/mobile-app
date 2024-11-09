@@ -68,54 +68,52 @@ export function BotaoComentar({size, ...rest}: IBotaoPostProps){
 }
 
 //abaixo somente para novopost
-export function BotaoGaleria({...rest}){
-    const [ imagens, setImagens ]= useState<ImagePicker.ImagePickerAsset[]>([])
-    
-    const selecionarImagem= async()=>{
+// BotaoGaleria
+export function BotaoGaleria({ onUpdateImagens, ...rest }) {
+    const selecionarImagem = async () => {
         let resultado = await ImagePicker.launchImageLibraryAsync({
-            allowsMultipleSelection: true,
-            selectionLimit: 4,
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            aspect: [4, 3],
-            quality: 1,
-        })
+        allowsMultipleSelection: true,
+        selectionLimit: 4,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [4, 3],
+        quality: 1,
+        });
 
         if (!resultado.canceled) {
-            setImagens(resultado.assets)
+        onUpdateImagens(resultado.assets);  // Passa as imagens selecionadas para o pai
         }
-    }
+    };
 
-    return(
+    return (
         <Pressable w={30} h={20} {...rest} onPress={selecionarImagem}>
-            <Image source={galeriaIcon} w={26} h={20} alt='abrir galeria'/>
+        <Image source={galeriaIcon} w={26} h={20} alt="abrir galeria" />
         </Pressable>
-    )
+    );
 }
-
-export function BotaoCamera({...rest}){
-    const [ imagens, setImagens ]= useState<ImagePicker.ImagePickerAsset[]>([])
-
-    const tirarFoto= async()=>{
+  
+// BotaoCamera
+export function BotaoCamera({ onUpdateImagens, ...rest }) {
+    const tirarFoto = async () => {
         let resultado = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsMultipleSelection: true,
-            selectionLimit: 4,
-            aspect: [4, 3],
-            quality: 1, 
-    
-        })
-    
-        if (!resultado.canceled) {
-            setImagens(resultado.assets)
-        }
-    }
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        selectionLimit: 4,
+        aspect: [4, 3],
+        quality: 1,
+        });
 
-    return(
+        if (!resultado.canceled) {
+        onUpdateImagens(resultado.assets);
+        }
+    };
+
+    return (
         <Pressable w={30} h={20} onPress={tirarFoto} {...rest}>
-            <Image source={cameraIcon} w={28} h={20} alt='abrir câmera'/>
+        <Image source={cameraIcon} w={28} h={20} alt="abrir câmera" />
         </Pressable>
-    )
+    );
 }
+
 
 export function BotaoEnviarNovoPost({...rest}){
     return(
