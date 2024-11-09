@@ -11,19 +11,20 @@ import { ScrollView } from "react-native-gesture-handler";
 export default function PesquisaPalavraChave({navigation, route}: any){
     const {valor, dataPerfil, dataPost} = route.params
     const {usuario} = useUsuarioContext()
+
     return(
         <LinearGradientMoots>
             <ScrollView>
                 <Box flex={1}>
                     <BarraPesquisa extended={false} valorParam={valor} mb={20}/>
                     <RoundedTop bg="$white" pt={5} pb={20} alignItems="center" h="100%">
-                        <Box alignItems="center" minHeight={100} maxHeight={245}>
+                        <Box alignItems="center" minHeight={100}>
                             <Titulo fontFamily="Poppins_500Medium">Perfis</Titulo>
-                            {dataPerfil[0] ? (
-                                <FlatList data={dataPerfil} renderItem={({item})=>(
-                                    <CartaoUsuario usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={false} onPress={()=>{navigation.navigate('outro-perfil', {outroUsuario: item})}} seguir={usuario.id!=item.userId}/>
-                                )} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginLeft: 7.5}}/>
-                            ): <TextoNegrito fontFamily="Poppins_500Medium">Nenhum perfil encontrado.</TextoNegrito>}
+                            <Box flexDirection="row" flexWrap="wrap" gap={5} ml={7.5}>
+                            {dataPerfil[0] ? dataPerfil.map((item)=>{
+                                return <CartaoUsuario usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={false} onPress={()=>{navigation.navigate('outro-perfil', {outroUsuario: item})}} seguir={usuario.id!=item.userId}/>
+                                    }): <TextoNegrito fontFamily="Poppins_500Medium">Nenhum perfil encontrado.</TextoNegrito>}
+                            </Box>
                         </Box>
                         <Divider w="80%" my={10}/>
                         <Box alignItems="center" minHeight={545}>

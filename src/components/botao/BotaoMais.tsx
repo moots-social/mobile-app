@@ -1,10 +1,11 @@
-import { Box, Image, Modal, ModalBackdrop, ModalBody, ModalContent, ModalHeader, Text } from "@gluestack-ui/themed"
+import { Box, Pressable, Icon, Image, Modal, ModalBackdrop, ModalBody, ModalContent, ModalHeader, Text } from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
 import { useState, useRef, useEffect } from "react"
 import { Pressable } from "react-native"
 import { BarraPesquisaChat } from "../barra/BarraPesquisa"
 import { getIdStorage, getTokenStorage } from "../../utils/storageUtils"
 import { usuarioApi } from "../../api/apis"
+import {EditIcon} from 'lucide-react-native'
 import { UsuarioContext } from "../../context/UsuarioContext"
 
 const maisIcon = require('../../assets/MaisIcon.png')
@@ -12,8 +13,8 @@ const maisIcon = require('../../assets/MaisIcon.png')
 export function BotaoNovoPost({...rest}){
     const navigation = useNavigation()
 
-    return <Pressable {...rest} onPress={()=>navigation.navigate('novoPost')}>
-            <Image source={maisIcon} w={70} h={70} alt='novo post'/>
+    return <Pressable  bg='$lightQuatro' p={20} rounded={30} {...rest} onPress={()=>navigation.navigate('novoPost')}>
+                <Icon as={EditIcon} color='$white' />
         </Pressable>
 }
 
@@ -23,7 +24,7 @@ export function BotaoNovoChat({...rest}){
 
     return (
             <Pressable {...rest} onPress={()=>setModalVisivel(true)}>
-                <Image source={maisIcon} w={70} h={70} alt='novo chat'/>
+                <Icon as={EditIcon} color='$white'/>
                 <Modal isOpen={isModalVisivel} onClose={()=>setModalVisivel(false)} finalFocusRef={ref}>
                     <ModalBackdrop />
                     <ModalContent>
