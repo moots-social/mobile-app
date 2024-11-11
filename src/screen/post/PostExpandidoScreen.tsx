@@ -4,12 +4,14 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import Post from "../../components/post/Post";
 import { RoundedTop } from "../../components/geral/Rounded";
 import Comentario from "../../components/post/Comentario";
+import { useUsuarioContext } from "../../context/UsuarioContext";
 
-const usuarioIcon = require('../../assets/UsuarioIcon.png')
 const enviarIcon = require('../../assets/EnviarIconRounded.png')
 
+import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 export default function PostExpandido({route}) {
   const {post} = route.params
+  const {usuario} = useUsuarioContext()
   return (
     <LinearGradientMoots>
       <ScrollView>
@@ -31,7 +33,7 @@ export default function PostExpandido({route}) {
         display="flex"
         >
           <Box p={10} flexDirection="row">
-            <Image source={usuarioIcon} w={20} h={20} mr={10} />
+            <Image source={usuario.fotoPerfil || usuarioIcon} rounded={30} w={20} h={20} mr={10} />
             <Textarea w="90%">
               <TextareaInput
                 placeholder={`Diga algo para ${post.tagUsuario}...`}
