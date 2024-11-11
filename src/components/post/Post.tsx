@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { MenuPost } from "./PostMenu";
 import { useState } from "react";
 import ImageView from "react-native-image-viewing"
+import { usuarioIcon } from "../perfil/PerfilComponents";
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
@@ -33,8 +34,10 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
         setIndex(index);
         setIsVisible(true);
       };
-    if(isVisible) return <ImageView 
-                            images={imagemPost}
+      const imagensFormatadas = imagemPost ? [{uri: imagemPost[0] || ''}, {uri: imagemPost[1] || ''}, {uri: imagemPost[2] || ''}, {uri: imagemPost[3] || ''}] : [{}]
+    
+        if(isVisible) return <ImageView 
+                            images={imagensFormatadas}
                             imageIndex={index}
                             visible={isVisible}
                             onRequestClose={()=>setIsVisible(false)}
@@ -44,7 +47,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
             <FullRounded bg="$white" w={menu ? "90%" : "100%"} py={20} px={10}>
                 <Box flexDirection="row" w="100%">
                     <Box>
-                        <Image source={imagemPerfil} w={40} h={40} alt='foto do usuário' size={50} borderRadius={50}/>
+                        <Image source={imagemPerfil || usuarioIcon} w={40} h={40} alt='foto do usuário' size={50} borderRadius={50}/>
                     </Box>
 
                     <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">

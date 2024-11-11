@@ -85,7 +85,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
 
     return(
             <BottomRadiusShadowBox {...rest}>
-                <Box  flexDirection="row" justifyContent={!isExtended ? "space-around" : "space-between"} alignItems="center" py={10}>
+                <Box  flexDirection="row" justifyContent={!isExtended ? "space-around" : "space-between"} alignItems="center" py={10} pt={30}>
                     {!isExtended && (
                         <Box>
                             <BotaoVoltar onPress={()=>voltar()}/>

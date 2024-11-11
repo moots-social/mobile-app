@@ -24,6 +24,7 @@ export default function Feed({navigation}) {
         setPublics(res.reverse())
       } else throw new Error()
     }).catch((err)=>console.error(err)).finally(()=>setIsLoading(false))
+    // setIsLoading(false)
   }, [])
 
   const onRefresh = useCallback(async () => {
@@ -41,8 +42,9 @@ export default function Feed({navigation}) {
   if(isLoading) return <Loading isOpen={isLoading}/>
   
   return (
+    <>
+      <StatusBar translucent/>
     <LinearGradientMoots>
-      <StatusBar translucent={false}/>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} >
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
         <Box alignItems="center" mt={35}>
@@ -57,10 +59,11 @@ export default function Feed({navigation}) {
               {...(e.texto && { descricaoPost: e.texto })}
               {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
             />
-          )): <TextoNegrito fontSize={14}>Atualize a página para buscar mais publicações.</TextoNegrito>}
+          )): <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>}
         </Box>
       </ScrollView>
         <BotaoNovoPost position="absolute" top="85%" right="5%" />
     </LinearGradientMoots>
+    </>
   )
 }

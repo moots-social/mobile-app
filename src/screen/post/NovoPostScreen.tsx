@@ -15,6 +15,7 @@ import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria} from "../../components/
 import { getIdStorage, getTokenStorage } from "../../utils/storageUtils";
 import { Alert } from "react-native";
 
+import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 
 export default function NovoPost({navigation}){
     const toast = useToast()
@@ -35,9 +36,11 @@ export default function NovoPost({navigation}){
                 abrirToast(toast, 'error', 'Digite algo ou selecione uma imagem para criar uma nova publicação.')
             }else{ 
                 const resultado = await enviarNovoPost(texto, uris)
-                if(resultado.id){
+                if(resultado){
                     abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 1000, false)
-                    navigation.goBack()
+                    setImagens([])
+                    setUris([])
+                    setTexto('')
                 }
             }
         } catch (error) {

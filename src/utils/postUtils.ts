@@ -14,7 +14,7 @@ export const enviarNovoPost = async(texto?: string, listImagens?: string[])=>{
             }))
         }
         const resultado = await Service.postApi.post(`/criar`, {
-            texto: texto || "", listImagens: novasImagens
+            texto: texto, listImagens: novasImagens
         }, {
             headers:
             {
@@ -24,6 +24,7 @@ export const enviarNovoPost = async(texto?: string, listImagens?: string[])=>{
         if(resultado.data) return resultado.data
         else throw new Error()
     }catch(error: any){
+        console.error(error)
         return error.response?.data?.error
     }
 }
@@ -39,6 +40,19 @@ export const buscarTodosPosts = async()=>{
         else throw new Error()
     } catch (error: any) {
         alert(error.response.data.error)
+        return error.response?.data?.error
+    }
+}
+export const buscarPostPorUserId = async(userId: number)=>{
+    const token = await Storage.getTokenStorage()
+
+    try {
+        const resultado = await Service.postApi.get(`/${userId}`, {
+            headers : { Authorization: token }
+        })
+        if(resultado.data) return resultado.data
+        else throw new Error()
+    } catch (error: any) {
         return error.response?.data?.error
     }
 }
