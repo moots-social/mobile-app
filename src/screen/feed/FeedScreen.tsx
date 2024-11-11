@@ -11,12 +11,19 @@ import { getIdStorage, getTokenStorage } from '../../utils/storageUtils'
 import { RefreshControl } from '@gluestack-ui/themed'
 import { TextoNegrito } from '../../components/geral/Texto'
 import { buscarTodosPosts } from '../../utils/postUtils'
+import { useDispatch, useSelector } from 'react-redux'
+import { setarUsuario } from '../../redux/useUsuario'
+import { autenticar, desautenticar } from '../../redux/useAutenticacao'
 
 
 export default function Feed({navigation}) {
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [publics, setPublics] = useState<any>([])
+
+  const auth = useSelector((state: any) => state.auth.autenticado)
+  const user = useSelector((state: any) => state.usuario.user)
+
   
   useEffect(()=>{
     buscarTodosPosts().then((res)=>{
@@ -24,6 +31,8 @@ export default function Feed({navigation}) {
         setPublics(res.reverse())
       } else throw new Error()
     }).catch((err)=>console.error(err)).finally(()=>setIsLoading(false))
+
+    alert(auth)
   }, [])
 
   const onRefresh = useCallback(async () => {
