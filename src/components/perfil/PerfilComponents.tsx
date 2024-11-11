@@ -3,9 +3,10 @@ import { BotaoConfigurar, BotaoCurso, BotaoSeguir, BotaoListaSeguidores } from "
 import { Titulo } from "../geral/Texto";
 import { ScrollView } from "@gluestack-ui/themed-native-base";
 import { useUsuarioContext } from "../../context/UsuarioContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ImageView from "react-native-image-viewing"
+import { buscarPostPorUserId } from "../../utils/postUtils";
 
 interface IFotoCapaBoxProps{
     fotoPerfilSource: any,
@@ -74,9 +75,18 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
         </Box>
 }
 
-export function PublicacoesBox(){
+export function PublicacoesBox({userId}){
+    const [posts, setPosts] = useState([])
+
+    useEffect(()=>{
+      buscarPostPorUserId(userId).then((res)=>{
+        setPosts(res)
+      }).catch((err)=>console.error(err)).finally(()=>console.log('tentativa de retornar posts do usuario finalizada'))
+    }, [])
+
     return <Box alignItems="center">
             <Titulo>Publicações</Titulo>
+
         </Box>
 }
 
@@ -86,7 +96,7 @@ export function PerfilBox({objetoARenderizar, seguir}: IPerfilBox){
             <FotoCapaBox fotoPerfilSource={objetoARenderizar.fotoPerfil || ''} fotoCapaSource={objetoARenderizar.fotoCapa || ''} />
             <TextoBox nomeCompleto={objetoARenderizar.nomeCompleto || ''} tag={objetoARenderizar.tag || ''} descricao={objetoARenderizar.descricao || ''}/>
             <BotoesPerfilBox curso={objetoARenderizar.curso || ''} seguir={seguir} getUsuario={objetoARenderizar}/>
-            <PublicacoesBox />
+            <PublicacoesBox userId={objetoARenderizar.userId}/>
         </ScrollView>
     )
 }

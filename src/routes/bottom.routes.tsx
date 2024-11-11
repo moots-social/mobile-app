@@ -87,6 +87,7 @@ export default function Bottom(){
         }
         
         getUser()
+        
     }, [])
     return(
         <Navigator>

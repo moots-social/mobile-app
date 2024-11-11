@@ -4,6 +4,7 @@ import { useState } from "react"
 import { TextoNegrito, Titulo } from "../geral/Texto"
 import { MultiLinhaInputPerfil } from "../geral/InputPerfil"
 import BotaoSecao from "../botao/BotaoSecao"
+import { useUsuarioContext } from "../../context/UsuarioContext"
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
@@ -13,9 +14,9 @@ interface userId{
 
 export function MenuPost({userId}: userId){
 
-    console.log(userId)
-
+    const {usuario} = useUsuarioContext()
     const navigation = useNavigation()
+    const [postUsuarioLogado, setPostUsuarioLogado] = useState<boolean>(userId == usuario.userId)
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const [botaoVisivel, setBotaoVisivel] = useState<boolean>(false)
     const [textoBotaoAcao, setTextoBotaoAcao] = useState<string>('')
@@ -35,6 +36,16 @@ export function MenuPost({userId}: userId){
             setModalVisivel(false)
         }, 300)
     }
+
+    const handleExcluirPost = () =>{
+        alert('oi')
+    }
+
+    const handleNavigatePerfil = () =>{
+        if(postUsuarioLogado) navigation.navigate('perfil')
+        else alert('ulalaaaa')
+    }
+
     return(
         <Box>  
 
@@ -45,12 +56,18 @@ export function MenuPost({userId}: userId){
                 </Pressable>
             )
             }}>
-            <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={()=>navigation.navigate('outro-perfil', {userId})}>
+            <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={handleNavigatePerfil}>
                 <MenuItemLabel>Visitar perfil</MenuItemLabel>
             </MenuItem>
+            {!postUsuarioLogado ? (
             <MenuItem key="Denunciar" textValue="Denunciar" onPress={()=>handleAbrir('Carregando...')}>
                 <MenuItemLabel>Denunciar publicação</MenuItemLabel>
             </MenuItem>
+            ) : (
+                <MenuItem key="Excluir" textValue="Excluir" onPress={()=>handleExcluirPost()}>
+                <MenuItemLabel>Excluir publicação</MenuItemLabel>
+            </MenuItem>
+            )}
         </Menu>
                 <Modal isOpen={isModalVisivel} onClose={()=>handleFechar('Voltando...')}>
                 <ModalBackdrop />

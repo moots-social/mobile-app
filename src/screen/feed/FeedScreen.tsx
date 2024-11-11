@@ -4,57 +4,51 @@ import CabecalhoPerfil from '../../components/cabecalho/CabecalhoPerfil'
 import { StatusBar } from 'expo-status-bar'
 import Post from '../../components/post/Post'
 import { BotaoNovoPost } from '../../components/botao/BotaoMais'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Loading from '../../components/geral/Loading'
 import { postApi } from '../../api/apis'
 import { getIdStorage, getTokenStorage } from '../../utils/storageUtils'
-import { Alert } from 'react-native'
+import { RefreshControl } from '@gluestack-ui/themed'
+import { TextoNegrito } from '../../components/geral/Texto'
+import { buscarTodosPosts } from '../../utils/postUtils'
 
 
 export default function Feed({navigation}) {
-  const [isLoading, setIsLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [publics, setPublics] = useState<any>([])
-  const token = getTokenStorage();
-  const id = getIdStorage();
-
-
+  
   useEffect(()=>{
-    setTimeout(()=>{
-      setIsLoading(false)
-      
-      reqPosts()
-    }, 150)
-
-    const reqPosts = async() => {
-      try{
-        const req = await postApi.get("/find-all", {
-          headers: {
-          Authorization: await token
-        }
-        })
-        
-        const data = await req.data;
-        
-        if (data){
-          console.log(data)
-          setPublics(data);
-        }
-      }catch(error: any){
-        console.log(error.response.data.error)
-      }
-    }
-    reqPosts();
-    
+    buscarTodosPosts().then((res)=>{
+      if(res[0]){
+        setPublics(res.reverse())
+      } else throw new Error()
+    }).catch((err)=>console.error(err)).finally(()=>setIsLoading(false))
+    // setIsLoading(false)
   }, [])
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const novasPublics = await buscarTodosPosts();
+      setPublics(novasPublics.reverse() || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+  
+  if(isLoading) return <Loading isOpen={isLoading}/>
+  
   return (
+    <>
+      <StatusBar translucent/>
     <LinearGradientMoots>
-      <Loading isOpen={isLoading}/>
-      <StatusBar translucent={false}/>
-      <ScrollView h="100%">
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} >
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
         <Box alignItems="center" mt={35}>
-          {publics.map((e: any, index: number) => (
+          {publics && publics.length>0 ? publics.map((e: any, index: number) => (
             <Post 
               key={index}
               nomeUsuario={e.nomeCompleto}
@@ -63,12 +57,13 @@ export default function Feed({navigation}) {
               imagemPerfil={e.fotoPerfil} 
               userId={e.userId}
               {...(e.texto && { descricaoPost: e.texto })}
-              {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens[0] })}
+              {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
             />
-          ))}
+          )): <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>}
         </Box>
       </ScrollView>
         <BotaoNovoPost position="absolute" top="85%" right="5%" />
     </LinearGradientMoots>
+    </>
   )
 }
