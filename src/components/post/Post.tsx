@@ -1,10 +1,12 @@
-import { Box, Button, Menu, MenuItem, MenuItemLabel, Pressable, Text } from "@gluestack-ui/themed";
+import { Box, Button, Menu, MenuItem, MenuItemLabel, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
 import { Image } from "@gluestack-ui/themed-native-base";
 import { FullRounded } from "../geral/Rounded";
 import { TextoNegrito } from "../geral/Texto";
 import { BotaoComentar, BotaoCurtirPost, BotaoDescurtirPost, BotaoSalvar } from "../botao/BotoesPostComentario";
 import { useNavigation } from "@react-navigation/native";
 import { MenuPost } from "./PostMenu";
+import { useState } from "react";
+import ImageView from "react-native-image-viewing"
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
@@ -24,9 +26,21 @@ interface IPostProps{
 
 export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, menu=true, botaoComentario=true, nomeUsuario, tagUsuario, ...rest}:IPostProps){
     const navigation = useNavigation()
-
+    const [isVisible, setIsVisible] = useState(false)
+    const [index, setIndex] = useState<number>(0)
+    const postObject = {nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil}
+    const handleExpandirFoto = (index: number) => {
+        setIndex(index);
+        setIsVisible(true);
+      };
+    if(isVisible) return <ImageView 
+                            images={imagemPost}
+                            imageIndex={index}
+                            visible={isVisible}
+                            onRequestClose={()=>setIsVisible(false)}
+                        />
     return(
-        <Pressable onPress={()=> navigation.navigate('expandido')} {...rest}>
+        <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject})} {...rest}>
             <FullRounded bg="$white" w={menu ? "90%" : "100%"} py={20} px={10}>
                 <Box flexDirection="row" w="100%">
                     <Box>
@@ -39,8 +53,12 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
                             <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>{tagUsuario}</Text>
                         </Box>
                         {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text> }
-                        {imagemPost && <Image key={imagemPost} size={300} borderRadius={20} source={{ uri: imagemPost }} />}
-
+                        <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
+                            {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
+                                                                <Image source={imagem} mr={10} rounded={10} h={200} w={200} />
+                                                            </Pressable>))
+                                        )}
+                        </ScrollView>
 
                         <Box flexDirection="row" display="flex" mt={10}>
                             <Box flexDirection="row" w="95%" gap={10}>
@@ -48,7 +66,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
                                 <BotaoDescurtirPost size="2xs"/>
                                 <BotaoSalvar size="2xs"/>
                             </Box>
-                            <BotaoComentar justifyContent="flex-end" size="2xs" />
+                            {botaoComentario &&<BotaoComentar justifyContent="flex-end" size="2xs" />}
                         </Box>
                     </Box>
                     {menu && <MenuPost userId={userId}/>}
