@@ -3,7 +3,15 @@ import { RoundedBottom } from "../geral/Rounded";
 import BotaoVoltar from "../botao/BotaoVoltar";
 import { MenuPost } from "../post/PostMenu";
 
-export default function CabecalhoPerfil({titulo='', temBotaoVoltar=true, postExpandido=false, fontSize=24, userId, ...rest}){
+interface ICabecalhoPerfilProps{
+    titulo: string,
+    userId: number,
+    temBotaoVoltar?: boolean,
+    postExpandido?: boolean,
+    fontSize?: number,
+}
+
+export default function CabecalhoPerfil({titulo='', temBotaoVoltar=true, postExpandido=false, fontSize=24, userId, ...rest}: ICabecalhoPerfilProps){
     
     return (
         <RoundedBottom bg="$white" display="flex" flexDirection="row" justifyContent={temBotaoVoltar ? "space-between" : 'center'} alignItems="center" py={20} px={20} pt={40} zIndex={1} {...rest}>

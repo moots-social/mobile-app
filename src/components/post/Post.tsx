@@ -8,6 +8,7 @@ import { MenuPost } from "./PostMenu";
 import { useState } from "react";
 import ImageView from "react-native-image-viewing"
 import { usuarioIcon } from "../perfil/PerfilComponents";
+import { StatusBar } from "expo-status-bar";
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
@@ -36,12 +37,15 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
       };
       const imagensFormatadas = imagemPost ? [{uri: imagemPost[0] || ''}, {uri: imagemPost[1] || ''}, {uri: imagemPost[2] || ''}, {uri: imagemPost[3] || ''}] : [{}]
     
-        if(isVisible) return <ImageView 
-                            images={imagensFormatadas}
-                            imageIndex={index}
-                            visible={isVisible}
-                            onRequestClose={()=>setIsVisible(false)}
-                        />
+        if(isVisible) return <>
+                                <StatusBar hidden />
+                                <ImageView 
+                                        images={imagensFormatadas}
+                                        imageIndex={index}
+                                        visible={isVisible}
+                                        onRequestClose={()=>setIsVisible(false)}
+                                    />
+                            </>
     return(
         <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject})} {...rest}>
             <FullRounded bg="$white" w={menu ? "90%" : "100%"} py={20} px={10}>
