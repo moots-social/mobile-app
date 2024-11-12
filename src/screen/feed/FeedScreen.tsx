@@ -19,12 +19,12 @@ export default function Feed({navigation}) {
   const [publics, setPublics] = useState<any>([])
   
   useEffect(()=>{
-    buscarTodosPosts().then((res)=>{
-      if(res[0]){
-        setPublics(res.reverse())
-      } else throw new Error()
-    }).catch((err)=>console.error(err)).finally(()=>setIsLoading(false))
-    // setIsLoading(false)
+    // buscarTodosPosts().then((res)=>{
+    //   if(res[0]){
+    //     setPublics(res.reverse())
+    //   } else throw new Error()
+    // }).catch((err)=>console.error(err)).finally(()=>setIsLoading(false))
+    setIsLoading(false)
   }, [])
 
   const onRefresh = useCallback(async () => {

@@ -101,3 +101,10 @@ export const buscarSeguidores = async()=>{
         return []
     }
 }
+
+export const buscarSemToken = async (id: number) => {
+    try{
+        const resultado = await Service.usuarioApi.get(`/buscar/perfil/${id}`)
+        if(resultado.data) return resultado.data
+    }catch(error){ console.error(error)}
+}

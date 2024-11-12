@@ -35,7 +35,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
         setIndex(index);
         setIsVisible(true);
       };
-      const imagensFormatadas = imagemPost ? [{uri: imagemPost[0] || ''}, {uri: imagemPost[1] || ''}, {uri: imagemPost[2] || ''}, {uri: imagemPost[3] || ''}] : [{}]
+      const imagensFormatadas = imagemPost ? [{uri: imagemPost[0]}, {uri: imagemPost[1]}, {uri: imagemPost[2]}, {uri: imagemPost[3]}] : [{}]
     
         if(isVisible) return <>
                                 <StatusBar hidden />
