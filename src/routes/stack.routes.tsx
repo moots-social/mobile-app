@@ -11,7 +11,6 @@ import PostExpandido from "../screen/post/PostExpandidoScreen";
 import PesquisaPalavraChave from "../screen/pesquisa/PesquisaPalavraChaveScreen";
 import NovoPost from "../screen/post/NovoPostScreen";
 import { useState, useEffect } from "react";
-import { useAuthContext } from "../context/AuthContext";
 import Loading from "../components/geral/Loading";
 import PerfilOutroUsuario from "../screen/perfil/PerfilOutroUsuarioScreen";
 import { getAnyItemStorage } from "../utils/storageUtils";

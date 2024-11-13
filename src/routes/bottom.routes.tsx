@@ -8,11 +8,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
 import { Box, Image } from "@gluestack-ui/themed"
 import { useEffect } from "react"
-import { Alert } from "react-native"
-
-import { useUsuarioContext } from "../context/UsuarioContext"
-import { useAuthContext } from "../context/AuthContext"
-
 import { logoutUser } from "../utils/storageUtils"
 import { buscar } from "../utils/usuarioUtils"
 import { useDispatch, useSelector } from "react-redux"
@@ -77,6 +72,7 @@ export default function Bottom(){
                 dispatch(setarUsuario(getUsuario))
             } else {
                 await logoutUser()
+                console.log('deslogando usuário por não ter dados relacionados.')
             }
         }
         
