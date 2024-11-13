@@ -26,6 +26,7 @@ export default function Login({ navigation }) {
   const handleSubmit = async () => {
       const res = await login(email, senha)
       if(res!=='Autenticado com sucesso.'){
+        console.log(res)
         abrirToast(toast, 'error', res, '', 1500, false)
       }else{
         abrirToast(toast, 'success', 'Autenticado com sucesso. Entrando...', '', 800, false)

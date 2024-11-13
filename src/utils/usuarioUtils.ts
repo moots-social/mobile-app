@@ -13,7 +13,7 @@ export const login = async(email: string, senha: string) =>{
         }
         return 'Autenticado com sucesso.'
     } catch (error: any) {
-      return error.response?.data?.error
+      return error
   }
 }
 export const criar = async(usuario: any)=>{

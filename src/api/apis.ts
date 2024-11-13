@@ -93,7 +93,7 @@ export const searchApi = {
 }
 
 export const postApi = {
-    novoPost: (texto?: string, listImagens?: string[]) => api.post(`/post/criar`, {texto, listImagens}),
+    novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
     
 }
 

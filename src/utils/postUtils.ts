@@ -2,7 +2,7 @@ import { apis } from "../api/apis"
 import { blobUsuario } from "./usuarioUtils"
 
 
-export const enviarNovoPost = async(texto?: string, listImagens?: string[])=>{
+export const enviarNovoPost = async(texto: string, listImagens: string[])=>{
     let novasImagens: string[] = []
     let novoTexto: string = texto ? texto : ''
     try{
@@ -12,9 +12,9 @@ export const enviarNovoPost = async(texto?: string, listImagens?: string[])=>{
             }))
         }
         const resultado = await apis.post.novoPost(novoTexto, novasImagens)
-        if(resultado.data) return resultado.data
+        console.log(resultado.data)
+        if(resultado.data) return {post: resultado.data, resultado: 'Post enviado com sucesso.'}
     }catch(error: any){
-        console.error(error)
         return error.response?.status
     }
 }

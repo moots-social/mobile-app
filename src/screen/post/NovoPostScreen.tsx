@@ -35,15 +35,16 @@ export default function NovoPost({navigation}){
                 abrirToast(toast, 'error', 'Digite algo ou selecione uma imagem para criar uma nova publicação.')
             }else{ 
                 const resultado = await enviarNovoPost(texto, uris)
-                if(resultado){
-                    abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 1000, false)
+                if(resultado && resultado.resultado === 'Post enviado com sucesso.'){
+                    navigation.navigate('tabs')
+                    abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 2000, false)
                     setImagens([])
                     setUris([])
                     setTexto('')
                 }
             }
         } catch (error) {
-            console.log(error)
+            alert(error)
         }
     }
 
@@ -125,7 +126,7 @@ export default function NovoPost({navigation}){
                                 </Box>
                                 <Box justifyContent="center" >
                                     <Textarea ml={38} brw={0} w="85%" minHeight={100} maxHeight={150} bottom={10}>
-                                        <TextareaInput fontFamily="Poppins_500Medium" placeholder="No que você está pensando?" onChangeText={(text)=>setTexto(text)} />
+                                        <TextareaInput fontFamily="Poppins_500Medium" placeholder="No que você está pensando?" value={texto} onChangeText={(text)=>setTexto(text)} />
                                     </Textarea>
                                     <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false}>
                                     {imagens.length>0 && imagens.map((imagem, index) => {
