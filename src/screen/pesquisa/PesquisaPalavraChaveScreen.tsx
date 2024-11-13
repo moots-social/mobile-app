@@ -31,7 +31,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                             <Titulo fontFamily="Poppins_500Medium">Publicações</Titulo>
                             {dataPost.length>0 ? dataPost.map((item)=>{
                                 // descricaoPost, imagemPost, imagemPerfil, userId, menu, botaoComentario, nomeUsuario, tagUsuario,
-                                return <Post descricaoPost={item.texto} imagemPost={item.listImagens} imagemPerfil={item.fotoPerfil} userId={item.userId} menu={false} botaoComentario={false} nomeUsuario={item.nomeCompleto} tagUsuario={item.tag} mb={20}/>
+                                return <Post descricaoPost={item.texto} imagemPost={item.listImagens} imagemPerfil={item.fotoPerfil} userId={item.userId} nomeUsuario={item.nomeCompleto} tagUsuario={item.tag} mb={20}/>
                             }): <TextoNegrito fontFamily="Poppins_500Medium" >Nenhuma publicação encontrada.</TextoNegrito>}
                         </Box>
                     </RoundedTop>

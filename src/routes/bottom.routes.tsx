@@ -75,6 +75,8 @@ export default function Bottom(){
             const getUsuario = await buscar()
             if(getUsuario){
                 dispatch(setarUsuario(getUsuario))
+            } else {
+                await logoutUser()
             }
         }
         

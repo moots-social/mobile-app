@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 
 export default function NovoPost({navigation}){
     const toast = useToast()
-    const [texto, setTexto] = useState<string>('')
+    const [ texto, setTexto ] = useState<string>('')
     const [ imagens, setImagens ]= useState<ImagePicker.ImagePickerAsset[]>([])
     const [uris, setUris] = useState<string[]>([''])
     const [isVisible, setIsVisible] = useState(false)

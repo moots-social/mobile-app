@@ -28,10 +28,10 @@ export const criar = async(usuario: any)=>{
 export const buscarEmail = async(email: string)=>{
     try {
         const dado = await apis.semToken.buscarEmail(email);
-        const res = await dado.data;
+        const res = await dado.data
         return res
     } catch (error: any) {
-      return error.response?.data?.error
+      return error.response.status
   }
 }
 export const buscar = async()=>{

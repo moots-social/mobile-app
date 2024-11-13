@@ -76,14 +76,7 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
 }
 
 export function PublicacoesBox({userId}){
-    const [posts, setPosts] = useState([])
-
-    useEffect(()=>{
-      buscarPostPorUserId(userId).then((res)=>{
-        setPosts(res)
-      }).catch((err)=>console.error(err)).finally(()=>console.log('tentativa de retornar posts do usuario finalizada'))
-    }, [])
-
+    
     return <Box alignItems="center">
             <Titulo>Publicações</Titulo>
 

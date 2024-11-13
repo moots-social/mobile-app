@@ -49,6 +49,7 @@ export default function Cadastro({ navigation }) {
   };
 
   const handleSubmit = async () => {
+    
     try {
       // Validação do email
       if (!validateEmail(sessao.email)) {
@@ -65,13 +66,14 @@ export default function Cadastro({ navigation }) {
       }else {
 
         const dado = await buscarEmail(sessao.email);
-        if (dado.email) {
+        console.log(dado)
+        if (dado != 409) {
           Alert.alert('Email inválido', "Esse email já está sendo utilizado. Tente com outro email.");
           setSessao({ ...sessao, email: "" });
           
-        } else if(dado === 'Email e senha válidos'){
+        } else{
           navigation.navigate("info", { sessao }); // Navega para a tela de info
-        } else throw new Error(dado)
+        }
       }
     } catch (error) {
         console.error(error);

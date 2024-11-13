@@ -59,7 +59,7 @@ export default function Feed({navigation}) {
         <Box alignItems="center" mt={35}>
           {publics && publics.length>0 ? publics.map((e: any, index: number) => (
             <Post 
-              key={index}
+              key={e.id}
               nomeUsuario={e.nomeCompleto}
               tagUsuario={e.tag} 
               mb={10} 

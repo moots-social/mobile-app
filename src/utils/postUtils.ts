@@ -1,58 +1,20 @@
-import  * as Storage from "./storageUtils"
-import * as Service from '../api/apis'
-import { handleUpdateImage } from "../screen/editarPerfil/EditarPerfilScreen"
+import { apis } from "../api/apis"
+import { blobUsuario } from "./usuarioUtils"
 
 
 export const enviarNovoPost = async(texto?: string, listImagens?: string[])=>{
     let novasImagens: string[] = []
-    const token = await Storage.getTokenStorage()
-
+    let novoTexto: string = texto ? texto : ''
     try{
         if(listImagens && listImagens.length>0){
             novasImagens = await Promise.all(listImagens.map(async(listImagem)=>{
-                return await handleUpdateImage(listImagem)
+                return await blobUsuario(listImagem)
             }))
         }
-        const resultado = await Service.postApi.post(`/criar`, {
-            texto: texto, listImagens: novasImagens
-        }, {
-            headers:
-            {
-                Authorization: token
-            }
-        })
+        const resultado = await apis.post.novoPost(novoTexto, novasImagens)
         if(resultado.data) return resultado.data
-        else throw new Error()
     }catch(error: any){
         console.error(error)
-        return error.response?.data?.error
-    }
-}
-
-export const buscarTodosPosts = async()=>{
-    const token = await Storage.getTokenStorage()
-
-    try {
-        const resultado = await Service.postApi.get(`/find-all`, {
-            headers : { Authorization: token }
-        })
-        if(resultado.data) return resultado.data
-        else throw new Error()
-    } catch (error: any) {
-        alert(error.response.data.error)
-        return error.response?.data?.error
-    }
-}
-export const buscarPostPorUserId = async(userId: number)=>{
-    const token = await Storage.getTokenStorage()
-
-    try {
-        const resultado = await Service.postApi.get(`/${userId}`, {
-            headers : { Authorization: token }
-        })
-        if(resultado.data) return resultado.data
-        else throw new Error()
-    } catch (error: any) {
-        return error.response?.data?.error
+        return error.response?.status
     }
 }
