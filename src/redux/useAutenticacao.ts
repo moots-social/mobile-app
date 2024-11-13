@@ -1,4 +1,5 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { logoutUser } from "../utils/storageUtils";
 
 const autenticacaoSlice = createSlice({
     name: "auth",
@@ -7,10 +8,16 @@ const autenticacaoSlice = createSlice({
     },
     reducers: {
         autenticar: state => {
-            state.autenticado = true
+            return {
+                ...state,
+                autenticado: true
+            }
         },
-        desautenticar: state => {
-            state.autenticado = false
+        desautenticar: (state) => {
+            return {
+                ...state,
+                autenticado: false,
+            }
         }
     }
 })

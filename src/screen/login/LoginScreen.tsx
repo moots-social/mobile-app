@@ -11,11 +11,13 @@ import { login } from "../../utils/usuarioUtils";
 import { getAnyItemStorage } from "../../utils/storageUtils";
 import { ScrollView, useToast } from "@gluestack-ui/themed";
 import { abrirToast} from "../../components/geral/ToastMoots";
+import { useDispatch, useSelector } from "react-redux";
+import { autenticar } from "../../redux/useAutenticacao";
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
   const toast = useToast()
-  const {setAuth} = useAuthContext()
+  const dispatch = useDispatch()
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
 
@@ -27,7 +29,7 @@ export default function Login({ navigation }) {
         abrirToast(toast, 'error', res, '', 1500, false)
       }else{
         abrirToast(toast, 'success', 'Autenticado com sucesso. Entrando...', '', 800, false)
-        setAuth(await getAnyItemStorage('auth'))
+        dispatch(autenticar())
       }
   };
 

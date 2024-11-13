@@ -3,16 +3,29 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 const usuarioSlice = createSlice({
   name: "usuario", 
   initialState: {
-    user: {} 
+    user: {},
+    termos: []
   },
   reducers: {
     setarUsuario: (state, action) => {
-      state.user = action.payload; 
-    }
+      return {
+        ...state,
+        user: action.payload
+      }
+    },
+    novoTermo: (state, action) => {
+      return {
+        ...state,
+        termos: [...state.termos, action.payload],
+      };
+    },
+    novaListaTermo: (state, action) =>{
+      state.termos = action.payload
+    },
   }
 });
 
-export const { setarUsuario } = usuarioSlice.actions;
+export const { setarUsuario, novoTermo, novaListaTermo } = usuarioSlice.actions;
 
 // export const storeUsuario = configureStore({
 //   reducer: usuarioSlice.reducer  

@@ -1,5 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Alert } from "react-native"
+import store from "../redux/storeProvider"
+import { desautenticar } from "../redux/useAutenticacao"
+import { novaListaTermo } from "../redux/useUsuario"
 
 export const getTokenStorage = async()=>{
     try {
@@ -39,7 +42,7 @@ export const getAnyItemStorage = async(item: string)=>{
 
 export const setTokenStorage = async(token: string)=>{
     try {
-        const item=await AsyncStorage.setItem('token', token)
+        const item = await AsyncStorage.setItem('token', token)
         return item
     } catch (error) {
         Alert.alert('Erro', `Algo deu errado. ${String(error)}`)
@@ -53,16 +56,19 @@ export const setAnyItemStorage = async(item: string, value: any)=>{
     }
 }
 
-export const logoutUser = async(setAuth: any, setUsuario: any): Promise<void> =>{
+export const logoutUser = async(): Promise<void> =>{
     await AsyncStorage.multiRemove(['token', 'id', 'email'])
     await AsyncStorage.setItem('auth', String(false))
-    setAuth('false')
-    setTimeout(()=>{
-        setUsuario({curso: ''})
-    }, 100)
+    store.dispatch(desautenticar())
+    store.dispatch(novaListaTermo([]))
 }
 
-// export const invalidToken = async(setAutentication: any, setUsuario: any)=>{
-//     Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
-//     logoutUser(setAutentication, setUsuario)
-// }
+export const storage = {
+    getTokenStorage,
+    getAllItemsStorage,
+    getIdStorage,
+    getAnyItemStorage,
+    setTokenStorage,
+    setAnyItemStorage,
+    logoutUser,
+}

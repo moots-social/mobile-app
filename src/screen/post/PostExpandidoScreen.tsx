@@ -4,14 +4,15 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import Post from "../../components/post/Post";
 import { RoundedTop } from "../../components/geral/Rounded";
 import Comentario from "../../components/post/Comentario";
-import { useUsuarioContext } from "../../context/UsuarioContext";
 
 const enviarIcon = require('../../assets/EnviarIconRounded.png')
 
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
+import { useSelector } from "react-redux";
 export default function PostExpandido({route}) {
   const {post} = route.params
-  const {usuario} = useUsuarioContext()
+  const usuario = useSelector((state)=> state.usuario.user)
+  
   return (
     <LinearGradientMoots>
       <ScrollView>

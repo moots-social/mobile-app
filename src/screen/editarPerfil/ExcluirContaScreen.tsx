@@ -7,26 +7,28 @@ import { useUsuarioContext } from "../../context/UsuarioContext";
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from "../../api/apis";
 import Loading from "../../components/geral/Loading";
-import { useAuthContext } from "../../context/AuthContext";
 import { logoutUser } from "../../utils/storageUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { desautenticar } from "../../redux/useAutenticacao";
+import { excluirConta } from "../../utils/usuarioUtils";
+import { setarUsuario } from "../../redux/useUsuario";
 
 export default function ExcluirConta(){
-    const {usuario, setUsuario} = useUsuarioContext()
-    const {setAuth} = useAuthContext()
+    const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleExcluirConta = async()=>{
         try{
-            const token = await SyncStorage.getItem('token')
-            const resultado = await usuarioApi.delete(`/${usuario.id}`, {headers: {Authorization: token}})
-            if(resultado!=undefined){
-                Alert.alert('Conta excluída', 'Conta excluída com sucesso. Muito obrigado por ter feito parte do Moots!')
-                setIsLoading(true)
-                setTimeout(async()=>{
-                    await logoutUser(setAuth, setUsuario)
-                    setIsLoading(false)
-                },2000)
-            }
+            const resultado = await excluirConta()
+            if(resultado){
+                    Alert.alert('Conta excluída', 'Conta excluída com sucesso. Muito obrigado por ter feito parte do Moots!')
+                    setIsLoading(true)
+                    setTimeout(async()=>{
+                        await logoutUser()
+                        setIsLoading(false)
+                    },1000)
+                    dispatch(setarUsuario({}))
+                }
         }catch(error: any){
             Alert.alert('Erro', error.response.data.error)
         }

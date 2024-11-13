@@ -3,15 +3,15 @@ import { useNavigation } from "@react-navigation/native"
 import { LinearGreenGradientMoots } from "../geral/LinearGradientMoots"
 import { TextoNegrito } from "../geral/Texto"
 import { useEffect, useState } from "react"
-import { useUsuarioContext } from "../../context/UsuarioContext"
-import { usuarioApi } from "../../api/apis"
 
 import BotaoSecao from "../botao/BotaoSecao"
 import CartaoUsuario from "./CartaoUsuario"
 import { Alert } from "react-native"
 import { getTokenStorage } from "../../utils/storageUtils"
-import { pararDeSeguir, seguirUsuario } from "../../utils/usuarioUtils"
+import usuarioUtils, { pararDeSeguir, seguirUsuario } from "../../utils/usuarioUtils"
 import { abrirToastSucesso } from "../geral/ToastMoots"
+import { useDispatch, useSelector } from "react-redux"
+import { setarUsuario } from "../../redux/useUsuario"
 
 const seguirIcon = require('../../assets/SeguirIcon.png')
 const listaIcon = require('../../assets/ListaIcon.png')
@@ -50,24 +50,24 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
     const toast = useToast()
 
     const handlePararDeSeguir = async()=>{
-        const resultado = await pararDeSeguir(nomeCompleto, id1, id2)
-        if(resultado===`Você parou de seguir ${nomeCompleto}.`){
+        const resultado = await pararDeSeguir(id1, id2)
+        if(resultado===200){
             setIsSeguindo(false)
             abrirToastSucesso(toast, resultado)
         } 
     }
 
     const handleSeguirUsuario = async()=>{
-        const resultado = await seguirUsuario(nomeCompleto, id1, id2)
+        const resultado = await seguirUsuario(id1, id2)
         if(resultado === `Agora você está seguindo ${nomeCompleto}.`){
             setIsSeguindo(true)
             abrirToastSucesso(toast, resultado)
         }
-        else if(resultado === 'Acesso negado. Você não tem permissão para acessar este recurso.'){
+        else if(resultado === 400){
             Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
                 {
                     text: 'Sim',
-                    onPress: async()=>await handlePararDeSeguir()
+                    onPress: async() => await handlePararDeSeguir()
                 },
                 {
                     text: 'Não'
@@ -79,13 +79,9 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
     useEffect(() => {
         const handleIsSeguindo = async () => {
             try {
-                const token = await getTokenStorage();
-                const resultado = await usuarioApi.get(`/buscar-quem-segue/${id1}`, {
-                    headers: { Authorization: token },
-                });
-    
-                if (resultado.data) {
-                    const checkIsSeguindo = resultado.data.some(dado => dado.id === id2);
+                const resultado = await usuarioUtils.buscarQuemSegue()
+                if (resultado) {
+                    const checkIsSeguindo = resultado.some(dado => dado.id === id2);
                     setIsSeguindo(checkIsSeguindo);
                 }
             } catch (error: any) {
@@ -112,7 +108,8 @@ export function BotaoConfigurar({imgW=10, imgH=10, ...rest}: IBotaoConfigurarPro
     )
 }
 export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IBotaoListaSeguidores){
-    const {usuario} = useUsuarioContext()
+    const usuario = useSelector((state)=> state.usuario.user)
+
     const navigation = useNavigation()
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const[botaoSelecionado, setBotaoSelecionado] = useState<string>('seguindo')
@@ -130,10 +127,9 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
 
     const getSeguindo = async()=>{
         try {
-            const token = await getTokenStorage()
-            const resultado = await usuarioApi.get(`/buscar-quem-segue/${getUsuario.userId}`, {headers:{Authorization: token}})
+            const resultado = await usuarioUtils.buscarQuemSegue(getUsuario.userId)
             if(resultado){
-                setSeguindo(resultado.data)
+                setSeguindo(resultado)
             }
         } catch (error) {
             setSeguindo([])
@@ -143,9 +139,9 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
         try {
             
             const token = await getTokenStorage()
-            const resultado = await usuarioApi.get(`/buscar-seguidores/${getUsuario.userId}`, {headers:{Authorization: token}})
+            const resultado = await usuarioUtils.buscarSeguidores(getUsuario.userId)
             if(resultado){
-                setSeguidores(resultado.data)
+                setSeguidores(resultado)
             }
             
         } catch (error) {
@@ -290,7 +286,8 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
 
 
 export function ActionCurso({curso}: ICursoModalProps){
-    const {usuario, setUsuario} = useUsuarioContext()
+    const usuario = useSelector((state)=> state.usuario.user)
+    const dispatch = useDispatch()
     const [imagem, setImagem] = useState<any>('')
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
 
@@ -304,7 +301,7 @@ export function ActionCurso({curso}: ICursoModalProps){
 
     const handleClick = (imagem: any, valor: string) =>{
         setImagem(imagem)
-        setUsuario({...usuario, novoCurso: valor})
+        dispatch(setarUsuario({...usuario, novoCurso: valor}))
         setOpcoesVisivel(false)
     }
     useEffect(()=>{

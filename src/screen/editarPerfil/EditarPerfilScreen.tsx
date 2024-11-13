@@ -5,61 +5,24 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/geral/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/geral/InputPerfil";
 import { ActionCurso } from '../../components/perfil/PerfilBotoes';
-import SyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import Loading from '../../components/geral/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { abrirToast} from '../../components/geral/ToastMoots';
 
-
-import { useAuthContext } from '../../context/AuthContext';
-import { useUsuarioContext } from '../../context/UsuarioContext';
-
-import { usuarioApi } from '../../api/apis';
 import { logoutUser } from '../../utils/storageUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { setarUsuario } from '../../redux/useUsuario';
 
+import usuarioUtils from '../../utils/usuarioUtils';
 
 const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 
-export const handleUpdateImage = async(uri: string)=>{
-    
-    let novaPerfilURL = ''
-    try {
-        const containerName ="artifact-image-container"
-
-        const formData = new FormData()
-        formData.append('file', {
-            uri: uri,
-            name: 'perfil.jpeg',
-            type: 'image/jpeg'
-        })
-        
-        const config = {
-            params: {
-                containerName: containerName
-            },
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        
-        const dado = await usuarioApi.post(`/images`, formData, config);
-        const req = await dado.data;
-        
-        if (req!=undefined) {
-            novaPerfilURL = req.data
-            
-        }
-    } catch (error: any) {
-        console.error(error.response.data.error)
-    }
-    return novaPerfilURL
-}
 
 export default function EditarPerfil({navigation}){
     const toast = useToast()
-    const {auth, setAuth} = useAuthContext()
-    const {usuario, setUsuario} = useUsuarioContext()
+    const usuario = useSelector(state => state.usuario.user)
+    const dispatch = useDispatch()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -96,7 +59,7 @@ export default function EditarPerfil({navigation}){
                         try {
                             const autenticado = await AsyncStorage.getItem('auth')
                             if(autenticado==='true'){
-                                await logoutUser(setAuth, setUsuario)
+                                await logoutUser()
                             }
                         } catch (error) {
                             console.error(error)
@@ -109,7 +72,7 @@ export default function EditarPerfil({navigation}){
                 }
             ])
         } catch (error: any) {
-            abrirToastErro(toast, `Não foi possível completar ação. ${error.response.data.error}`)
+            abrirToast(toast, 'error', `Não foi possível completar ação. ${error.response.data.error}`)
         }
     }
 
@@ -117,28 +80,29 @@ export default function EditarPerfil({navigation}){
     const handleSubmit = async()=>{
         
         try{
-            const token = await SyncStorage.getItem('token')
             let imagem = ''
             let imagem2= ''
             if(usuarioAtualizado.fotoPerfil!=='') {
-                imagem = await handleUpdateImage(usuarioAtualizado.fotoPerfil)
+                imagem = await usuarioUtils.blobUsuario(usuarioAtualizado.fotoPerfil)
             }
             if(usuarioAtualizado.fotoCapa!==''){
-                imagem2 = await handleUpdateImage(usuarioAtualizado.fotoCapa)
+                imagem2 = await usuarioUtils.blobUsuario(usuarioAtualizado.fotoCapa)
             }
             
         
-            const resultado = await usuarioApi.put(`/atualizar/${usuario.id}`, {
+            const resultado = await usuarioUtils.atualizarDados({
                 nomeCompleto: usuarioAtualizado.nomeCompleto || usuario.nomeCompleto, descricao: usuarioAtualizado.descricao,
                 curso: usuario.novoCurso || usuario.curso, fotoPerfil: imagem || usuario.fotoPerfil,
                 fotoCapa: imagem2 || usuario.fotoCapa
-            }, {headers: {Authorization: token}})
+            })
     
-            if(resultado!==undefined){
-                setUsuario({...usuario, nomeCompleto: resultado.data.nomeCompleto || usuario.nomeCompleto, descricao: resultado.data.descricao,
-                    curso: resultado.data.curso || usuario.curso, fotoPerfil: resultado.data.fotoPerfil || usuario.fotoPerfil,
-                    fotoCapa: resultado.data.fotoCapa || usuario.fotoCapa, novoCurso: ''
-                })
+            if(resultado){
+                dispatch(setarUsuario(
+                    {...usuario, nomeCompleto: resultado.nomeCompleto || usuario.nomeCompleto, descricao: resultado.descricao,
+                    curso: resultado.curso || usuario.curso, fotoPerfil: resultado.fotoPerfil || usuario.fotoPerfil,
+                    fotoCapa: resultado.fotoCapa || usuario.fotoCapa, novoCurso: ''
+                }
+                ))
                 setIsLoading(true)
                 setTimeout(()=>{
                     setIsLoading(false)
@@ -150,7 +114,7 @@ export default function EditarPerfil({navigation}){
            }else throw new Error('Não foi possível editar seu perfil. Tente novamente mais tarde.')
             
         }catch(error: any){
-            abrirToast(toast, 'error', error)
+            abrirToast(toast, 'error', String(error))
         }
     }
 

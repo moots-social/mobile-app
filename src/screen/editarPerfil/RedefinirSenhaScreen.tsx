@@ -6,11 +6,14 @@ import { useState } from "react";
 
 import SyncStorage from '@react-native-async-storage/async-storage';
 import { usuarioApi } from "../../api/apis";
-import { useUsuarioContext } from "../../context/UsuarioContext";
 import { Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { redefinirSenha } from "../../utils/usuarioUtils";
+import { setarUsuario } from "../../redux/useUsuario";
 
 export default function RedefinirSenha({navigation}){
-    const {usuario, setUsuario} = useUsuarioContext()
+    const usuario = useSelector((state)=> state.usuario.user)
+    const dispatch = useDispatch()
     const [senhaAtualizada, setSenhaAtualizada] = useState({senhaAntiga: '', novaSenha: '', confirmaNovaSenha: ''})
 
     const handleSenhaAntigaChange = (texto: string)=>{
@@ -29,19 +32,14 @@ export default function RedefinirSenha({navigation}){
             if(senhaAntiga==='' || novaSenha==='' || confirmaNovaSenha ==='') throw new Error('Todos os campos devem ser preenchidos.')
             if(novaSenha.length<8) throw new Error('Sua senha deve conter 8 caracteres ou mais.')
             if(novaSenha!==confirmaNovaSenha) throw new Error('As senhas não coincidem. Tente novamente.')
-            const token = await SyncStorage.getItem('token')
-            const resultado = await usuarioApi.patch(`/redefinir-senha/${usuario.id}`, {
-                senhaAntiga: senhaAntiga, senhaNova: novaSenha
-            }, {headers: {Authorization: token}})
+            const resultado = await redefinirSenha(senhaAntiga, novaSenha)
             if(resultado){
-                setUsuario(resultado.data)
+                dispatch(setarUsuario(resultado))
                 alert('Senha alterada com sucesso.')
                 navigation.goBack()
             }
         }catch(error: any){
-            //AxiosError: Request failed with status code 409
-            if(error.response.data.statusCode==409) {Alert.alert('Senha incorreta', 'Sua senha está incorreta. Tente novamente com a senha correta.'); return}
-            Alert.alert('Erro ao atualizar senha', String(error || error.response.data.error))
+            Alert.alert('Senha incorreta', 'Sua senha está incorreta. Tente novamente com a senha correta.')
         }
     }
     return(

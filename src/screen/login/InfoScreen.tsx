@@ -7,12 +7,13 @@ import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import FormControlInput from "../../components/geral/FormControlInput";
 import Antdesign from "react-native-vector-icons/AntDesign";
 import { Select } from '@gluestack-ui/themed';
-import { usuarioApi } from "../../api/apis";
+import { reqSemToken, usuarioApi } from "../../api/apis";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { handleUpdateImage } from "../editarPerfil/EditarPerfilScreen";
+import { criar } from "../../utils/usuarioUtils";
 
 const imagemCursoDesenvolvimento = require("../../assets/cursoIcons/DesenvolvimentoIcon.png")
 const imagemCursoFic = require("../../assets/cursoIcons/FicIcon.png")
@@ -141,11 +142,9 @@ export default function Info({navigation, route}){
         }else{
           imagem = ''
         }
-        const res = await usuarioApi.post("/criar", {...create, fotoPerfil: imagem});
-        const dado = await res.data;
-
-        if (dado) {
-          Alert.alert(`Usuario ${dado.tag} criado com sucesso. Faça login e proveite o app!`)
+        const res = await criar({...create, fotoPerfil: imagem})
+        if (res === `Usuário "${create.nomeCompleto}" criado com sucesso.`) {
+          Alert.alert('Cadastro', `Você criou sua conta com sucesso. Realize o login para usar o app.`)
           navigation.navigate("login")
       } 
       } catch (error: any) {

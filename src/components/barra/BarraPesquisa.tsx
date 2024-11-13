@@ -1,18 +1,18 @@
-import { Box, FlatList, Image, Input, InputField, InputIcon, InputSlot, Pressable,  styled, useToast } from "@gluestack-ui/themed";
+import { Box, Image, Input, InputField, InputIcon, InputSlot, Pressable, styled, useToast } from "@gluestack-ui/themed";
 import { TextoNegrito } from "../geral/Texto";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { StyledShadowBox } from "../../screen/login/CadastroScreen";
 
 import BotaoVoltar from "../botao/BotaoVoltar";
 import { useNavigation} from "@react-navigation/native";
-import { RoundedBottomSemSombra } from "../geral/Rounded";
-import { searchApi } from "../../api/apis";
-import { getTokenStorage } from "../../utils/storageUtils";
 import { Alert, Keyboard } from "react-native";
 import { abrirToast } from "../geral/ToastMoots";
 import FiltrosModal from "../modal/FiltrosModal";
 import { ScrollView } from "react-native-gesture-handler";
 import { useMiscContext } from "../../context/MiscContext";
+import { useDispatch, useSelector } from "react-redux";
+import searchUtils from "../../utils/searchUtils";
+import { novaListaTermo, novoTermo } from "../../redux/useUsuario";
 const botaoEnviar = require('../../assets/EnviarIconRounded.png')
 const pesquisaIcon = require('../../assets/PesquisaIcon.png')
 
@@ -37,8 +37,9 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const toast = useToast()
     const navigation = useNavigation()
     const input = useRef(null)
-    const {termos, setTermos, filtros, setFiltros} = useMiscContext()
-    const [isExtended, setIsExtended] = useState<boolean>(extended)
+    const termos = useSelector(state => state.usuario.termos)
+    const dispatch = useDispatch()
+
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>(valorParam || '')
 
@@ -46,7 +47,6 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
         navigation.goBack()
     }
     
-
     const desfocarInput = () => {
         input.current.blur()
         Keyboard.dismiss()
@@ -61,20 +61,15 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
         else{
             setIsInvalid(false)
             try {
-                const token = await getTokenStorage()
-                const resultadoPerfil = await searchApi.get(`/user`, {
-                    params: {
-                        query: valor
-                    },
-                    headers: {
-                        Authorization: token
-                    }
-                })
-                if(resultadoPerfil){
-                    navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil.data || null, dataPost: null})
-                    setTimeout(()=>{
-                        if(!termos.includes(valor)) setTermos([...termos, valor])
-                    }, 100)
+                const resultadoPerfil = await searchUtils.buscarUsuario(valor)
+                const resultadoPost = await searchUtils.buscarPost(valor)
+                if(resultadoPerfil || resultadoPost){
+                    navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil || null, dataPost: resultadoPost || null})
+                    if(!termos.includes(valor)){
+                        setTimeout(()=>{
+                            dispatch(novoTermo(valor))
+                        }, 100)
+                    } 
                     setValor('')
                 }
             } catch (error) {
@@ -85,14 +80,14 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
 
     return(
             <BottomRadiusShadowBox {...rest}>
-                <Box  flexDirection="row" justifyContent={!isExtended ? "space-around" : "space-between"} alignItems="center" py={10} pt={30}>
-                    {!isExtended && (
+                <Box  flexDirection="row" justifyContent={!extended ? "space-around" : "space-between"} alignItems="center" py={10} pt={30}>
+                    {!extended && (
                         <Box>
                             <BotaoVoltar onPress={()=>voltar()}/>
                         </Box>
                     )}
 
-                    <Box w={!isExtended ? "70%" : "85%"}>
+                    <Box w={!extended ? "70%" : "85%"}>
                         <Input ref={input} onBlur={desfocarInput} variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid} onSubmitEditing={handlePesquisar}>
                             <InputSlot>
                                 <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20} alt='pesquisa'/></InputIcon>
@@ -115,17 +110,17 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                         </Input>
                     </Box>
 
-                    <Box mr={isExtended ? 8 : 0}>
+                    <Box mr={extended ? 8 : 0}>
                         <FiltrosModal />
                     </Box>
 
                 </Box>
 
-                {isExtended && <Box flexDirection="row" display="flex">
+                {extended && <Box flexDirection="row" display="flex">
                     <TextoNegrito mr='$2.5' display="flex">Recentes:</TextoNegrito>
                     <ScrollView contentContainerStyle={{gap: 5}} showsHorizontalScrollIndicator={false} horizontal>
-                    {termos[0] ? termos.map((termo)=>{
-                        return <TermoRecente termo={termo}/>
+                    {termos.length> 0 ? termos.map((termo)=>{
+                        return <TermoRecente termo={termo} key={termo}/>
                     }): <TextoNegrito>Nenhuma pesquisa recente.</TextoNegrito>}
                     </ScrollView>
                 </Box>}
@@ -134,52 +129,24 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     )
 }
 
-export function BarraPesquisaChat(){
-    return(
-        <RoundedBottomSemSombra justifyContent="center" p={10}>
-            <Box flexDirection="row" justifyContent="space-between" >
-                <Input variant="rounded" h={35} w="100%" borderWidth={2} borderColor="$black">
-                    <InputSlot>
-                        <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20} alt='pesquisa'/></InputIcon>
-                    </InputSlot>
-                    <InputField 
-                        fontFamily="Poppins_500Medium" 
-                        placeholder="Procure alguém..."
-                        ml={-10} 
-                        pt={5}
-                    />
-                    <InputSlot>
-                        <Pressable>
-                            <InputIcon w="100%" mr={5} bottom={2}>
-                                <Image source={botaoEnviar} w={20} h={20} alt='enviar'/>
-                            </InputIcon>
-                        </Pressable>
-                    </InputSlot>
-                </Input>
-            </Box>
-        </RoundedBottomSemSombra>
-    )
-}
-
 export function TermoRecente({termo, ...rest}: ITermoProps){
     const navigation = useNavigation()
-    const {termos, setTermos} = useMiscContext()
+    const termos = useSelector(state => state.usuario.termos)
+    const dispatch = useDispatch()
+
     const handlePress = async()=>{
         try {
-            const token = await getTokenStorage()
-            const resultado = await searchApi.get('/user', {
-                params:{
-                    query: termo
-                },
-                headers: {Authorization: token}
-            })
-            if(resultado.data){
-                navigation.navigate('pesquisaPalavraChave', {valor: termo, dataPerfil: resultado.data || null})
+            const resultado = await searchUtils.buscarUsuario(termo)
+            const resultadoPost = await searchUtils.buscarPost(termo)
+
+            if(resultado || resultadoPost){
+                navigation.navigate('pesquisaPalavraChave', {valor: termo, dataPerfil: resultado || null, dataPost: resultadoPost || null})
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
+
     const handleLongPress = () =>{
         Alert.alert('Remover pesquisa', `Deseja remover a pesquisa recente "${termo}"?`, [
             {
@@ -187,7 +154,7 @@ export function TermoRecente({termo, ...rest}: ITermoProps){
                 onPress: ()=>{
                     const index: number = termos.lastIndexOf(termo)
                     const novoArrayTermo = termos.slice(0, index).concat(termos.slice(index+1))
-                    setTermos(novoArrayTermo)
+                    dispatch(novaListaTermo(novoArrayTermo))
                 }
             },
             {

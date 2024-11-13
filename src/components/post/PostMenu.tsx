@@ -4,7 +4,7 @@ import { useState } from "react"
 import { TextoNegrito, Titulo } from "../geral/Texto"
 import { MultiLinhaInputPerfil } from "../geral/InputPerfil"
 import BotaoSecao from "../botao/BotaoSecao"
-import { useUsuarioContext } from "../../context/UsuarioContext"
+import { useSelector } from "react-redux"
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
@@ -13,8 +13,8 @@ interface userId{
 }
 
 export function MenuPost({userId}: userId){
+    const usuario = useSelector((state)=> state.usuario.user)
 
-    const {usuario} = useUsuarioContext()
     const navigation = useNavigation()
     const [postUsuarioLogado, setPostUsuarioLogado] = useState<boolean>(userId == usuario.userId)
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)

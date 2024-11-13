@@ -26,11 +26,9 @@ import {
 import { Image } from "@gluestack-ui/themed-native-base";
 import { StatusBar } from "expo-status-bar";
 import { Box, Spinner } from "@gluestack-ui/themed";
-import { ProviderAuthContext } from "../context/AuthContext";
-import { ProviderUsuarioContext } from "../context/UsuarioContext";
 import { LogBox } from "react-native";
-import { ProviderMiscContext } from "../context/MiscContext";
-
+import { Provider } from "react-redux";
+import store from "../redux/storeProvider";
 export default function Routes() {
   LogBox.ignoreAllLogs(true)
 
@@ -67,14 +65,10 @@ export default function Routes() {
   }
 
   return (
-    <ProviderAuthContext>
-      <ProviderUsuarioContext>
-        <ProviderMiscContext>
-          <NavigationContainer>
-              <Stack />
-          </NavigationContainer>
-        </ProviderMiscContext>
-      </ProviderUsuarioContext>
-    </ProviderAuthContext>
+    <Provider store={store}>
+        <NavigationContainer>
+            <Stack />
+        </NavigationContainer>
+    </Provider>
   );
 }

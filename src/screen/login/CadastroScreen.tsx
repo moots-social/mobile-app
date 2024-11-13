@@ -6,6 +6,7 @@ import BotaoSecao from "../../components/botao/BotaoSecao";
 import { useRef, useState } from "react";
 import { usuarioApi } from "../../api/apis";
 import { Alert } from "react-native";
+import { buscarEmail } from "../../utils/usuarioUtils";
 
 const image = require("../../assets/vectorizedGreenAttempt.png");
 
@@ -63,27 +64,17 @@ export default function Cadastro({ navigation }) {
         Alert.alert('Senha inválida', "Sua senha deve ter pelo menos 8 caracteres.")
       }else {
 
-        try {
-          const dado = await usuarioApi.get(`/buscarEmail?email=${sessao.email}`);
-          const res = dado.data;
-          if (res) {
-            Alert.alert('Email inválido', "Esse email já está sendo utilizado. Tente com outro email.");
-            setSessao({ ...sessao, email: "" });
-            
-          } else throw new Error()
-        } catch (error: any) {
-          if(error.response.data.error == 'Email e senha válidos'){
-            navigation.navigate("info", { sessao }); // Navega para a tela de info
-          }
-          else{
-            Alert.alert('Error', error.response.data.error);
-          }
+        const dado = await buscarEmail(sessao.email);
+        if (dado.email) {
+          Alert.alert('Email inválido', "Esse email já está sendo utilizado. Tente com outro email.");
+          setSessao({ ...sessao, email: "" });
           
-        }
+        } else if(dado === 'Email e senha válidos'){
+          navigation.navigate("info", { sessao }); // Navega para a tela de info
+        } else throw new Error(dado)
       }
-    } catch (e) {
-      Alert.alert('Email inválido', '' + e);
-      
+    } catch (error) {
+        console.error(error);
     }
   };
 

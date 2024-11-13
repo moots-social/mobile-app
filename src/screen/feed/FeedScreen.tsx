@@ -10,10 +10,10 @@ import { postApi } from '../../api/apis'
 import { getIdStorage, getTokenStorage } from '../../utils/storageUtils'
 import { RefreshControl } from '@gluestack-ui/themed'
 import { TextoNegrito } from '../../components/geral/Texto'
-import { buscarTodosPosts } from '../../utils/postUtils'
 import { useDispatch, useSelector } from 'react-redux'
 import { setarUsuario } from '../../redux/useUsuario'
 import { autenticar, desautenticar } from '../../redux/useAutenticacao'
+import searchUtils from '../../utils/searchUtils'
 
 
 export default function Feed({navigation}) {
@@ -26,12 +26,12 @@ export default function Feed({navigation}) {
 
   
   useEffect(()=>{
-    // buscarTodosPosts().then((res)=>{
-    //   if(res[0]){
-    //     setPublics(res.reverse())
-    //   } else throw new Error()
-    // }).catch((err)=>console.error(err)).finally(()=>setIsLoading(false))
-    alert(auth)
+    const buscarPosts = async()=>{
+      const resultado = await searchUtils.buscarTodosOsPosts()
+      setPublics(resultado.content.reverse() || [])
+
+    }
+    buscarPosts()
     setIsLoading(false)
 
   }, [])
@@ -39,8 +39,8 @@ export default function Feed({navigation}) {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      const novasPublics = await buscarTodosPosts();
-      setPublics(novasPublics.reverse() || []);
+      const novasPublics = await searchUtils.buscarTodosOsPosts();
+      setPublics(novasPublics.content.reverse() || []);
     } catch (err) {
       console.error(err);
     } finally {

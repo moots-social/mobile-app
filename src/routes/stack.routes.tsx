@@ -15,13 +15,12 @@ import { useAuthContext } from "../context/AuthContext";
 import Loading from "../components/geral/Loading";
 import PerfilOutroUsuario from "../screen/perfil/PerfilOutroUsuarioScreen";
 import { getAnyItemStorage } from "../utils/storageUtils";
-import { Provider } from "react-redux";
-import store from "../redux/storeProvider";
+import { useSelector } from "react-redux";
 
 const { Screen, Navigator } = createStackNavigator();
 
 export default function Stack() {
-  const { auth } = useAuthContext();
+  const auth = useSelector((state: any) => state.auth.autenticado)
   const [autenticado, setAutenticado] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -40,7 +39,6 @@ export default function Stack() {
   }
 
   return (
-    <Provider store={store}>
       <Navigator>
         {autenticado ? (
           <>
@@ -62,6 +60,5 @@ export default function Stack() {
           </>
         )}
       </Navigator>
-    </Provider>
   );
 }

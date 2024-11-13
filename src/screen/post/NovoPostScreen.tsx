@@ -4,18 +4,16 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { RoundedBottom } from "../../components/geral/Rounded";
 import { TextoNegrito } from "../../components/geral/Texto";
 import { useEffect, useState } from "react";
-import { useUsuarioContext } from "../../context/UsuarioContext";
 import { abrirToast } from "../../components/geral/ToastMoots";
 import { enviarNovoPost } from "../../utils/postUtils";
-import { postApi, usuarioApi } from "../../api/apis";
 import * as ImagePicker from 'expo-image-picker'
 import ImageView from "react-native-image-viewing"
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria} from "../../components/botao/BotoesPostComentario";
-import { getIdStorage, getTokenStorage } from "../../utils/storageUtils";
 import { Alert } from "react-native";
 
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
+import { useSelector } from "react-redux";
 
 export default function NovoPost({navigation}){
     const toast = useToast()
@@ -24,6 +22,7 @@ export default function NovoPost({navigation}){
     const [uris, setUris] = useState<string[]>([''])
     const [isVisible, setIsVisible] = useState(false)
     const [index, setIndex] = useState<number>(0)
+    const usuario = useSelector((state)=> state.usuario.user)
     
     const handleExpandirFoto = (index: number) => {
         setIndex(index);
@@ -107,7 +106,6 @@ export default function NovoPost({navigation}){
         getUriImagens()
       }, [imagens]);
 
-    const {usuario} = useUsuarioContext()
     if(isVisible) return <ImageView 
                             images={imagens}
                             imageIndex={index}

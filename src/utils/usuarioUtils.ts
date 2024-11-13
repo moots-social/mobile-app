@@ -1,100 +1,91 @@
-import * as Service from "../api/apis";
-import * as Storage from "./storageUtils";
+import { apis } from "../api/apis";
+import { storage } from "./storageUtils";
 
 export const login = async(email: string, senha: string) =>{
     try {
-        const dado = await Service.usuarioLogin.post("", {
-            email : email,
-            senha : senha
-        });
+        const dado = await apis.semToken.login(email, senha);
         const res = await dado.data;
         if(res){
-            await Storage.setTokenStorage(res.token)
-            await Storage.setAnyItemStorage('email', res.login)
-            await Storage.setAnyItemStorage('id', String(res.id))
-            await Storage.setAnyItemStorage('auth', String(true))
+            await storage.setTokenStorage(res.token)
+            await storage.setAnyItemStorage('email', res.login)
+            await storage.setAnyItemStorage('id', String(res.id))
+            await storage.setAnyItemStorage('auth', String(true))
         }
         return 'Autenticado com sucesso.'
     } catch (error: any) {
-      return error.response.data.error
+      return error.response?.data?.error
+  }
+}
+export const criar = async(usuario: any)=>{
+    try {
+        const dado = await apis.semToken.cadastro(usuario);
+        return `Usuário "${dado.nomeCompleto}" criado com sucesso.`
+    } catch (error: any) {
+      console.error(error.response?.data?.error)
   }
 }
 
+export const buscarEmail = async(email: string)=>{
+    try {
+        const dado = await apis.semToken.buscarEmail(email);
+        const res = await dado.data;
+        return res
+    } catch (error: any) {
+      return error.response?.data?.error
+  }
+}
 export const buscar = async()=>{
     try {
-        const token = await Storage.getTokenStorage()
-        const id = await Storage.getIdStorage()
-        const resultado = await Service.usuarioApi.get(`/buscar/${id}`,{
-            headers: {Authorization: token}
-        })
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.buscar(Number(id))
         const res = resultado.data
         if(res) return res
     } catch (error: any) {
-        return error.response?.data?.error
+        console.error(error.response?.data?.error)
     }
 }
 
-export const pararDeSeguir = async(nomeCompleto: string, id1: number, id2:number)=>{
+export const pararDeSeguir = async(id1: number, id2:number)=>{
     try {
-        const token = await Storage.getTokenStorage()
-        const resultado = await Service.usuarioApi.put(`/seguir`, {}, {
-            params: {
-                id1: id1,
-                id2: id2,
-                follow: false
-            },
-            headers: {
-                Authorization: token
-            }
-        })
-        if(resultado.data){
-            return `Você parou de seguir ${nomeCompleto}.`
-        }
+        const resultado = await apis.usuario.seguir(id1, id2, false)
+        if(resultado.data) return 200
     } catch (error: any) {
-        return error.response?.data?.error
+        return error.response.status
     }
 }
 
-export const seguirUsuario = async(nomeCompleto: string, id1: number, id2: number)=>{
+export const seguirUsuario = async(id1: number, id2: number)=>{
     try {
-        const token = await Storage.getTokenStorage()
-        const resultado = await Service.usuarioApi.put(`/seguir`, {}, {
-            params:{
-                id1: id1,
-                id2: id2
-            },
-            headers: {
-                Authorization: token
-            }
-        })
-        if(resultado){
-            return `Agora você está seguindo ${nomeCompleto}.`
-        } 
+        const resultado = await apis.usuario.seguir(id1, id2)
+        if(resultado) return 200
     } catch (error: any) {
-        return error.response?.data?.error
+        return error.response.status
     }
 }
 
-export const buscarQuemSegue = async()=>{
+export const atualizarDados = async(usuario: any)=>{
     try {
-        const token = await Storage.getTokenStorage()
-        const id = await Storage.getIdStorage()
-        const resultado = await Service.usuarioApi.get(`/buscar-quem-segue/${id}`, {
-            headers: { Authorization: token },
-        });
+        const id = Number(await storage.getIdStorage())
+        const resultado = await apis.usuario.atualizar(id, usuario)
+        if(resultado.data) return resultado.data
+    } catch (error) {
+        console.error(error)
+    }
+}
 
+export const buscarQuemSegue = async(userId?: number)=>{
+    try {
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.buscarQuemSegue(userId || Number(id))
         if (resultado.data) return resultado.data
     } catch (error: any) {
         return []
     }
 }
-export const buscarSeguidores = async()=>{
+export const buscarSeguidores = async(userId?: number)=>{
     try {
-        const token = await Storage.getTokenStorage()
-        const id = await Storage.getIdStorage()
-        const resultado = await Service.usuarioApi.get(`/buscar-seguidores/${id}`, {
-            headers: { Authorization: token },
-        });
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.buscarSeguidores(userId || Number(id))
 
         if (resultado.data) return resultado.data
     } catch (error: any) {
@@ -104,7 +95,65 @@ export const buscarSeguidores = async()=>{
 
 export const buscarSemToken = async (id: number) => {
     try{
-        const resultado = await Service.usuarioApi.get(`/buscar/perfil/${id}`)
+        const resultado = await apis.semToken.buscarPerfil(id)
         if(resultado.data) return resultado.data
     }catch(error){ console.error(error)}
+}
+
+export const excluirConta = async () => {
+    try {
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.excluirConta(Number(id))
+        if(resultado.data) return resultado.data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const blobUsuario= async(uri: string)=>{
+    let novaPerfilURL = ''
+    try {
+        const formData = new FormData()
+        formData.append('file', {
+            uri: uri,
+            name: 'perfil.jpeg',
+            type: 'image/jpeg'
+        })
+        
+        const dado = await apis.semToken.blob(formData);
+        const req = await dado.data;
+        
+        if (req) {
+            novaPerfilURL = req.data
+        }
+    } catch (error: any) {
+        console.error(error.response.data.error)
+    }
+    return novaPerfilURL
+}
+
+export const redefinirSenha = async(senhaAntiga: string, senhaNova: string)=>{
+    try {
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.redefinirSenha(Number(id), senhaAntiga, senhaNova)
+        if(resultado.data) return resultado.data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export default {
+    login,
+    criar,
+    buscarEmail,
+    buscar,
+    pararDeSeguir,
+    seguirUsuario,
+    atualizarDados,
+    buscarQuemSegue,
+    buscarSeguidores,
+    buscarSemToken,
+    excluirConta,
+    blobUsuario,
+    redefinirSenha,
 }

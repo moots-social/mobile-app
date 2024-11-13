@@ -4,6 +4,8 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import Notificacao from "../../components/notificacao/Notificacao";
 import { useEffect, useState } from "react";
 import Loading from "../../components/geral/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { autenticar, desautenticar } from "../../redux/useAutenticacao";
 
 export default function Notificacoes(){
     const [isLoading, setIsLoading] = useState(true)

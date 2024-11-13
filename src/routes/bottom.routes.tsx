@@ -15,6 +15,8 @@ import { useAuthContext } from "../context/AuthContext"
 
 import { logoutUser } from "../utils/storageUtils"
 import { buscar } from "../utils/usuarioUtils"
+import { useDispatch, useSelector } from "react-redux"
+import { setarUsuario } from "../redux/useUsuario"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const salvarIcon = require('../assets/SalvarIcon.png')
@@ -25,16 +27,15 @@ const perfilIcon = require('../assets/UsuarioIcon.png')
 const {Screen, Navigator} = createBottomTabNavigator()
 
 function IconePersonalizado({tab, focused}: any){
-    const {usuario} = useUsuarioContext()
     return  <Box h="100%" justifyContent="center" px={10} rounded={30} bgColor={focused ? '#EDEDED' : '$white'}>
-                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.5} rounded={tab.icon==usuario.fotoPerfil ? 30 : 0}/>
+                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.5} rounded={tab.id === 4 ? 30 : 0}/>
             </Box>
    
 }
 
 export default function Bottom(){
-    const {auth, setAuth} = useAuthContext()
-    const {usuario, setUsuario} = useUsuarioContext()
+    const dispatch = useDispatch()
+    const usuario = useSelector((state: any)=> state.usuario.user)
     const tabs = [
         {
             id: 0,
@@ -70,19 +71,10 @@ export default function Bottom(){
 
     
     useEffect(()=>{
-        //to-do: arrumar sessão expirada
         const getUser = async()=>{
-            try{
-                const getUsuario = await buscar()
-                if(getUsuario.nomeCompleto){
-                    setUsuario(getUsuario)
-                } else throw new Error(getUsuario)
-            }catch(error: any){
-                if(error == 'Error: Token inválido ou expirado.') {
-                    Alert.alert('Sessão expirada', 'Sua sessão expirou. Faça login novamente para continuar aproveitando.')
-                    logoutUser(setAuth, setUsuario)
-                }
-                else alert(String(error))
+            const getUsuario = await buscar()
+            if(getUsuario){
+                dispatch(setarUsuario(getUsuario))
             }
         }
         
