@@ -21,7 +21,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                         <Box alignItems="center" minHeight={100}>
                             <Titulo fontFamily="Poppins_500Medium">Perfis</Titulo>
                             <Box flexDirection="row" flexWrap="wrap" gap={5} ml={7.5}>
-                            {dataPerfil[0] ? dataPerfil.map((item)=>{
+                            {dataPerfil.length>0 ? dataPerfil.map((item)=>{
                                 return <CartaoUsuario usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={false} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId})}} seguir={usuario.id!=item.userId}/>
                                     }): <TextoNegrito fontFamily="Poppins_500Medium">Nenhum perfil encontrado.</TextoNegrito>}
                             </Box>

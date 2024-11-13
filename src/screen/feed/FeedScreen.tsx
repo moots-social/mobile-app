@@ -27,8 +27,9 @@ export default function Feed({navigation}) {
   
   useEffect(()=>{
     const buscarPosts = async()=>{
-      const resultado = await searchUtils.buscarTodosOsPosts()
-      setPublics(resultado.content.reverse() || [])
+      // const resultado = await searchUtils.buscarTodosOsPosts()
+      // setPublics(resultado.content.reverse() || [])
+      setPublics([])
 
     }
     buscarPosts()
@@ -39,8 +40,9 @@ export default function Feed({navigation}) {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      const novasPublics = await searchUtils.buscarTodosOsPosts();
-      setPublics(novasPublics.content.reverse() || []);
+      // const novasPublics = await searchUtils.buscarTodosOsPosts();
+      // setPublics(novasPublics.content.reverse() || []);
+      setPublics([])
     } catch (err) {
       console.error(err);
     } finally {

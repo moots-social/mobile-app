@@ -4,7 +4,10 @@ const usuarioSlice = createSlice({
   name: "usuario", 
   initialState: {
     user: {},
-    termos: []
+    termos: [],
+    filtros: {
+      
+    }
   },
   reducers: {
     setarUsuario: (state, action) => {
