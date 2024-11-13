@@ -7,6 +7,8 @@ import { useRef, useState } from "react";
 import { usuarioApi } from "../../api/apis";
 import { Alert } from "react-native";
 import { buscarEmail } from "../../utils/usuarioUtils";
+import { abrirToast } from "../../components/geral/ToastMoots";
+import { useToast } from "@gluestack-ui/themed";
 
 const image = require("../../assets/vectorizedGreenAttempt.png");
 
@@ -28,6 +30,7 @@ export const StyledShadowBox = styled(Box, {
 });
 
 export default function Cadastro({ navigation }) {
+  const toast = useToast()
   const [sessao, setSessao] = useState({ email: "", senha: "" });
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
@@ -53,24 +56,22 @@ export default function Cadastro({ navigation }) {
     try {
       // Validação do email
       if (!validateEmail(sessao.email)) {
-        Alert.alert('Email inválido', "Por favor, insira um email válido.");
+        abrirToast(toast, 'error', 'Insira um email válido.', '', 1000, false)
         return; // Para a execução se o email não for válido
       }
 
       if (sessao.email === "" || sessao.senha === "" || confirmarSenha === "") {
-        Alert.alert('Email inválido', "Todos os campos necessitam ser preenchidos.");
+        abrirToast(toast, 'error', 'Todos os campos precisam ser preenchidos.', '', 1000, false)
       } else if (sessao.senha !== confirmarSenha) {
-        Alert.alert('Senha inválida', "As senhas não correspondem.");
+        abrirToast(toast, 'error', 'As senhas não correspondem.', '', 1000, false)
       } else if (sessao.senha.length < 8){
-        Alert.alert('Senha inválida', "Sua senha deve ter pelo menos 8 caracteres.")
+        abrirToast(toast, 'error', 'Sua senha deve ter, no mínimo, oito caracteres.', '', 1000, false)
       }else {
 
         const dado = await buscarEmail(sessao.email);
-        console.log(dado)
         if (dado != 409) {
-          Alert.alert('Email inválido', "Esse email já está sendo utilizado. Tente com outro email.");
+          abrirToast(toast, 'error', 'Esse email já está sendo utilizado. Tente com outro email.', '', 1000, false)
           setSessao({ ...sessao, email: "" });
-          
         } else{
           navigation.navigate("info", { sessao }); // Navega para a tela de info
         }

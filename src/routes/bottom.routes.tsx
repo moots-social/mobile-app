@@ -12,6 +12,7 @@ import { logoutUser } from "../utils/storageUtils"
 import { buscar } from "../utils/usuarioUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../redux/useUsuario"
+import { autenticar } from "../redux/useAutenticacao"
 
 const homeIcon = require('../assets/HomeIcon.png')
 const salvarIcon = require('../assets/SalvarIcon.png')
@@ -70,6 +71,7 @@ export default function Bottom(){
             const getUsuario = await buscar()
             if(getUsuario){
                 dispatch(setarUsuario(getUsuario))
+                dispatch(autenticar())
             } else {
                 await logoutUser()
                 console.log('deslogando usuário por não ter dados relacionados.')

@@ -24,6 +24,7 @@ export default function Login({ navigation }) {
   const inputEmail = useRef(null)
   const inputSenha = useRef(null)
   const handleSubmit = async () => {
+    if(email!=='' && senha !==''){
       const res = await login(email, senha)
       if(res!=='Autenticado com sucesso.'){
         console.log(res)
@@ -32,6 +33,7 @@ export default function Login({ navigation }) {
         abrirToast(toast, 'success', 'Autenticado com sucesso. Entrando...', '', 800, false)
         dispatch(autenticar())
       }
+    } else abrirToast(toast, 'error', 'Ambos os campos precisam ser preenchidos.', '', 1000, false)
   };
 
   const handleNextInput = (nextRef) => {

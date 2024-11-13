@@ -18,18 +18,16 @@ import searchUtils from '../../utils/searchUtils'
 
 export default function Feed({navigation}) {
   const [refreshing, setRefreshing] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [publics, setPublics] = useState<any>([])
-
-  const auth = useSelector((state: any) => state.auth.autenticado)
-  const user = useSelector((state: any) => state.usuario.user)
 
   
   useEffect(()=>{
+    setIsLoading(true)
     const buscarPosts = async()=>{
-      // const resultado = await searchUtils.buscarTodosOsPosts()
-      // setPublics(resultado.content.reverse() || [])
-      setPublics([])
+      const resultado = await searchUtils.buscarTodosOsPosts()
+      setPublics(resultado.content.reverse() || [''])
+      // setPublics([])
 
     }
     buscarPosts()
@@ -40,9 +38,9 @@ export default function Feed({navigation}) {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      // const novasPublics = await searchUtils.buscarTodosOsPosts();
-      // setPublics(novasPublics.content.reverse() || []);
-      setPublics([])
+      const novasPublics = await searchUtils.buscarTodosOsPosts();
+      setPublics(novasPublics.content.reverse() || []);
+      // setPublics([])
     } catch (err) {
       console.error(err);
     } finally {
@@ -59,7 +57,7 @@ export default function Feed({navigation}) {
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} >
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
         <Box alignItems="center" mt={35}>
-          {publics && publics.length>0 ? publics.map((e: any, index: number) => (
+          {publics && publics.length>0 && publics[0]!=='' ? publics.map((e: any, index: number) => (
             <Post 
               key={e.id}
               nomeUsuario={e.nomeCompleto}

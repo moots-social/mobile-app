@@ -9,6 +9,7 @@ import { useState } from "react";
 import ImageView from "react-native-image-viewing"
 import { usuarioIcon } from "../perfil/PerfilComponents";
 import { StatusBar } from "expo-status-bar";
+import { DimensionValue } from "react-native";
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
@@ -24,9 +25,10 @@ interface IPostProps{
     expandivel?: boolean,
     nomeUsuario: string,
     tagUsuario: string
+    rw?: DimensionValue
 }
 
-export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, menu=true, botaoComentario=true, nomeUsuario, tagUsuario, ...rest}:IPostProps){
+export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, menu=true, botaoComentario=true, nomeUsuario, tagUsuario, rw, ...rest}:IPostProps){
     const navigation = useNavigation()
     const [isVisible, setIsVisible] = useState(false)
     const [index, setIndex] = useState<number>(0)
@@ -38,17 +40,17 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
       const imagensFormatadas = imagemPost ? [{uri: imagemPost[0]}, {uri: imagemPost[1]}, {uri: imagemPost[2]}, {uri: imagemPost[3]}] : [{}]
     
         if(isVisible) return <>
-                                <StatusBar hidden />
-                                <ImageView 
-                                        images={imagensFormatadas}
-                                        imageIndex={index}
-                                        visible={isVisible}
-                                        onRequestClose={()=>setIsVisible(false)}
-                                    />
-                            </>
+                            <StatusBar hidden />
+                            <ImageView 
+                                    images={imagensFormatadas}
+                                    imageIndex={index}
+                                    visible={isVisible}
+                                    onRequestClose={()=>setIsVisible(false)}
+                                />
+                        </>
     return(
         <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject})} {...rest}>
-            <FullRounded bg="$white" w={menu ? "90%" : "100%"} py={20} px={10}>
+            <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20}>
                 <Box flexDirection="row" w="100%">
                     <Box>
                         <Image source={imagemPerfil || usuarioIcon} w={40} h={40} alt='foto do usuário' size={50} borderRadius={50}/>

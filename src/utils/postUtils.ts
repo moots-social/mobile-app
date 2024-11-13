@@ -17,3 +17,9 @@ export const enviarNovoPost = async(texto: string, listImagens: string[])=>{
         return error.response?.status
     }
 }
+
+
+//renderização de posts em virtualizedlists
+// export const getCountPosts = (_dados: any[]): number => {
+//     return _dados.length
+// }

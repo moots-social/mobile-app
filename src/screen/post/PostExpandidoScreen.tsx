@@ -28,7 +28,7 @@ export default function PostExpandido({route}) {
       </Box>
       <RoundedTop
         bg="$white"
-        minHeight={500}
+        minHeight={700}
         w="95%"
         alignSelf="center"
         display="flex"

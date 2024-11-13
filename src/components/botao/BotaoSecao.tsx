@@ -8,6 +8,7 @@ interface botaoSecao extends IButtonProps{
 
 export default function BotaoSecao({children, ...props} : botaoSecao){
     return (
+        
     <Button
         style={{
         shadowColor: "#000",
