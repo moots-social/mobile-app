@@ -18,9 +18,10 @@ export const login = async(email: string, senha: string) =>{
 }
 export const criar = async(usuario: any)=>{
     try {
-        const dado = await apis.semToken.cadastro(usuario);
-        return `Usuário "${dado.nomeCompleto}" criado com sucesso.`
+        const dado = await apis.semToken.cadastro(usuario)
+        if(dado.data) return `Usuário "${dado.data.nomeCompleto}" criado com sucesso.`
     } catch (error: any) {
+        alert(error)
       console.error(error.response?.data?.error)
   }
 }

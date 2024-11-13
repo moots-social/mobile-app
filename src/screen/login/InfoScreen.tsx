@@ -13,7 +13,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "react-native";
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { handleUpdateImage } from "../editarPerfil/EditarPerfilScreen";
-import { criar } from "../../utils/usuarioUtils";
+import { blobUsuario, criar } from "../../utils/usuarioUtils";
 
 const imagemCursoDesenvolvimento = require("../../assets/cursoIcons/DesenvolvimentoIcon.png")
 const imagemCursoFic = require("../../assets/cursoIcons/FicIcon.png")
@@ -78,7 +78,7 @@ export default function Info({navigation, route}){
     const [numSecao, setNumSecao] = useState(0);
     const { sessao } = route.params;
     const { email, senha } = sessao
-    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: usuarioIcon, fotoCapa: '', curso: "", roles: ["USER"], descricao: '', email, senha})
+    const [create, setCreate] = useState({nomeCompleto: "", tag: "", fotoPerfil: usuarioIcon, curso: "", roles: ["USER"], email, senha})
     const [imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([])
     const [imagemCurso, setImagemCurso] = useState(imagemCursoDesenvolvimento)
 
@@ -131,17 +131,18 @@ export default function Info({navigation, route}){
     }
 
     const handleSubmit = async() => {
-
+      
       let imagem = ''
       try {
         if(create.curso === ""){
           Alert.alert('Campo vazio', "O seu curso é obrigatório.")
         }
         if(create.fotoPerfil!==usuarioIcon){
-          imagem = await handleUpdateImage(create.fotoPerfil)
+          imagem = await blobUsuario(create.fotoPerfil)
         }else{
           imagem = ''
         }
+        alert(`imagem: ${imagem}`)
         const res = await criar({...create, fotoPerfil: imagem})
         if (res === `Usuário "${create.nomeCompleto}" criado com sucesso.`) {
           Alert.alert('Cadastro', `Você criou sua conta com sucesso. Realize o login para usar o app.`)
@@ -152,7 +153,7 @@ export default function Info({navigation, route}){
           Alert.alert('Erro', error.response.data.error)
           voltarSecao(2)
         }
-        Alert.alert(error.response.data.error)
+        console.error(error)
       }
     }; 
 

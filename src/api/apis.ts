@@ -50,11 +50,10 @@ api.interceptors.response.use(response => response, async error => {
 //usar somente dentro de um arquivo da pasta /utils, exemplo: const resultado = await reqSemToken.login('teste@teste.com', 'senha')
 export const reqSemToken = {
     login: (email: string, senha: string) => apiSemToken.post(`/login`, {email, senha}),
-    cadastro: async(usuario: any) =>{
-        const {nomeCompleto, tag, email, senha, fotoPerfil, fotoCapa, curso, roles, descricao} = usuario
-        const res = await apiSemToken.post(`/user/criar`, {nomeCompleto, tag, email, senha, fotoPerfil, fotoCapa, curso, roles, descricao})
-        return res.data
-    }, 
+    cadastro: (usuario: any) => apiSemToken.post(`/user/criar`, 
+        {nomeCompleto: usuario.nomeCompleto, email: usuario.email, senha: usuario.senha, tag: usuario.tag, roles: ["USER"], fotoPerfil: usuario.fotoPerfil,
+            curso: usuario.curso, fotoCapa: '', descricao: '' 
+        }), 
     buscarPerfil: (id: number) => apiSemToken.get(`/user/buscar/perfil/${id}`),
     blob: (formData: FormData) => apiSemToken.post(`/user/images`, formData, {params: {
         containerName: 'artifact-image-container'
