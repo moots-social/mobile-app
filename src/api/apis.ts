@@ -35,7 +35,7 @@ api.interceptors.request.use(async(config) => {
 
 //se o token estiver inválido, vai fazer com que o usuário saia de sua conta
 api.interceptors.response.use(response => response, async error => {
-    if (error.response && error.response.status === 401 || error.response.status === 403) {
+    if (error.response && error.response.status === 401) {
         alert('Sua sessão expirou. Faça login novamente.')
         await logoutUser()
     }else if (!error.response) {
@@ -74,7 +74,7 @@ export const usuarioApi = {
         const resultado = api.put(`/user/atualizar/${id}`, {nomeCompleto, descricao, curso, fotoPerfil, fotoCapa})
         return resultado
     },
-    seguir: (id1: number, id2: number, follow: boolean = true) => api.put(`/user/seguir`, {params: {id1, id2, follow}}),
+    seguir: (id1: number, id2: number, follow: boolean = true) => api.put(`/user/seguir`, {}, {params: {id1, id2, follow: follow}}),
     excluirConta: (id: number)=> api.delete(`/user/${id}`),
     redefinirSenha: (id: number, senhaAntiga: string, senhaNova: string)=> api.patch(`/user/redefinir-senha/${id}`, {
         senhaAntiga, senhaNova

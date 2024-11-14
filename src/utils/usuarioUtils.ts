@@ -36,7 +36,7 @@ export const buscarEmail = async(email: string)=>{
     } catch (error: any) {
         geralUtils.erro(error, 'buscarEmail', 'usuarioUtils', error.response?.status || false)
         return error.response.status
-  }
+    }
 }
 export const buscar = async()=>{
     try {
@@ -56,6 +56,7 @@ export const pararDeSeguir = async(id1: number, id2:number)=>{
         if(resultado.data) return 200
     } catch (error: any) {
         geralUtils.erro(error, 'pararDeSeguir', 'usuarioUtils', error.response?.status || false)
+        console.log(error.response.details)
         return error.response.status
     }
 }
@@ -63,7 +64,7 @@ export const pararDeSeguir = async(id1: number, id2:number)=>{
 export const seguirUsuario = async(id1: number, id2: number)=>{
     try {
         const resultado = await apis.usuario.seguir(id1, id2)
-        if(resultado) return 200
+        if(resultado.data) return 200
     } catch (error: any) {
         geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
         return error.response.status
@@ -87,6 +88,8 @@ export const buscarQuemSegue = async(userId?: number)=>{
         const resultado = await apis.usuario.buscarQuemSegue(userId || Number(id))
         if (resultado.data) return resultado.data
     } catch (error: any) {
+        geralUtils.erro(error, 'buscarQuemSegue', 'usuarioUtils', error.response?.status || false)
+        console.warn('se status for igual a 409, ignorar')
         return []
     }
 }
@@ -94,10 +97,11 @@ export const buscarSeguidores = async(userId?: number)=>{
     try {
         const id = await storage.getIdStorage()
         const resultado = await apis.usuario.buscarSeguidores(userId || Number(id))
-
+        
         if (resultado.data) return resultado.data
     } catch (error: any) {
         geralUtils.erro(error, 'buscarSeguidores', 'usuarioUtils', error.response?.status || false)
+        console.warn('se status for igual a 409, ignorar')
         return []
     }
 }

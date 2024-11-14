@@ -9,7 +9,7 @@ import CartaoUsuario from "./CartaoUsuario"
 import { Alert } from "react-native"
 import { getTokenStorage } from "../../utils/storageUtils"
 import usuarioUtils, { pararDeSeguir, seguirUsuario } from "../../utils/usuarioUtils"
-import { abrirToastSucesso } from "../geral/ToastMoots"
+import { abrirToast } from "../geral/ToastMoots"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../../redux/useUsuario"
 
@@ -53,17 +53,17 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
         const resultado = await pararDeSeguir(id1, id2)
         if(resultado===200){
             setIsSeguindo(false)
-            abrirToastSucesso(toast, resultado)
+            abrirToast(toast, 'success', `Você parou de seguir ${nomeCompleto}.`)
         } 
     }
 
     const handleSeguirUsuario = async()=>{
         const resultado = await seguirUsuario(id1, id2)
-        if(resultado === `Agora você está seguindo ${nomeCompleto}.`){
+        if(resultado === 200){
             setIsSeguindo(true)
-            abrirToastSucesso(toast, resultado)
+            abrirToast(toast, 'success', `Agora você está seguindo ${nomeCompleto}.` )
         }
-        else if(resultado === 400){
+        else if(resultado === 403){
             Alert.alert(`Parar de seguir`, `Tem certeza que deseja parar de seguir ${nomeCompleto}?`, [
                 {
                     text: 'Sim',
@@ -138,7 +138,6 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
     const getSeguidores = async()=>{
         try {
             
-            const token = await getTokenStorage()
             const resultado = await usuarioUtils.buscarSeguidores(getUsuario.userId)
             if(resultado){
                 setSeguidores(resultado)
