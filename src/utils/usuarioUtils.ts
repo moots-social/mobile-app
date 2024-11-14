@@ -1,4 +1,5 @@
 import { apis } from "../api/apis";
+import geralUtils from "./geralUtils";
 import { storage } from "./storageUtils";
 
 export const login = async(email: string, senha: string) =>{
@@ -13,7 +14,8 @@ export const login = async(email: string, senha: string) =>{
         }
         return 'Autenticado com sucesso.'
     } catch (error: any) {
-      return error
+        geralUtils.erro(error, 'login', 'usuarioUtils', error.response?.status || false)
+        return error
   }
 }
 export const criar = async(usuario: any)=>{
@@ -21,8 +23,8 @@ export const criar = async(usuario: any)=>{
         const dado = await apis.semToken.cadastro(usuario)
         if(dado.data) return `Usuário "${dado.data.nomeCompleto}" criado com sucesso.`
     } catch (error: any) {
-        alert(error)
-      console.error(error.response?.data?.error)
+        geralUtils.erro(error, 'criar', 'usuarioUtils', error.response?.status || false)
+        console.error(error.response?.data?.error)
   }
 }
 
@@ -32,7 +34,8 @@ export const buscarEmail = async(email: string)=>{
         const res = await dado.data
         return res
     } catch (error: any) {
-      return error.response.status
+        geralUtils.erro(error, 'buscarEmail', 'usuarioUtils', error.response?.status || false)
+        return error.response.status
   }
 }
 export const buscar = async()=>{
@@ -42,6 +45,7 @@ export const buscar = async()=>{
         const res = resultado.data
         if(res) return res
     } catch (error: any) {
+        geralUtils.erro(error, 'buscar', 'usuarioUtils', error.response?.status || false)
         console.error(error.response?.data?.error)
     }
 }
@@ -51,6 +55,7 @@ export const pararDeSeguir = async(id1: number, id2:number)=>{
         const resultado = await apis.usuario.seguir(id1, id2, false)
         if(resultado.data) return 200
     } catch (error: any) {
+        geralUtils.erro(error, 'pararDeSeguir', 'usuarioUtils', error.response?.status || false)
         return error.response.status
     }
 }
@@ -60,6 +65,7 @@ export const seguirUsuario = async(id1: number, id2: number)=>{
         const resultado = await apis.usuario.seguir(id1, id2)
         if(resultado) return 200
     } catch (error: any) {
+        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
         return error.response.status
     }
 }
@@ -69,8 +75,9 @@ export const atualizarDados = async(usuario: any)=>{
         const id = Number(await storage.getIdStorage())
         const resultado = await apis.usuario.atualizar(id, usuario)
         if(resultado.data) return resultado.data
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        return error.response.status
     }
 }
 
@@ -90,6 +97,7 @@ export const buscarSeguidores = async(userId?: number)=>{
 
         if (resultado.data) return resultado.data
     } catch (error: any) {
+        geralUtils.erro(error, 'buscarSeguidores', 'usuarioUtils', error.response?.status || false)
         return []
     }
 }
@@ -98,7 +106,10 @@ export const buscarSemToken = async (id: number) => {
     try{
         const resultado = await apis.semToken.buscarPerfil(id)
         if(resultado.data) return resultado.data
-    }catch(error){ console.error(error)}
+    }catch(error: any){
+        geralUtils.erro(error, 'buscarSemToken', 'usuarioUtils', error.response?.status || false)
+        return error.response.status
+    }
 }
 
 export const excluirConta = async () => {
@@ -106,8 +117,9 @@ export const excluirConta = async () => {
         const id = await storage.getIdStorage()
         const resultado = await apis.usuario.excluirConta(Number(id))
         if(resultado.data) return resultado.data
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        geralUtils.erro(error, 'excluirConta', 'usuarioUtils', error.response?.status || false)
+        return error.response.status
     }
 }
 
@@ -128,7 +140,8 @@ export const blobUsuario= async(uri: string)=>{
             novaPerfilURL = req.data
         }
     } catch (error: any) {
-        console.error(error.response.data.error)
+        geralUtils.erro(error, 'blobUsuario', 'usuarioUtils', error.response?.status || false)
+        return error.response.status
     }
     return novaPerfilURL
 }
@@ -138,8 +151,9 @@ export const redefinirSenha = async(senhaAntiga: string, senhaNova: string)=>{
         const id = await storage.getIdStorage()
         const resultado = await apis.usuario.redefinirSenha(Number(id), senhaAntiga, senhaNova)
         if(resultado.data) return resultado.data
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        geralUtils.erro(error, 'redefinirSenha', 'usuarioUtils', error.response?.status || false)
+        return error.response.status
     }
 }
 

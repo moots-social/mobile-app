@@ -1,4 +1,4 @@
-import { Box, Pressable, Text } from "@gluestack-ui/themed";
+import { Box, Pressable, Text, useToast } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import InputPerfil from "../../components/geral/InputPerfil";
 import { TextoNegrito } from "../../components/geral/Texto";
@@ -10,9 +10,11 @@ import { Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { redefinirSenha } from "../../utils/usuarioUtils";
 import { setarUsuario } from "../../redux/useUsuario";
+import { abrirToast } from "../../components/geral/ToastMoots";
 
 export default function RedefinirSenha({navigation}){
-    const usuario = useSelector((state)=> state.usuario.user)
+    const toast = useToast()
+    
     const dispatch = useDispatch()
     const [senhaAtualizada, setSenhaAtualizada] = useState({senhaAntiga: '', novaSenha: '', confirmaNovaSenha: ''})
 
@@ -29,17 +31,18 @@ export default function RedefinirSenha({navigation}){
     const handleSubmit = async()=>{
         const {senhaAntiga, novaSenha, confirmaNovaSenha} = senhaAtualizada
         try{
-            if(senhaAntiga==='' || novaSenha==='' || confirmaNovaSenha ==='') throw new Error('Todos os campos devem ser preenchidos.')
-            if(novaSenha.length<8) throw new Error('Sua senha deve conter 8 caracteres ou mais.')
-            if(novaSenha!==confirmaNovaSenha) throw new Error('As senhas não coincidem. Tente novamente.')
+            if(senhaAntiga==='' || novaSenha==='' || confirmaNovaSenha ==='') throw new Error('Todos os campos devem ser preenchidos.', {cause: 'badrequest'})
+            if(novaSenha.length<8) throw new Error('Sua senha deve conter 8 caracteres ou mais.', {cause: 'less8'})
+            if(novaSenha!==confirmaNovaSenha) throw new Error('As senhas não coincidem. Tente novamente.', {cause: 'matchpass'})
+
             const resultado = await redefinirSenha(senhaAntiga, novaSenha)
-            if(resultado){
+            if(resultado!==409){
                 dispatch(setarUsuario(resultado))
-                alert('Senha alterada com sucesso.')
+                abrirToast(toast, 'success', 'Senha alterada com sucesso.', '', 1500, false)
                 navigation.goBack()
-            }
+            } else throw new Error('Sua senha está incorreta. Tente novamente com a senha correta.')
         }catch(error: any){
-            Alert.alert('Senha incorreta', 'Sua senha está incorreta. Tente novamente com a senha correta.')
+            abrirToast(toast, 'error', String(error), '', 1000, false)
         }
     }
     return(
