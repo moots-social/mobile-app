@@ -65,6 +65,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
             try {
                 let resultadoPerfil = null
                 let resultadoPost = null
+
                 if(filtros.radioGeral === 'tudo'){
                     resultadoPerfil = await searchUtils.buscarUsuario(valor)
                     resultadoPost = await searchUtils.buscarPost(valor)
@@ -73,10 +74,12 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                 } else if (filtros.radioGeral === 'publicacoes'){
                     resultadoPost = await searchUtils.buscarPost(valor)
                 } else console.log('por algum motivo, radioGeral é diferente de algum dos 3 valores')
-                if(filtros.radioUsuario!=='qualquerUm' && resultadoPerfil.length>0 && usuario.seguindo.length>0){
-                    const novoArrayUsuarioSeguindo = resultadoPerfil.filter((perfil, index)=> {return usuario.seguindo[index].id == perfil.userId})
+
+                if(filtros.radioUsuario!=='qualquerUm' && resultadoPerfil.length>0 && usuario.idSeguindo.length>0){
+                    const novoArrayUsuarioSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
                     resultadoPerfil = novoArrayUsuarioSeguindo
                 }
+
                 if(filtros.selectUsuario!=='Qualquer' && resultadoPerfil.length>0){
                     const novoArrayCurso = resultadoPerfil.filter((perfil)=> {return filtros.selectUsuario.toUpperCase() === perfil.curso})
                     resultadoPerfil = novoArrayCurso

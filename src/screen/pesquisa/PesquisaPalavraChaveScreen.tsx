@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 export default function PesquisaPalavraChave({navigation, route}: any){
     const {valor, dataPerfil, dataPost} = route.params
     const usuario = useSelector((state)=> state.usuario.user)
-
+    const filtros = useSelector(state=> state.usuario.filtros)
     return(
         <LinearGradientMoots>
             <ScrollView>
@@ -23,7 +23,8 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                             <Box flexDirection="row" flexWrap="wrap" gap={5} ml={7.5}>
                             {dataPerfil && dataPerfil.length>0 ? dataPerfil.map((item)=>{
                                 return <CartaoUsuario usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={false} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId})}} seguir={usuario.id!=item.userId}/>
-                                    }): <TextoNegrito fontFamily="Poppins_500Medium">Nenhum perfil encontrado.</TextoNegrito>}
+                                    }): <TextoNegrito fontFamily="Poppins_500Medium">{filtros.radioGeral!=='publicacoes' ? 'Nenhum perfil encontrado.' :
+                                        'Filtro para buscar apenas publicações ativado.'}</TextoNegrito>}
                             </Box>
                         </Box>
                         <Divider w="80%" my={10}/>
@@ -33,7 +34,8 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                                 <VirtualizedList contentContainerStyle={{alignItems: 'center'}} w="95%" data={dataPost} initialNumToRender={3} keyExtractor={(item: any) => item.id} getItem={(data, index)=>data[index]} getItemCount={() => dataPost.length} renderItem={({item}: any)=> (
                                     <Post descricaoPost={item.texto} imagemPost={item.listImagens} imagemPerfil={item.fotoPerfil} userId={item.userId} nomeUsuario={item.nomeCompleto} tagUsuario={item.tag} mb={20} rw="100%" mx='$5'/>
                                 )}/>
-                            ): <TextoNegrito fontFamily="Poppins_500Medium" >Nenhuma publicação encontrada.</TextoNegrito>}
+                            ): <TextoNegrito fontFamily="Poppins_500Medium" >{filtros.radioGeral!=='usuarios' ? 'Nenhuma publicação encontrada.' :
+                                'Filtro para buscar apenas usuários ativado.'}</TextoNegrito>}
                         </Box>
                     </RoundedTop>
                 </Box>

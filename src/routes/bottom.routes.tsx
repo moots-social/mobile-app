@@ -68,20 +68,28 @@ export default function Bottom(){
     
     useEffect(()=>{
         const getUser = async()=>{
-            const getUsuario = await buscar()
-            if(getUsuario){
-                const getSeguindo = await buscarQuemSegue()
-                dispatch(setarUsuario({...getUsuario, seguindo: getSeguindo}))
-                dispatch(autenticar())
-            } else {
+            try{
+                const getUsuario = await buscar()
+                if(getUsuario){
+                    let getSeguindo = await buscarQuemSegue()
+                    if(getSeguindo.length>0){
+                        const arrayIdSeguindo = getSeguindo.map(usuario => usuario.userId)
+                        getSeguindo = arrayIdSeguindo
+                    }
+                    dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo}))
+                    dispatch(autenticar())
+                }
+            }catch (error){
                 await logoutUser()
+                console.error(error)
                 console.log('deslogando usuário por não ter dados relacionados.')
             }
+            
         }
         
         getUser()
-        
     }, [])
+
     return(
         <Navigator>
             
