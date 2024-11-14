@@ -21,7 +21,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                         <Box alignItems="center" minHeight={100}>
                             <Titulo fontFamily="Poppins_500Medium">Perfis</Titulo>
                             <Box flexDirection="row" flexWrap="wrap" gap={5} ml={7.5}>
-                            {dataPerfil.length>0 ? dataPerfil.map((item)=>{
+                            {dataPerfil && dataPerfil.length>0 ? dataPerfil.map((item)=>{
                                 return <CartaoUsuario usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={false} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId})}} seguir={usuario.id!=item.userId}/>
                                     }): <TextoNegrito fontFamily="Poppins_500Medium">Nenhum perfil encontrado.</TextoNegrito>}
                             </Box>
@@ -29,7 +29,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                         <Divider w="80%" my={10}/>
                         <Box alignItems="center" minHeight={545}>
                             <Titulo fontFamily="Poppins_500Medium">Publicações</Titulo>
-                            {dataPost.length>0 ? (
+                            {dataPost && dataPost.length>0 ? (
                                 <VirtualizedList contentContainerStyle={{alignItems: 'center'}} w="95%" data={dataPost} initialNumToRender={3} keyExtractor={(item: any) => item.id} getItem={(data, index)=>data[index]} getItemCount={() => dataPost.length} renderItem={({item}: any)=> (
                                     <Post descricaoPost={item.texto} imagemPost={item.listImagens} imagemPerfil={item.fotoPerfil} userId={item.userId} nomeUsuario={item.nomeCompleto} tagUsuario={item.tag} mb={20} rw="100%" mx='$5'/>
                                 )}/>

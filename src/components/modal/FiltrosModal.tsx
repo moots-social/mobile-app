@@ -54,16 +54,13 @@ export default function FiltrosModal({...rest}){
                 selectUsuario: valorSelectUsuario,
                 checkPublicacoes: valorCheckPublicacoes
             }))
-            console.log(filtros)
         } else{
             dispatch(setarFiltrosPadrao())
-            console.log(filtros)
         }
-        // setFiltros({radio: valorRadioGeral, usuario: valorRadioUsuario, selectUsuario: valorSelectUsuario, checkPost: valorCheckPublicacoes})
-        // else setFiltros({radio: 'tudo', usuario: 'qualquerUm', selectUsuario: 'Qualquer', checkPost: true})
+
         setTimeout(()=>{
             setModalVisivel(false)
-        }, 0.1)
+        }, 500)
     }
 
     const handleAbrir = (textoBotao: string) =>{

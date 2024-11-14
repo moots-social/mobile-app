@@ -38,6 +38,8 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const navigation = useNavigation()
     const input = useRef(null)
     const termos = useSelector(state => state.usuario.termos)
+    const filtros = useSelector(state => state.usuario.filtros)
+    const usuario = useSelector(state => state.usuario.user)
     const dispatch = useDispatch()
 
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
@@ -61,10 +63,23 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
         else{
             setIsInvalid(false)
             try {
-                const resultadoPerfil = await searchUtils.buscarUsuario(valor)
-                const resultadoPost = await searchUtils.buscarPost(valor)
+                let resultadoPerfil = null
+                let resultadoPost = null
+                if(filtros.radioGeral === 'tudo'){
+                    resultadoPerfil = await searchUtils.buscarUsuario(valor)
+                    resultadoPost = await searchUtils.buscarPost(valor)
+                } else if (filtros.radioGeral === 'usuarios'){
+                    resultadoPerfil = await searchUtils.buscarUsuario(valor)
+                } else if (filtros.radioGeral === 'publicacoes'){
+                    resultadoPost = await searchUtils.buscarPost(valor)
+                } else console.log('por algum motivo, radioGeral é diferente de algum dos 3 valores')
+
+                if(filtros.selectUsuario!=='Qualquer' && resultadoPerfil.length>0){
+                    const novoArrayCurso = resultadoPerfil.filter((perfil)=> {return filtros.selectUsuario.toUpperCase() === perfil.curso})
+                    resultadoPerfil = novoArrayCurso
+                }
                 if(resultadoPerfil || resultadoPost){
-                    navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil || null, dataPost: resultadoPost || null})
+                    navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil, dataPost: resultadoPost})
                     if(!termos.includes(valor)){
                         setTimeout(()=>{
                             dispatch(novoTermo(valor))
