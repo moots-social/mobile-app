@@ -4,6 +4,7 @@ import { storage } from "./storageUtils";
 
 export const login = async(email: string, senha: string) =>{
     try {
+        console.log('requisição feita')
         const dado = await apis.semToken.login(email, senha);
         const res = await dado.data;
         if(res){
@@ -15,8 +16,10 @@ export const login = async(email: string, senha: string) =>{
         return 'Autenticado com sucesso.'
     } catch (error: any) {
         geralUtils.erro(error, 'login', 'usuarioUtils', error.response?.status || false)
-        return error
-  }
+        return error.response.status
+    }finally {
+        console.log('requisição finalizada')
+    }
 }
 export const criar = async(usuario: any)=>{
     try {
@@ -46,7 +49,6 @@ export const buscar = async()=>{
         if(res) return res
     } catch (error: any) {
         geralUtils.erro(error, 'buscar', 'usuarioUtils', error.response?.status || false)
-        console.error(error.response?.data?.error)
     }
 }
 

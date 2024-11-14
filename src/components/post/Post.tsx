@@ -10,7 +10,7 @@ import ImageView from "react-native-image-viewing"
 import { usuarioIcon } from "../perfil/PerfilComponents";
 import { StatusBar } from "expo-status-bar";
 import { DimensionValue } from "react-native";
-
+import FastImage from "react-native-fast-image";
 const menuIcon = require('../../assets/MenuIcon.png')
 
 //como esse componente vai ser renderizado antes e depois de ser clicado,
@@ -65,6 +65,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
                         <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
                             {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
                                                                 <Image source={imagem} mr={10} rounded={10} h={200} w={200} />
+                                                                {/* <FastImage source={{uri: imagem}} style={{width: 200, height: 200, marginRight: 10}}/> */}
                                                             </Pressable>))
                                         )}
                         </ScrollView>

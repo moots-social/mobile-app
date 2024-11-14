@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setarUsuario } from '../../redux/useUsuario'
 import { autenticar, desautenticar } from '../../redux/useAutenticacao'
 import searchUtils from '../../utils/searchUtils'
+import VirtualizedPosts from '../../components/geral/VirtualizedPosts'
 
 
 export default function Feed({navigation}) {
@@ -25,9 +26,9 @@ export default function Feed({navigation}) {
   useEffect(()=>{
     setIsLoading(true)
     const buscarPosts = async()=>{
-      const resultado = await searchUtils.buscarTodosOsPosts()
-      setPublics(resultado.content.reverse() || [''])
-      // setPublics([])
+      // const resultado = await searchUtils.buscarTodosOsPosts()
+      // setPublics(resultado.content.reverse() || [''])
+      setPublics([])
 
     }
     buscarPosts()
@@ -38,9 +39,9 @@ export default function Feed({navigation}) {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      const novasPublics = await searchUtils.buscarTodosOsPosts();
-      setPublics(novasPublics.content.reverse() || []);
-      // setPublics([])
+      // const novasPublics = await searchUtils.buscarTodosOsPosts();
+      // setPublics(novasPublics.content.reverse() || []);
+      setPublics([])
     } catch (err) {
       console.error(err);
     } finally {
@@ -69,6 +70,7 @@ export default function Feed({navigation}) {
               {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
             />
           )): <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>}
+          {/* {publics.length>0 && publics[0]!=='' ? <VirtualizedPosts dataPost={publics}/> : <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>} */}
         </Box>
       </ScrollView>
         <BotaoNovoPost position="absolute" top="85%" right="5%" />

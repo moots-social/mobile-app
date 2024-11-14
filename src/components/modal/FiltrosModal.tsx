@@ -2,11 +2,14 @@ import { Box, Image, Modal, ModalBackdrop, ModalContent, ModalHeader, Pressable,
 import React, { useState, useEffect } from "react";
 import { TextoNegrito, Titulo } from "../geral/Texto";
 import BotaoSecao from "../botao/BotaoSecao";
+import { useDispatch, useSelector } from "react-redux";
+import { setarFiltros, setarFiltrosPadrao } from "../../redux/useUsuario";
 
-const filtroIcon = require('../../assets/filtroIcon.png')
+const filtroIcon = require('../../assets/FiltroIcon.png')
 
 export default function FiltrosModal({...rest}){
-
+    const dispatch = useDispatch()
+    const filtros = useSelector(state => state.usuario.filtros)
     const [textoBotaoAcao, setTextoBotaoAcao] = useState('Confirmando...')
 
     const [modalVisivel, setModalVisivel] = useState(false)
@@ -44,7 +47,19 @@ export default function FiltrosModal({...rest}){
     const handleFechar = (textoBotao: string) => {
         setBotaoVisivel(false)
         setTextoBotaoAcao(textoBotao)
-        // if(textoBotao==='Confirmando...') setFiltros({radio: valorRadioGeral, usuario: valorRadioUsuario, selectUsuario: valorSelectUsuario, checkPost: valorCheckPublicacoes})
+        if(textoBotao==='Confirmando...'){
+            dispatch(setarFiltros({
+                radioGeral: valorRadioGeral,
+                radioUsuario: valorRadioUsuario,
+                selectUsuario: valorSelectUsuario,
+                checkPublicacoes: valorCheckPublicacoes
+            }))
+            console.log(filtros)
+        } else{
+            dispatch(setarFiltrosPadrao())
+            console.log(filtros)
+        }
+        // setFiltros({radio: valorRadioGeral, usuario: valorRadioUsuario, selectUsuario: valorSelectUsuario, checkPost: valorCheckPublicacoes})
         // else setFiltros({radio: 'tudo', usuario: 'qualquerUm', selectUsuario: 'Qualquer', checkPost: true})
         setTimeout(()=>{
             setModalVisivel(false)

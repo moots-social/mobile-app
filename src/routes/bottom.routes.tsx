@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Box, Image } from "@gluestack-ui/themed"
 import { useEffect } from "react"
 import { logoutUser } from "../utils/storageUtils"
-import { buscar } from "../utils/usuarioUtils"
+import { buscar, buscarQuemSegue } from "../utils/usuarioUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../redux/useUsuario"
 import { autenticar } from "../redux/useAutenticacao"
@@ -70,7 +70,8 @@ export default function Bottom(){
         const getUser = async()=>{
             const getUsuario = await buscar()
             if(getUsuario){
-                dispatch(setarUsuario(getUsuario))
+                const getSeguindo = await buscarQuemSegue()
+                dispatch(setarUsuario({...getUsuario, seguindo: getSeguindo}))
                 dispatch(autenticar())
             } else {
                 await logoutUser()

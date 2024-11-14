@@ -82,9 +82,8 @@ export function PublicacoesBox({userId}){
     useEffect(()=>{
         const buscarPostsUsuario = async()=>{
             try{
-                const resultado = await buscarPostPorUserId(userId)
-                if(resultado[0]) setDataPost(resultado.reverse())
-                console.log(resultado)
+                // const resultado = await buscarPostPorUserId(userId)
+                // if(resultado[0]) setDataPost(resultado.reverse())
             }catch (error){
                 console.error(error)
             }
