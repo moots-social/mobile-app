@@ -1,11 +1,9 @@
-import { useUsuarioContext } from '../../context/UsuarioContext'
 import { useEffect, useState } from 'react'
 import { PerfilBox} from '../../components/perfil/PerfilComponents'
 
 import LinearGradientMoots from '../../components/geral/LinearGradientMoots'
 import Loading from '../../components/geral/Loading'
-import { useDispatch, useSelector } from 'react-redux'
-import { autenticar, desautenticar } from '../../redux/useAutenticacao'
+import { useSelector } from 'react-redux'
 
 export default function PerfilUsuario() {
 

@@ -1,12 +1,13 @@
 import { Box, Image, Pressable, Text } from "@gluestack-ui/themed";
 import { BotaoConfigurar, BotaoCurso, BotaoSeguir, BotaoListaSeguidores } from "./PerfilBotoes";
-import { Titulo } from "../geral/Texto";
+import { TextoNegrito, Titulo } from "../geral/Texto";
 import { ScrollView } from "@gluestack-ui/themed-native-base";
 import { useEffect, useState } from "react";
 
 import ImageView from "react-native-image-viewing"
-import { buscarPostPorUserId } from "../../utils/postUtils";
 import { useSelector } from "react-redux";
+import { buscarPostPorUserId } from "../../utils/searchUtils";
+import VirtualizedPosts from "../geral/VirtualizedPosts";
 
 interface IFotoCapaBoxProps{
     fotoPerfilSource: any,
@@ -47,7 +48,7 @@ export function FotoCapaBox({fotoPerfilSource, fotoCapaSource, ...rest}: IFotoCa
                     <Image source={fotoCapaSource} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} position="relative" zIndex={0} alt='capa'/>
                 </Pressable>
                 <Pressable alignSelf="center" zIndex={1} position="absolute" top={170} onPress={()=>handleExpandirFoto(1)}>
-                    <Image source={fotoPerfilSource || usuarioIcon} w={100}  h={100} rounded={60}alt='foto de perfil'/>
+                    <Image source={fotoPerfilSource || usuarioIcon} w={100}  h={100} rounded={60} alt='foto de perfil'/>
                 </Pressable>
                 <ImageView 
                     images={[{uri: fotoCapaSource}, {uri: fotoPerfilSource || usuarioIcon}]}
@@ -76,10 +77,24 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
 }
 
 export function PublicacoesBox({userId}){
-    
+    const [dataPost, setDataPost] = useState<any[]>([])
+
+    useEffect(()=>{
+        const buscarPostsUsuario = async()=>{
+            try{
+                const resultado = await buscarPostPorUserId(userId)
+                if(resultado[0]) setDataPost(resultado.reverse())
+                console.log(resultado)
+            }catch (error){
+                console.error(error)
+            }
+        }
+        
+        buscarPostsUsuario()
+    }, [userId])
     return <Box alignItems="center">
             <Titulo>Publicações</Titulo>
-
+            {dataPost.length>0 ? <VirtualizedPosts w="100%" dataPost={dataPost}/> : <TextoNegrito fontFamily="Poppins_500Medium">Sem publicações para mostrar.</TextoNegrito>}
         </Box>
 }
 
