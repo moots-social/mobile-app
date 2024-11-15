@@ -41,7 +41,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const filtros = useSelector(state => state.usuario.filtros)
     const usuario = useSelector(state => state.usuario.user)
     const dispatch = useDispatch()
-
+    let novoPlaceholder = filtros.radioGeral!=='tudo' || filtros.radioUsuario!=='qualquerUm' || filtros.selectUsuario!=='Qualquer' || !filtros.checkPublicacoes ? extended ? "Pesquise algo... [FILTROS]" : '[FILTROS]' : 'Pesquise algo...'
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>(valorParam || '')
 
@@ -71,20 +71,31 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                     resultadoPost = await searchUtils.buscarPost(valor)
                 } else if (filtros.radioGeral === 'usuarios'){
                     resultadoPerfil = await searchUtils.buscarUsuario(valor)
+
+                    
                 } else if (filtros.radioGeral === 'publicacoes'){
                     resultadoPost = await searchUtils.buscarPost(valor)
+                    
                 } else console.log('por algum motivo, radioGeral é diferente de algum dos 3 valores')
-
-                if(filtros.radioUsuario!=='qualquerUm' && resultadoPerfil.length>0 && usuario.idSeguindo.length>0){
-                    const novoArrayUsuarioSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
-                    resultadoPerfil = novoArrayUsuarioSeguindo
+                if(filtros.radioGeral!=='publicacoes'){
+                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil.length>0 && usuario.idSeguindo.length>0){
+                        const getUsuariosSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
+                        resultadoPerfil = getUsuariosSeguindo
+                    }
+                    
+                    if(filtros.selectUsuario!=='Qualquer' && resultadoPerfil.length>0){
+                        const getUsuariosPorCurso = resultadoPerfil.filter((perfil)=> {return filtros.selectUsuario.toUpperCase() === perfil.curso})
+                        resultadoPerfil = getUsuariosPorCurso
+                    }
                 }
+                if(filtros.radioGeral!=='usuarios'){
+                    if(filtros.checkPublicacoes==false && resultadoPost.length>0 && usuario.idSeguindo.length>0){
+                        const getPostsQuemSegue = resultadoPost.filter(post => usuario.idSeguindo.includes(Number(post.userId)))
+                        resultadoPost = getPostsQuemSegue
+                    }
 
-                if(filtros.selectUsuario!=='Qualquer' && resultadoPerfil.length>0){
-                    const novoArrayCurso = resultadoPerfil.filter((perfil)=> {return filtros.selectUsuario.toUpperCase() === perfil.curso})
-                    resultadoPerfil = novoArrayCurso
                 }
-
+                
                 if(resultadoPerfil || resultadoPost){
                     navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil, dataPost: resultadoPost})
                     if(!termos.includes(valor)){
@@ -116,7 +127,8 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                             </InputSlot>
                             <InputField 
                                 fontFamily="Poppins_500Medium" 
-                                placeholder={valor!='' ? valor : "Pesquise algo..."} 
+                                //todo: se filtro ativo, mostrar Pesquise algo... [FILTROS ATIVADOS]
+                                placeholder={valor!='' ? valor : novoPlaceholder} 
                                 ml={-10} 
                                 pt={5} 
                                 value={valor}

@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Alert } from "react-native"
 import store from "../redux/storeProvider"
 import { desautenticar } from "../redux/useAutenticacao"
-import { novaListaTermo } from "../redux/useUsuario"
+import { novaListaTermo, setarFiltrosPadrao } from "../redux/useUsuario"
 
 export const getTokenStorage = async()=>{
     try {
@@ -61,6 +61,7 @@ export const logoutUser = async(): Promise<void> =>{
     await AsyncStorage.setItem('auth', String(false))
     store.dispatch(desautenticar())
     store.dispatch(novaListaTermo([]))
+    store.dispatch(setarFiltrosPadrao())
 }
 
 export const storage = {

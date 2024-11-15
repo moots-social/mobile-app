@@ -1,5 +1,5 @@
 import { Pressable, Image, Modal, ModalBackdrop, ModalContent, Box, Text, ActionsheetBackdrop, ActionsheetContent, ActionsheetItem, ActionsheetItemText, Actionsheet, ScrollView, FlatList, useToast} from "@gluestack-ui/themed"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { LinearGreenGradientMoots } from "../geral/LinearGradientMoots"
 import { TextoNegrito } from "../geral/Texto"
 import { useEffect, useState } from "react"
@@ -33,6 +33,7 @@ interface IBotaoSeguirProps{
     id1: number,
     id2: number,
     nomeCompleto: string
+    usuarioLogado?: any
 }
 
 interface IBotaoConfigurarProps{
@@ -45,14 +46,21 @@ interface IBotaoListaSeguidores{
     imgH?: number,
     getUsuario: any
 }
-export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}: IBotaoSeguirProps){
+export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeCompleto, ...rest}: IBotaoSeguirProps){
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
+
+    const usuario = useSelector(state => state.usuario.user) || usuarioLogado
+    const dispatch = useDispatch()
     const toast = useToast()
 
     const handlePararDeSeguir = async()=>{
         const resultado = await pararDeSeguir(id1, id2)
         if(resultado===200){
             setIsSeguindo(false)
+            dispatch(setarUsuario({
+                ...usuario,
+                idSeguindo: usuario.idSeguindo.filter(id => id !== id2)
+            }))
             abrirToast(toast, 'success', `Você parou de seguir ${nomeCompleto}.`)
         } 
     }
@@ -61,6 +69,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
         const resultado = await seguirUsuario(id1, id2)
         if(resultado === 200){
             setIsSeguindo(true)
+            dispatch(setarUsuario({...usuario, idSeguindo: [...(usuario.idSeguindo ?? []), id2]}))
             abrirToast(toast, 'success', `Agora você está seguindo ${nomeCompleto}.` )
         }
         else if(resultado === 403){
@@ -78,21 +87,15 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
     
     useEffect(() => {
         const handleIsSeguindo = async () => {
-            try {
-                const resultado = await usuarioUtils.buscarQuemSegue()
-                if (resultado) {
-                    const checkIsSeguindo = resultado.some(dado => dado.id === id2);
-                    setIsSeguindo(checkIsSeguindo);
-                }
-            } catch (error: any) {
-                console.error(error.response?.data?.error || error);
-            }
+            const checkIsSeguindo = usuario.idSeguindo.some(dado => dado == id2);
+            setIsSeguindo(checkIsSeguindo);
+            console.log('verificado se está seguindo')
         };
     
         handleIsSeguindo();
-    }, [id1, id2])
+    }, [usuario, isSeguindo])
     return(
-        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario} borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario}  borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>
         </Pressable>
     )
@@ -102,7 +105,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, nomeCompleto, ...rest}:
 export function BotaoConfigurar({imgW=10, imgH=10, ...rest}: IBotaoConfigurarProps){
     const navigation = useNavigation()
     return(
-        <Pressable bg="$lightTres" borderWidth={1} borderColor="$black" rounded={20} justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>navigation.navigate('editar')} {...rest}>
+        <Pressable bg="$lightTres" rounded={20} justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>navigation.navigate('editar')} {...rest}>
             <Image source={editarIcon} w={imgW} h={imgH} m={10} alt='editar'/>
         </Pressable>
     )
@@ -158,7 +161,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
     }, [isModalVisivel, botaoSelecionado])
     
     return(
-        <Pressable bg="$lightDois" borderWidth={1} borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>setModalVisivel(true)} {...rest}>
+        <Pressable bg="$lightDois" borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>setModalVisivel(true)} {...rest}>
             <Image source={listaIcon} w={imgW} h={imgH} m={10} alt='lista'/>
             <Modal isOpen={isModalVisivel} onClose={()=>{setModalVisivel(false); setBotaoSelecionado('seguindo')}}>
                 <ModalBackdrop/>

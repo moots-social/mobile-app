@@ -68,6 +68,7 @@ export default function Bottom(){
     
     useEffect(()=>{
         const getUser = async()=>{
+            dispatch(autenticar())
             try{
                 const getUsuario = await buscar()
                 if(getUsuario){
@@ -77,11 +78,9 @@ export default function Bottom(){
                         getSeguindo = arrayIdSeguindo
                     }
                     dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo}))
-                    dispatch(autenticar())
                 }
             }catch (error){
                 await logoutUser()
-                console.error(error)
                 console.log('deslogando usuário por não ter dados relacionados.')
             }
             

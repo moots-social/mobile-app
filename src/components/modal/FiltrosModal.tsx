@@ -15,12 +15,12 @@ export default function FiltrosModal({...rest}){
     const [modalVisivel, setModalVisivel] = useState(false)
     const [botaoVisivel, setBotaoVisivel] = useState(false)
 
-    const [valorRadioGeral, setValorRadioGeral] = useState('tudo')
+    const [valorRadioGeral, setValorRadioGeral] = useState(filtros.radioGeral) //filtros.radioGeral
 
-    const [valorRadioUsuario, setValorRadioUsuario] = useState('qualquerUm')
-    const [valorSelectUsuario, setValorSelectUsuario] = useState('Qualquer')
+    const [valorRadioUsuario, setValorRadioUsuario] = useState(filtros.radioUsuario) //filtros.radioUsuario
+    const [valorSelectUsuario, setValorSelectUsuario] = useState(filtros.selectUsuario) //filtros.selectUsuario
 
-    const [valorCheckPublicacoes, setValorCheckPublicacoes] = useState(true)
+    const [valorCheckPublicacoes, setValorCheckPublicacoes] = useState(true) //filtros.checkPublicacoes
 
     const [eValidoUsuario, setEValidoUsuario] = useState(true)
     const [eValidoPublicacoes, setEValidoPublicacoes] = useState(true)
