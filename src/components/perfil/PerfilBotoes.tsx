@@ -48,8 +48,9 @@ interface IBotaoListaSeguidores{
 }
 export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeCompleto, ...rest}: IBotaoSeguirProps){
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
-
+    
     const usuario = useSelector(state => state.usuario.user) || usuarioLogado
+    console.log(usuario.idSeguindo)
     const dispatch = useDispatch()
     const toast = useToast()
 
@@ -59,12 +60,12 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
             setIsSeguindo(false)
             dispatch(setarUsuario({
                 ...usuario,
-                idSeguindo: usuario.idSeguindo.filter(id => id !== id2)
+                idSeguindo: usuario.idSeguindo.filter(id => id != id2)
             }))
             abrirToast(toast, 'success', `Você parou de seguir ${nomeCompleto}.`)
         } 
     }
-
+    
     const handleSeguirUsuario = async()=>{
         const resultado = await seguirUsuario(id1, id2)
         if(resultado === 200){
@@ -93,7 +94,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
         };
     
         handleIsSeguindo();
-    }, [usuario, isSeguindo])
+    }, [usuario.idSeguindo])
     return(
         <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario}  borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>
