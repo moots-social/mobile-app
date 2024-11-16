@@ -6,7 +6,8 @@ import { Alert } from "react-native";
 //192.168.209.1
 //172.16.2.183
 //192.168.15.8
-const baseURL = 'http://192.168.15.8:8080'
+//192.168.1.77
+const baseURL = 'http://192.168.1.77:8080'
 
 const apiSemToken = axios.create({
     baseURL,
@@ -93,7 +94,7 @@ export const searchApi = {
 
 export const postApi = {
     novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
-    
+    curtirPost: (postId: number, like: boolean) => api.put('post/dar-like', {}, {params: {postId: postId, like: like}})
 }
 
 export const apis = {

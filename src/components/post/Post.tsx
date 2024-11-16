@@ -24,30 +24,41 @@ interface IPostProps{
     botaoComentario?: boolean,
     expandivel?: boolean,
     nomeUsuario: string,
-    tagUsuario: string
-    rw?: DimensionValue
+    tagUsuario: string,
+    rw?: DimensionValue,
+    contadorLike: number,
+    curtirPost: (postId: number, like: boolean) => void,
+    postId: number
 }
 
-export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, menu=true, botaoComentario=true, nomeUsuario, tagUsuario, rw, ...rest}:IPostProps){
+export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, menu=true, botaoComentario=true, nomeUsuario, tagUsuario, rw, contadorLike, curtirPost, postId, ...rest}:IPostProps){
     const navigation = useNavigation()
-    const [isVisible, setIsVisible] = useState(false)
+    const [isVisible, setIsVisible] = useState(true)
     const [index, setIndex] = useState<number>(0)
     const postObject = {nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil}
     const handleExpandirFoto = (index: number) => {
         setIndex(index);
         setIsVisible(true);
       };
-      const imagensFormatadas = imagemPost ? [{uri: imagemPost[0]}, {uri: imagemPost[1]}, {uri: imagemPost[2]}, {uri: imagemPost[3]}] : [{}]
-    
-        if(isVisible) return <>
-                            <StatusBar hidden />
-                            <ImageView 
-                                    images={imagensFormatadas}
-                                    imageIndex={index}
-                                    visible={isVisible}
-                                    onRequestClose={()=>setIsVisible(false)}
-                                />
-                        </>
+    const [like, setLike] = useState<boolean>(false)
+    const imagensFormatadas = imagemPost ? [{uri: imagemPost[0]}, {uri: imagemPost[1]}, {uri: imagemPost[2]}, {uri: imagemPost[3]}] : [{}]
+
+    if(isVisible) return <>
+                        <StatusBar hidden />
+                        <ImageView 
+                                images={imagensFormatadas}
+                                imageIndex={index}
+                                visible={isVisible}
+                                onRequestClose={()=>setIsVisible(false)}
+                            />
+                    </>
+
+    const handleCurtir = () => {
+        const novoLike = !like;
+        setLike(novoLike); 
+        curtirPost(postId, novoLike); 
+    };
+  
     return(
         <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject})} {...rest}>
             <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20}>
@@ -72,7 +83,7 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
 
                         <Box flexDirection="row" display="flex" mt={10}>
                             <Box flexDirection="row" w="95%" gap={10}>
-                                <BotaoCurtirPost size="2xs"/>
+                                <BotaoCurtirPost size="2xs" onPress={() => handleCurtir()}/><Text>{contadorLike || 0}</Text>
                                 <BotaoDescurtirPost size="2xs"/>
                                 <BotaoSalvar size="2xs"/>
                             </Box>
