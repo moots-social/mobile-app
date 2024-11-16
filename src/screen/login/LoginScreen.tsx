@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
     if(email!=='' && senha !==''){
       const res = await login(email, senha)
       if(res!=='Autenticado com sucesso.'){
-        abrirToast(toast, 'error', res, '', 1500, false)
+        abrirToast(toast, 'error', 'Email ou senha incorretos. Tente novamente.', '', 1500, false)
       }else{
         abrirToast(toast, 'success', 'Autenticado com sucesso. Entrando...', '', 800, false)
         dispatch(autenticar())

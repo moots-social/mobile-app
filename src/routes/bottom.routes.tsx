@@ -24,7 +24,7 @@ const {Screen, Navigator} = createBottomTabNavigator()
 
 function IconePersonalizado({tab, focused}: any){
     return  <Box h="100%" justifyContent="center" px={10} rounded={30} bgColor={focused ? '#EDEDED' : '$white'}>
-                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.5} rounded={tab.id === 4 ? 30 : 0}/>
+                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.3} rounded={tab.id === 4 ? 30 : 0} />
             </Box>
    
 }
@@ -94,7 +94,6 @@ export default function Bottom(){
             
             {tabs.map((tab) => (
               <Screen key={tab.id} name={tab.name} component={tab.component} options={{
-                
                 headerShown: false, 
                 tabBarIcon: ({focused}) => (
                     <IconePersonalizado tab={tab} focused={focused}/>

@@ -93,7 +93,11 @@ export const searchApi = {
 
 export const postApi = {
     novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
-    
+}
+
+export const notificacaoApi = {
+    buscarNotificacoes: (id: number) => api.get(`/notification/${id}`),
+    excluirNotificacao: (notificacaoId: string) => api.delete(`/notification/deletar-notificacao/${notificacaoId}`)
 }
 
 export const apis = {
@@ -101,4 +105,5 @@ export const apis = {
     usuario: usuarioApi,
     search: searchApi,
     post: postApi,
+    notificacao: notificacaoApi
 }
