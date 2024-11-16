@@ -53,9 +53,9 @@ export default function Notificacao({notificacao, ...rest}){
     return(
         <Pressable onPress={handlePress} >
             <FullRounded bg="$white" p='$2.5' {...rest}>
-                <TouchableOpacity style={{alignSelf: "flex-end"}} onPress={handleExcluirNotificacao}>
+                <Pressable alignSelf="flex-end" onPress={handleExcluirNotificacao}>
                     <Image source={fecharIcon} w='$2.5' h='$2.5' alt='fechar'/>
-                </TouchableOpacity>
+                </Pressable>
                 <Box flexDirection="row" alignItems="center" mb='$2.5' ml='$2.5'>
                     {/* <Box mr={10}>
                         <Image source={usuarioIcon} w={40} h={40} alt='foto da notificação'/>

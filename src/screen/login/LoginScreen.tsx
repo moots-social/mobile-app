@@ -1,7 +1,7 @@
 import { Box, Image } from "@gluestack-ui/themed-native-base";
 import { Titulo, TextoNegrito } from "../../components/geral/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import BotaoSecao from "../../components/botao/BotaoSecao";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
@@ -13,6 +13,7 @@ import { ScrollView, useToast } from "@gluestack-ui/themed";
 import { abrirToast} from "../../components/geral/ToastMoots";
 import { useDispatch, useSelector } from "react-redux";
 import { autenticar } from "../../redux/useAutenticacao";
+import * as NavigationBar from 'expo-navigation-bar'
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
@@ -20,7 +21,7 @@ export default function Login({ navigation }) {
   const dispatch = useDispatch()
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
-
+  
   const inputEmail = useRef(null)
   const inputSenha = useRef(null)
   const handleSubmit = async () => {
@@ -42,6 +43,9 @@ export default function Login({ navigation }) {
       handleSubmit();
     }
   };
+  useEffect(()=>{
+    NavigationBar.setBackgroundColorAsync('white')
+  }, [])
   return (
     <LinearGradientMoots>
       <ScrollView>
