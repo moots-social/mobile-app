@@ -2,7 +2,7 @@ import { Pressable, Image, Modal, ModalBackdrop, ModalContent, Box, Text, Action
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { LinearGreenGradientMoots } from "../geral/LinearGradientMoots"
 import { TextoNegrito } from "../geral/Texto"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import BotaoSecao from "../botao/BotaoSecao"
 import CartaoUsuario from "./CartaoUsuario"
@@ -250,12 +250,15 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
     }
 
     useEffect(()=>{
+        // const buscarUsuarioPeloCurso = useCallback(async()=>{
+            
+        // }, [])
         handleImagemCor()
     }, [curso])
 
     return(
         <Pressable onPress={handleAbrir}>
-            <Image source={imagem || ''} w={50} h={50} alt='curso'/>
+            <Image source={imagem || ''}  w={50} h={50} alt='curso'/>
             <Modal isOpen={isModalVisivel} onClose={handleFechar}>
                 <ModalBackdrop />
                 <ModalContent w={350} h={734}>
@@ -268,9 +271,9 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
                             <Box alignItems="center" mb={100}>
                                 <TextoNegrito fontSize={12} fontFamily="Poppins_600SemiBold">Encontre mais pessoas realizando esse curso:</TextoNegrito>
                                 <Box flexDirection="row" justifyContent="space-between" w="100%" bg={corFundoCartao} py={15} px={20} rounded={15}>
-                                    {/* <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/>
                                     <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/>
-                                    <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/> */}
+                                    <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/>
+                                    <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/>
                                 </Box>
                             </Box>
                             {botaoVisivel ? (

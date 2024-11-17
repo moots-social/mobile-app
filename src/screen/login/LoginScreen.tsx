@@ -50,12 +50,12 @@ export default function Login({ navigation }) {
     <LinearGradientMoots>
       <ScrollView>
         <StatusBar translucent={true}/>
-          <Box flex={1} justifyContent="space-between">
+          <Box flex={1}>
 
-            <Box display="flex" alignItems="center" h="40%" justifyContent="center">
-              <Image source={image} alt='logo' w={200} h={200}/>
+            <Box display="flex" alignItems="center" justifyContent="center" $base-my={80} $md-my={120}>
+              <Image source={image} alt='logo' $base-w={200} $md-w={400} $base-h={200} $md-h={400}/>
             </Box>
-            <Box display="flex" bg='$white' h="60%" alignItems="center" mb={190} borderTopLeftRadius={50} borderTopRightRadius={50}>
+            <Box display="flex" bg='$white' $md-h={600} $base-h={500} alignItems="center" borderTopLeftRadius={50} borderTopRightRadius={50}>
 
               <Titulo mt={5} fontSize={20}>Comece a aproveitar.</Titulo>
 
@@ -69,7 +69,7 @@ export default function Login({ navigation }) {
                   </Box>
 
                   <FormControlInput inputRef={inputSenha} label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)} onSubmitEditing={()=>handleSubmit()} secureTextEntry={true}/>
-                  <Box flexDirection="row" justifyContent="center" mt={2.5} mb='$20'>
+                  <Box flexDirection="row" justifyContent="center" mt={2.5} $base-mb='$20' $md-mb='$48' >
                     <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
                     <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
                       <TextoNegrito color="$lightSete">Redefinir senha</TextoNegrito>
@@ -77,11 +77,9 @@ export default function Login({ navigation }) {
                   </Box>
               </Box>
 
-              <Box alignItems="center" w="80%">
-                <BotaoSecao w="100%" onPress={() => handleSubmit()}>
+                <BotaoSecao w="80%" $md-h={60} onPress={() => handleSubmit()}>
                     Confirmar
                 </BotaoSecao>
-              </Box>
           </Box>
         </Box>
       </ScrollView>

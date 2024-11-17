@@ -77,8 +77,9 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                     resultadoPost = await searchUtils.buscarPost(valor)
                     
                 } else console.log('por algum motivo, radioGeral é diferente de algum dos 3 valores')
+
                 if(filtros.radioGeral!=='publicacoes'){
-                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil.length>0 && usuario.idSeguindo.length>0){
+                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil.length>0){
                         const getUsuariosSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
                         resultadoPerfil = getUsuariosSeguindo
                     }
@@ -120,14 +121,13 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                         </Box>
                     )}
 
-                    <Box w={!extended ? "70%" : "85%"}>
+                    <Box w={!extended ? "70%" : "85%"} $md-w={!extended ? '80%' : '90%'}>
                         <Input ref={input} onBlur={desfocarInput} variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid} onSubmitEditing={handlePesquisar}>
                             <InputSlot>
                                 <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20} alt='pesquisa'/></InputIcon>
                             </InputSlot>
                             <InputField 
                                 fontFamily="Poppins_500Medium" 
-                                //todo: se filtro ativo, mostrar Pesquise algo... [FILTROS ATIVADOS]
                                 placeholder={valor!='' ? valor : novoPlaceholder} 
                                 ml={-10} 
                                 pt={5} 

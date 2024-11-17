@@ -2,7 +2,7 @@ import { Box, Image, Pressable, Text } from "@gluestack-ui/themed";
 import { BotaoConfigurar, BotaoCurso, BotaoSeguir, BotaoListaSeguidores } from "./PerfilBotoes";
 import { TextoNegrito, Titulo } from "../geral/Texto";
 import { ScrollView } from "@gluestack-ui/themed-native-base";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import ImageView from "react-native-image-viewing"
 import { useSelector } from "react-redux";
@@ -79,15 +79,15 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
 export function PublicacoesBox({userId}){
     const [dataPost, setDataPost] = useState<any[]>([])
 
-    useEffect(()=>{
-        const buscarPostsUsuario = async()=>{
-            try{
-                // const resultado = await buscarPostPorUserId(userId)
-                // if(resultado[0]) setDataPost(resultado.reverse())
-            }catch (error){
-                console.error(error)
-            }
+    const buscarPostsUsuario = useCallback(async()=>{
+        try{
+            const resultado = await buscarPostPorUserId(userId)
+            if(resultado[0]) setDataPost(resultado.reverse())
+        }catch (error){
+            console.error(error)
         }
+    }, [])
+    useEffect(()=>{
         
         buscarPostsUsuario()
     }, [userId])

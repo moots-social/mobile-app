@@ -73,7 +73,7 @@ export default function Feed({navigation}) {
           {/* {publics.length>0 && publics[0]!=='' ? <VirtualizedPosts dataPost={publics}/> : <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>} */}
         </Box>
       </ScrollView>
-        <BotaoNovoPost position="absolute" top="85%" right="5%" />
+        <BotaoNovoPost position="absolute" $base-top="85%" $md-top="90%" $base-right="5%" $md-right="6%" />
     </LinearGradientMoots>
     </>
   )
