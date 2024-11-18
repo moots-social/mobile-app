@@ -22,15 +22,15 @@ const UsuarioIcon = require('../../assets/UsuarioIcon.png')
 export default function EditarPerfil({navigation}){
     const toast = useToast()
     const usuario = useSelector(state => state.usuario.user)
+    
     const dispatch = useDispatch()
     const [isOpcoesVisivel, setOpcoesVisivel] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-
     const [usuarioAtualizado, setUsuarioAtualizado] = useState({nomeCompleto: '', descricao: usuario.descricao, curso: '', fotoPerfil: '', fotoCapa: ''})
-
+    
     const [checkDescricao, setCheckDescricao] = useState<boolean>(false)
     const [disabledSalvar, setDisabledSalvar] = useState<boolean>(true)
-
+    
     const handleOpcaoEscolhida = (opcao: string)=>{
         setOpcoesVisivel(false)
         setTimeout(async()=>{
@@ -40,12 +40,12 @@ export default function EditarPerfil({navigation}){
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 aspect: [4, 3],
                 quality: 1, 
-        
+                
             })
-
+            
             if(!resultado.canceled){
                 if(opcao==='fotoPerfil') setUsuarioAtualizado({...usuarioAtualizado, fotoPerfil: resultado.assets[0].uri})
-                else setUsuarioAtualizado({...usuarioAtualizado, fotoCapa: resultado.assets[0].uri})
+                    else setUsuarioAtualizado({...usuarioAtualizado, fotoCapa: resultado.assets[0].uri})
             }
         }, 300)
     }
@@ -189,6 +189,11 @@ export default function EditarPerfil({navigation}){
                         <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
+                        {usuario.roles && usuario.roles.includes('ADMIN') && (
+                        <Pressable alignItems="center" onPress={()=>navigation.navigate('moderador')}>
+                            <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Área do moderador</TextoNegrito>
+                        </Pressable>
+                        )}
                         {/* ! */}
                         {!disabledSalvar ? (<Pressable alignItems="center" isDisabled={disabledSalvar} onPress={handleSubmit}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito> 

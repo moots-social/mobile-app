@@ -93,7 +93,7 @@ export function PublicacoesBox({userId}){
     }, [userId])
     return <Box alignItems="center">
             <Titulo>Publicações</Titulo>
-            {dataPost.length>0 ? <VirtualizedPosts w="100%" dataPost={dataPost}/> : <TextoNegrito fontFamily="Poppins_500Medium">Sem publicações para mostrar.</TextoNegrito>}
+            {/* {dataPost.length>0 ? <VirtualizedPosts w="100%" dataPost={dataPost}/> : <TextoNegrito fontFamily="Poppins_500Medium">Sem publicações para mostrar.</TextoNegrito>} */}
         </Box>
 }
 

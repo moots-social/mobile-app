@@ -1,13 +1,11 @@
 import axios from "axios";
 import { getTokenStorage, logoutUser } from "../utils/storageUtils";
-import { Alert } from "react-native";
-
 //SERVIDOR: 172.16.3.228
 //192.168.209.1
 //172.16.2.183
 //192.168.15.8
 //192.168.1.77
-const baseURL = 'http://172.16.2.183:8080'
+const baseURL = 'http://192.168.15.8:8080'
 
 const apiSemToken = axios.create({
     baseURL,

@@ -203,11 +203,11 @@ export default function Info({navigation, route}){
                   <Image key={create.fotoPerfil} source={create.fotoPerfil} size={180} mb={30} borderRadius={90}/>
                   <TouchableOpacity onPress={() => selecionarImagem()} activeOpacity={1}>
                   <StyledShadowBox
-                    w="90%"
                     borderWidth={3}
                     borderRadius={15}
                     bg="white"
                     flexDirection="row"
+                    justifyContent='center'
                   >
                     <Box
                       borderColor="black"
@@ -215,13 +215,13 @@ export default function Info({navigation, route}){
                       justifyContent="center"
                       alignItems="center"
                       w="80%"
-                      pl={12}
+                      pl='$8'
                     >
                       <TextoNegrito fontSize={20}>
                         {obj.buttonText}
                       </TextoNegrito>
                     </Box>
-                    <Box w="20%" justifyContent="center" alignItems="center">
+                    <Box justifyContent="center" alignItems="center">
                       <Antdesign name="camerao" size={30} />
                     </Box>
                   </StyledShadowBox>
@@ -239,7 +239,7 @@ export default function Info({navigation, route}){
 
               {secoes[numSecao]?.curso?.map((obj) => (
                 <Box h="70%" alignItems="center" w="90%">
-                  <Image key={create.curso} source={imagemCurso} size={160} mb={10} />
+                  <Image key={create.curso} source={imagemCurso} $base-w={160} $base-h={160} $md-w={300} $md-h={300} mb={10} />
                   <FormControl w="100%">
                     <FormControlLabel justifyContent="center">
                       <FormControlLabelText
