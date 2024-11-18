@@ -26,8 +26,9 @@ interface IPostProps {
   tagUsuario: string;
   rw?: DimensionValue;
   contadorLike: number;
-  curtirPost: (postId: number, like: boolean) => void;
+  curtirPost: (postId: number, deuLike: boolean) => void;
   postId: number;
+  deuLike: boolean
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -44,6 +45,7 @@ export default function Post({
   contadorLike,
   curtirPost,
   postId,
+  deuLike,
   setRefresh,
   ...rest
 }: IPostProps) {
@@ -51,7 +53,6 @@ export default function Post({
   const [isVisible, setIsVisible] = useState(false);
   const [index, setIndex] = useState<number>(0);
   const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil };
-  const [like, setLike] = useState<boolean>(false);
   const [excluiuPost, setExcluiuPost] = useState<boolean>(false);
 
   const imagensFormatadas = imagemPost ? [{ uri: imagemPost[0] }, { uri: imagemPost[1] }, { uri: imagemPost[2] }, { uri: imagemPost[3] }] : [{}];
@@ -62,9 +63,7 @@ export default function Post({
   };
 
   const handleCurtir = () => {
-    const novoLike = !like;
-    setLike(novoLike);
-    curtirPost(postId, novoLike);
+    curtirPost(postId, deuLike);
   };
 
   if (isVisible) {

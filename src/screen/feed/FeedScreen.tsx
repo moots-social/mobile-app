@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setarUsuario } from '../../redux/useUsuario'
 import { autenticar, desautenticar } from '../../redux/useAutenticacao'
 import searchUtils from '../../utils/searchUtils'
-import VirtualizedPosts from '../../components/geral/VirtualizedPosts'
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 export default function Feed({navigation}) {
@@ -25,10 +25,17 @@ export default function Feed({navigation}) {
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(()=>{
+    const id = AsyncStorage.getItem('id')
     setIsLoading(true)
     const buscarPosts = async()=>{
       const resultado = await searchUtils.buscarTodosOsPosts()
-      setPublics(resultado.content.reverse() || [''])
+      if(resultado){
+        const postsComLike = resultado.map(post => {
+          const deuLike = post.content.likeUsers.include(id)
+          return { ...post, deuLike };
+        })
+        setPublics(postsComLike.reverse() || [''])
+      }
       // setPublics([])
       
     }
@@ -50,39 +57,57 @@ export default function Feed({navigation}) {
     }
   }, []);
 
-  const handleLikeChange = async (postId: number, like: boolean) => {
-    try {
-      setPublics((prevPosts) =>
-        prevPosts.map((post) =>
-          post.postId === postId
-            ? { ...post, contadorLike: post.contadorLike + (like ? 1 : -1) }
-            : post
-        )
-      );
+  const handleLikeChange = async (postId: number, deuLike: boolean) => {
+    // try {
+    //   setPublics((prevPosts) =>
+    //     prevPosts.map((post) =>
+    //       post.postId === postId
+    //         ? { ...post, contadorLike: post.contadorLike + (like ? 1 : -1) }
+    //         : post
+    //     )
+    //   );
   
-      const req = await apis.post.curtirPost(postId, like);
-      const resultado = await req.data;
+    //   const req = await apis.post.curtirPost(postId, like);
+    //   const resultado = await req.data;
   
-      if (resultado) {
-        setDeuLike(!deuLike);
-      } else {
-        setPublics((prevPosts) =>
-          prevPosts.map((post) =>
-            post.postId === postId
-              ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
+    //   if (resultado) {
+    //     setDeuLike(!deuLike);
+    //   } else {
+    //     setPublics((prevPosts) =>
+    //       prevPosts.map((post) =>
+    //         post.postId === postId
+    //           ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
+    //           : post
+    //       )
+    //     );
+    //   }
+    // } catch (error) {
+    //   console.error("Erro ao curtir o post:", error);
+    //   setPublics((prevPosts) =>
+    //     prevPosts.map((post) =>
+    //       post.postId === postId
+    //         ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
+    //         : post
+    //     )
+    //   );
+    // }
+    try{
+       // Alterna o estado de like
+       const likeStatus = deuLike ? false : true; // Se já deu like, vamos remover o like, caso contrário vamos dar o like
+       const dados = await apis.post.curtirPost(postId, likeStatus)
+       const req = await dados.data;
+
+       if(req){
+        setPublics((prevPublics) => 
+          prevPublics.map((post) => 
+            post.id === postId
+              ? {...post, contadorLike: req.contadorLike, deuLike: likeStatus}
               : post
-          )
+            ) 
         );
-      }
-    } catch (error) {
-      console.error("Erro ao curtir o post:", error);
-      setPublics((prevPosts) =>
-        prevPosts.map((post) =>
-          post.postId === postId
-            ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
-            : post
-        )
-      );
+       }
+    } catch (error: any) {
+      console.log(error.response.data.error)
     }
   };
   
@@ -106,6 +131,7 @@ export default function Feed({navigation}) {
               userId={e.userId}
               contadorLike={e.contadorLike}
               postId={e.postId} 
+              deuLike={e.deuLike}
               curtirPost={handleLikeChange}
               setRefresh={setRefresh}
               {...(e.texto && { descricaoPost: e.texto })}
