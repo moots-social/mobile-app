@@ -4,6 +4,7 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/geral/Texto";
 
 export default function Moderador(){
+    //to-do: funções para excluir post e zerar contador de denuncias do post dentro do menu
     return (
         <LinearGradientMoots>
             <ScrollView>

@@ -63,7 +63,7 @@ export default function Notificacao({notificacao, onNotificacaoExcluida, ...rest
     return(
         <Pressable onPress={handlePress} >
             <FullRounded bg="$white" p='$2.5' {...rest}>
-                <Pressable alignSelf="flex-end" onPress={handleExcluirNotificacao}>
+                <Pressable alignSelf="flex-end" p='$1' onPress={handleExcluirNotificacao}>
                     <Image source={fecharIcon} w='$2.5' h='$2.5' alt='fechar'/>
                 </Pressable>
                 <Box flexDirection="row" alignItems="center" mb='$2.5' ml='$2.5'>

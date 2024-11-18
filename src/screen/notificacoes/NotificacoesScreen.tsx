@@ -28,8 +28,8 @@ export default function Notificacoes(){
           setRefreshing(false);
         }}, [])
 
-        const handleNotificacaoExcluida = (id) => {
-            if(notificacoes && notificacoes.length>0) setNotificacoes(notificacoes.filter(notificacao => notificacao.id !== id))
+        const handleNotificacaoExcluida = (id: number) => {
+            if(notificacoes && notificacoes.length>0) onRefresh()
         }
     useEffect(()=>{
 
