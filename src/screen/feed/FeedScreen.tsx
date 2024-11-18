@@ -6,7 +6,7 @@ import Post from '../../components/post/Post'
 import { BotaoNovoPost } from '../../components/botao/BotaoMais'
 import { useCallback, useEffect, useState } from 'react'
 import Loading from '../../components/geral/Loading'
-import { postApi } from '../../api/apis'
+import { apis, postApi } from '../../api/apis'
 import { getIdStorage, getTokenStorage } from '../../utils/storageUtils'
 import { RefreshControl } from '@gluestack-ui/themed'
 import { TextoNegrito } from '../../components/geral/Texto'
@@ -21,33 +21,71 @@ export default function Feed({navigation}) {
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [publics, setPublics] = useState<any>([])
+  const [deuLike, setDeuLike] = useState<boolean>(true)
+  const [refresh, setRefresh] = useState<boolean>(false);
 
-  
   useEffect(()=>{
     setIsLoading(true)
     const buscarPosts = async()=>{
-      // const resultado = await searchUtils.buscarTodosOsPosts()
-      // setPublics(resultado.content.reverse() || [''])
-      setPublics([])
-
+      const resultado = await searchUtils.buscarTodosOsPosts()
+      setPublics(resultado.content.reverse() || [''])
+      // setPublics([])
+      
     }
     buscarPosts()
     setIsLoading(false)
 
-  }, [])
+  }, [refresh])
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      // const novasPublics = await searchUtils.buscarTodosOsPosts();
-      // setPublics(novasPublics.content.reverse() || []);
-      setPublics([])
+      const novasPublics = await searchUtils.buscarTodosOsPosts();
+      setPublics(novasPublics.content.reverse() || []);
+      // setPublics([])
     } catch (err) {
       console.error(err);
     } finally {
       setRefreshing(false);
     }
   }, []);
+
+  const handleLikeChange = async (postId: number, like: boolean) => {
+    try {
+      setPublics((prevPosts) =>
+        prevPosts.map((post) =>
+          post.postId === postId
+            ? { ...post, contadorLike: post.contadorLike + (like ? 1 : -1) }
+            : post
+        )
+      );
+  
+      const req = await apis.post.curtirPost(postId, like);
+      const resultado = await req.data;
+  
+      if (resultado) {
+        setDeuLike(!deuLike);
+      } else {
+        setPublics((prevPosts) =>
+          prevPosts.map((post) =>
+            post.postId === postId
+              ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
+              : post
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao curtir o post:", error);
+      setPublics((prevPosts) =>
+        prevPosts.map((post) =>
+          post.postId === postId
+            ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
+            : post
+        )
+      );
+    }
+  };
+  
   
   if(isLoading) return <Loading isOpen={isLoading}/>
   
@@ -66,6 +104,10 @@ export default function Feed({navigation}) {
               mb={10} 
               imagemPerfil={e.fotoPerfil} 
               userId={e.userId}
+              contadorLike={e.contadorLike}
+              postId={e.postId} 
+              curtirPost={handleLikeChange}
+              setRefresh={setRefresh}
               {...(e.texto && { descricaoPost: e.texto })}
               {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
             />

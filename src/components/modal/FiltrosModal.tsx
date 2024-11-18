@@ -5,7 +5,7 @@ import BotaoSecao from "../botao/BotaoSecao";
 import { useDispatch, useSelector } from "react-redux";
 import { setarFiltros, setarFiltrosPadrao } from "../../redux/useUsuario";
 
-const filtroIcon = require('../../assets/filtroIcon.png')
+const filtroIcon = require('../../assets/FiltroIcon.png')
 
 export default function FiltrosModal({...rest}){
     const dispatch = useDispatch()
