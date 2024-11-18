@@ -1,20 +1,24 @@
-import { Image, Menu, MenuItem, MenuItemLabel, Pressable, Box, Divider, Modal, ModalBackdrop, ModalBody, ModalContent, ModalFooter, ModalHeader, Text } from "@gluestack-ui/themed"
+import { Image, Menu, MenuItem, MenuItemLabel, Pressable, Box, Divider, Modal, ModalBackdrop, ModalBody, ModalContent, ModalFooter, ModalHeader, Text, useToast } from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
 import { useState } from "react"
 import { TextoNegrito, Titulo } from "../geral/Texto"
 import { MultiLinhaInputPerfil } from "../geral/InputPerfil"
 import BotaoSecao from "../botao/BotaoSecao"
 import { useSelector } from "react-redux"
+import { apis } from "../../api/apis"
+import { abrirToast} from "../../components/geral/ToastMoots";
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
-interface userId{
-    userId: number
+interface IPropsMenu{
+    userId: number,
+    postId: number,
+    setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function MenuPost({userId}: userId){
+export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
     const usuario = useSelector((state)=> state.usuario.user)
-
+    const toast = useToast()
     const navigation = useNavigation()
     const [postUsuarioLogado, setPostUsuarioLogado] = useState<boolean>(userId == usuario.userId)
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
@@ -37,8 +41,17 @@ export function MenuPost({userId}: userId){
         }, 300)
     }
 
-    const handleExcluirPost = () =>{
-        alert('oi')
+    const handleExcluirPost = async() =>{
+        const req = await apis.post.excluirPost(postId)
+
+        if(req){
+            abrirToast(toast, 'success', 'Post excluido com sucesso', '', 2000, true)
+            setRefresh(prev => !prev);
+            navigation.navigate('feed')
+        }else {
+            alert('deu bom não fi ' + postId)
+        }
+    
     }
 
     const handleNavigatePerfil = () =>{

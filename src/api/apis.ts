@@ -94,7 +94,8 @@ export const searchApi = {
 
 export const postApi = {
     novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
-    curtirPost: (postId: number, like: boolean) => api.put('post/dar-like', {}, {params: {postId: postId, like: like}})
+    curtirPost: (postId: number, like: boolean) => api.put('/post/dar-like', {}, {params: {postId: postId, like: like}}),
+    excluirPost: (postId: number) => api.delete(`/post/deletar/${postId}`)
 }
 
 export const apis = {

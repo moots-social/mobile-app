@@ -22,6 +22,7 @@ export default function Feed({navigation}) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [publics, setPublics] = useState<any>([])
   const [deuLike, setDeuLike] = useState<boolean>(true)
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(()=>{
     setIsLoading(true)
@@ -33,14 +34,13 @@ export default function Feed({navigation}) {
     buscarPosts()
     setIsLoading(false)
 
-  }, [])
+  }, [refresh])
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
       const novasPublics = await searchUtils.buscarTodosOsPosts();
       setPublics(novasPublics.content.reverse() || []);
-      // setPublics([])
     } catch (err) {
       console.error(err);
     } finally {
@@ -50,20 +50,40 @@ export default function Feed({navigation}) {
 
   const handleLikeChange = async (postId: number, like: boolean) => {
     try {
+      setPublics((prevPosts) =>
+        prevPosts.map((post) =>
+          post.postId === postId
+            ? { ...post, contadorLike: post.contadorLike + (like ? 1 : -1) }
+            : post
+        )
+      );
+  
       const req = await apis.post.curtirPost(postId, like);
       const resultado = await req.data;
   
       if (resultado) {
+        setDeuLike(!deuLike);
+      } else {
         setPublics((prevPosts) =>
           prevPosts.map((post) =>
-            post.id === postId ? { ...post, contadorLike: resultado.contadorLike } : post
+            post.postId === postId
+              ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
+              : post
           )
         );
       }
     } catch (error) {
       console.error("Erro ao curtir o post:", error);
+      setPublics((prevPosts) =>
+        prevPosts.map((post) =>
+          post.postId === postId
+            ? { ...post, contadorLike: post.contadorLike - (like ? 1 : -1) }
+            : post
+        )
+      );
     }
   };
+  
   
   if(isLoading) return <Loading isOpen={isLoading}/>
   
@@ -85,6 +105,7 @@ export default function Feed({navigation}) {
               contadorLike={e.contadorLike}
               postId={e.postId} 
               curtirPost={handleLikeChange}
+              setRefresh={setRefresh}
               {...(e.texto && { descricaoPost: e.texto })}
               {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
             />
