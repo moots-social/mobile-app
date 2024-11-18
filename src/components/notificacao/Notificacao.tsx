@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native"
 const fecharIcon = require('../../assets/FecharIcon.png')
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
-export default function Notificacao({notificacao, ...rest}){
+export default function Notificacao({notificacao, onNotificacaoExcluida, ...rest}){
     const toast = useToast()
     const navigation = useNavigation()
     const [evento, setEvento] = useState<string>('')
@@ -48,6 +48,7 @@ export default function Notificacao({notificacao, ...rest}){
                 onPress: async()=>{
                     const res = await notificacaoUtils.excluirNotificacao(notificacao.notificationId)
                     if (res===200){
+                        onNotificacaoExcluida(notificacao.id)
                         abrirToast(toast, 'success', 'Notificação excluída com sucesso.', '', 1000, false)
                         
                     } 
