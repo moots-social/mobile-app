@@ -101,21 +101,6 @@ export default function Post({
             </ScrollView>
 
         <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
-          <Box>
-            <TextoNegrito>{nomeUsuario}</TextoNegrito>
-            <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>{tagUsuario}</Text>
-          </Box>
-          {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text>}
-
-          <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
-            {imagemPost && imagemPost.map((imagem, index) => (
-              imagem && (
-                <Pressable key={index} onPress={() => handleExpandirFoto(index)}>
-                  <Image source={{ uri: imagem }} mr={10} rounded={10} h={200} w={200} />
-                </Pressable>
-              )
-            ))}
-          </ScrollView>
 
           <Box flexDirection="row" display="flex" mt={10}>
             <Box flexDirection="row" w="95%" gap={10}>
@@ -129,7 +114,8 @@ export default function Post({
         </Box>
 
         {/* Menu e ações do post */}
-        {menu && <MenuPost userId={userId} postId={postId} setRefresh={setRefresh} />}
+        {/* {menu && <MenuPost userId={userId} postId={postId} setRefresh={setRefresh} />} */}
+      </Box>
       </Box>
     </FullRounded>
   );

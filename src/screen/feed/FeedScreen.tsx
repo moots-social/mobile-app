@@ -96,7 +96,7 @@ export default function Feed({navigation}) {
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} >
         <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false}/>
         <Box alignItems="center" mt={35}>
-          {/* {publics && publics.length>0 && publics[0]!=='' ? publics.map((e: any, index: number) => (
+          {publics && publics.length>0 && publics[0]!=='' ? publics.map((e: any, index: number) => (
             <Post 
               key={e.id}
               nomeUsuario={e.nomeCompleto}
@@ -111,8 +111,8 @@ export default function Feed({navigation}) {
               {...(e.texto && { descricaoPost: e.texto })}
               {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
             />
-          )): <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>} */}
-          {publics.length>0 && publics[0]!=='' ? <VirtualizedPosts dataPost={publics}/> : <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>}
+          )): <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>}
+          {/* {publics.length>0 && publics[0]!=='' ? <VirtualizedPosts dataPost={publics}/> : <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>} */}
         </Box>
       </ScrollView>
         <BotaoNovoPost position="absolute" $base-top="85%" $md-top="90%" $base-right="5%" $md-right="6%" />
