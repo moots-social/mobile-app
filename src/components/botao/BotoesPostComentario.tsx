@@ -25,46 +25,46 @@ interface IBotaoPostProps{
 //abaixo somente comentario
 export function BotaoCurtirComentario({imgW, imgH, ...rest}: IBotaoComentarioProps){
     return(
-        <TouchableOpacity {...rest}>
+        <Pressable {...rest}>
             <Image source={coracaoIcon} w={imgW} h={imgH} alt='curtir comentario'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 export function BotaoDescurtirComentario({ imgW, imgH, ...rest}: IBotaoComentarioProps){
     return(
-        <TouchableOpacity {...rest}>
+        <Pressable {...rest}>
             <Image source={descurtirIcon} w={imgW} h={imgH} alt='não curti'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
 //abaixo somente post existente
 export function BotaoCurtirPost({size, ...rest}: IBotaoPostProps){
     return(
-        <TouchableOpacity {...rest}>
+        <Pressable {...rest}>
             <Image source={coracaoIcon} size={size} alt='curtir post'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 export function BotaoDescurtirPost({ size, ...rest}: IBotaoPostProps){
     return(
-        <TouchableOpacity {...rest}>
+        <Pressable {...rest}>
             <Image source={descurtirIcon} size={size} alt='não curti'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 export function BotaoSalvar({size, ...rest}: IBotaoPostProps){
     return(
-        <TouchableOpacity {...rest}>
+        <Pressable {...rest}>
             <Image source={salvarIcon} size={size} alt='salvar'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 export function BotaoComentar({size, ...rest}: IBotaoPostProps){
     return(
-        <TouchableOpacity {...rest}>
+        <Pressable {...rest}>
             <Image source={comentarioIcon} size={size} alt='comentar'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
@@ -72,9 +72,9 @@ export function BotaoComentar({size, ...rest}: IBotaoPostProps){
 export function BotaoGaleria({...rest}){
     
     return(
-        <TouchableOpacity w={30} h={20} {...rest}>
+        <Pressable w={30} h={20} {...rest}>
             <Image source={galeriaIcon} w={26} h={20} alt='abrir galeria'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
@@ -84,16 +84,16 @@ export function BotaoCamera({...rest}){
     
 
     return(
-        <TouchableOpacity w={30} h={20} {...rest}>
+        <Pressable w={30} h={20} {...rest}>
             <Image source={cameraIcon} w={28} h={20} alt='abrir câmera'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
 export function BotaoEnviarNovoPost({...rest}){
     return(
-        <TouchableOpacity {...rest} >
+        <Pressable {...rest} >
             <Image source={enviarIcon} w={20} h={20} alt='enviar post'/>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
