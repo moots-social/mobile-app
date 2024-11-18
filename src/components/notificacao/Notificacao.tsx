@@ -21,6 +21,12 @@ export default function Notificacao({notificacao, ...rest}){
             case 'Seguiu':
               navigation.navigate('outro-perfil', { userId: notificacao.userId });
               break;
+            case 'Curtiu':
+                alert('curtiu: ' + notificacao.postId)
+                break
+            case 'Comentou':
+                alert('comentou: ' + notificacao.postId)
+                break
             default:
               console.warn('Evento não tratado:', notificacao.evento);
           }
@@ -41,7 +47,10 @@ export default function Notificacao({notificacao, ...rest}){
                 text: 'Sim',
                 onPress: async()=>{
                     const res = await notificacaoUtils.excluirNotificacao(notificacao.notificationId)
-                    if (res===200) abrirToast(toast, 'success', 'Notificação excluída com sucesso.', '', 1000, false)
+                    if (res===200){
+                        abrirToast(toast, 'success', 'Notificação excluída com sucesso.', '', 1000, false)
+                        
+                    } 
                     else abrirToast(toast, 'error', 'Tivemos alguns problemas ao deletar sua notificação. Tente novamente.')
                 }
             },
