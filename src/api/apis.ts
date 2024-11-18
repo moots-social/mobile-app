@@ -6,7 +6,7 @@ import { Alert } from "react-native";
 //192.168.209.1
 //172.16.2.183
 //192.168.15.8
-const baseURL = 'http://192.168.15.8:8080'
+const baseURL = 'http://172.16.2.183:8080'
 
 const apiSemToken = axios.create({
     baseURL,

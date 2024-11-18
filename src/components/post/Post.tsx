@@ -65,7 +65,6 @@ export default function Post({descricaoPost, imagemPost, imagemPerfil, userId, m
                         <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
                             {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
                                                                 <Image source={imagem} mr={10} rounded={10} h={200} w={200} />
-                                                                {/* <FastImage source={{uri: imagem}} style={{width: 200, height: 200, marginRight: 10}}/> */}
                                                             </Pressable>))
                                         )}
                         </ScrollView>

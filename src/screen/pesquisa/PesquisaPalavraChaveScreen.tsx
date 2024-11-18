@@ -16,7 +16,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
             <ScrollView>
                 <Box flex={1}>
                     <BarraPesquisa extended={false} valorParam={valor} mb={20}/>
-                    <RoundedTop bg="$white" pt={5} pb={20} alignItems="center" $md-minHeight={1200}>
+                    <RoundedTop bg="$white" pt={5} pb={20} alignItems="center" $base-minHeight={800} $md-minHeight={1200}>
                         <Box alignItems="center" minHeight={100}>
                             <Titulo fontFamily="Poppins_500Medium">Perfis</Titulo>
                             <Box flexDirection="row" flexWrap="wrap" gap={5} ml={7.5}>
