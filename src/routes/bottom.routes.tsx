@@ -23,8 +23,8 @@ const perfilIcon = require('../assets/UsuarioIcon.png')
 const {Screen, Navigator} = createBottomTabNavigator()
 
 function IconePersonalizado({tab, focused}: any){
-    return  <Box h="100%" justifyContent="center" px={10} rounded={30} bgColor={focused ? '#EDEDED' : '$white'}>
-                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.5} rounded={tab.id === 4 ? 30 : 0}/>
+    return  <Box h="100%" w="$12" justifyContent="center" px={10} rounded='$lg' bgColor={focused ? '#EDEDED' : '$white'}>
+                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.3} rounded={tab.id === 4 ? 30 : 0} />
             </Box>
    
 }
@@ -68,6 +68,7 @@ export default function Bottom(){
     
     useEffect(()=>{
         const getUser = async()=>{
+            dispatch(autenticar())
             try{
                 const getUsuario = await buscar()
                 if(getUsuario){
@@ -77,11 +78,9 @@ export default function Bottom(){
                         getSeguindo = arrayIdSeguindo
                     }
                     dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo}))
-                    dispatch(autenticar())
                 }
             }catch (error){
                 await logoutUser()
-                console.error(error)
                 console.log('deslogando usuário por não ter dados relacionados.')
             }
             
@@ -95,7 +94,6 @@ export default function Bottom(){
             
             {tabs.map((tab) => (
               <Screen key={tab.id} name={tab.name} component={tab.component} options={{
-                
                 headerShown: false, 
                 tabBarIcon: ({focused}) => (
                     <IconePersonalizado tab={tab} focused={focused}/>

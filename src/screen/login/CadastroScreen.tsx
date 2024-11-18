@@ -10,7 +10,7 @@ import { buscarEmail } from "../../utils/usuarioUtils";
 import { abrirToast } from "../../components/geral/ToastMoots";
 import { useToast } from "@gluestack-ui/themed";
 
-const image = require("../../assets/vectorizedGreenAttempt.png");
+const image = require("../../assets/MootsIcon.png");
 
 export const StyledVStack = styled(VStack, {
   display: "flex",
@@ -87,11 +87,11 @@ export default function Cadastro({ navigation }) {
     <Box flex={1}>
       <LinearGradientMoots>
         <StyledVStack>
-          <Box display="flex" alignItems="center" h="40%" justifyContent="center">
-            <Image source={image} h={200} w={200} />
+          <Box display="flex" alignItems="center" $base-my={70} $md-my={120}>
+            <Image source={image} $base-w={200} $md-w={400} $base-h={200} $md-h={400}/>
           </Box>
 
-          <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} width="100%" height="60%" alignItems="center">
+          <Box bg="white" borderTopLeftRadius={50} borderTopRightRadius={50} $md-h={600} $base-h={500} alignItems="center">
             <Titulo mt={5} fontSize={20}>
               Faça parte agora.
             </Titulo>

@@ -1,11 +1,10 @@
 import BarraPesquisa from "../../components/barra/BarraPesquisa";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
-import { Box, Divider, FlatList, VirtualizedList } from "@gluestack-ui/themed";
+import { Box, Divider, ScrollView, FlatList, VirtualizedList } from "@gluestack-ui/themed";
 import { RoundedTop } from "../../components/geral/Rounded";
 import CartaoUsuario from "../../components/perfil/CartaoUsuario";
 import { TextoNegrito, Titulo } from "../../components/geral/Texto";
 import Post from "../../components/post/Post";
-import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 
 export default function PesquisaPalavraChave({navigation, route}: any){
@@ -17,7 +16,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
             <ScrollView>
                 <Box flex={1}>
                     <BarraPesquisa extended={false} valorParam={valor} mb={20}/>
-                    <RoundedTop bg="$white" pt={5} pb={20} alignItems="center" h="100%">
+                    <RoundedTop bg="$white" pt={5} pb={20} alignItems="center" $base-minHeight={800} $md-minHeight={1200}>
                         <Box alignItems="center" minHeight={100}>
                             <Titulo fontFamily="Poppins_500Medium">Perfis</Titulo>
                             <Box flexDirection="row" flexWrap="wrap" gap={5} ml={7.5}>

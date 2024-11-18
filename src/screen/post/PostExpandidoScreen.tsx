@@ -24,11 +24,12 @@ export default function PostExpandido({route}) {
         userId={post.userId}
         />
       <Box alignSelf="center">
-        <Post my={20} menu={false} botaoComentario={false} nomeUsuario={post.nomeUsuario} tagUsuario={post.tagUsuario} descricaoPost={post.descricaoPost} userId={post.userId} imagemPerfil={post.imagemPerfil} imagemPost={post.imagemPost}/>
+        <Post my={20} $base-w='100%' $md-w='109%' menu={false} botaoComentario={false} nomeUsuario={post.nomeUsuario} tagUsuario={post.tagUsuario} descricaoPost={post.descricaoPost} userId={post.userId} imagemPerfil={post.imagemPerfil} imagemPost={post.imagemPost}/>
       </Box>
       <RoundedTop
         bg="$white"
-        minHeight={700}
+        $base-minHeight={700}
+        $md-minHeight={1100}
         w="95%"
         alignSelf="center"
         display="flex"

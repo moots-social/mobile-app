@@ -87,6 +87,18 @@ export default function Post({
         <Box>
           <Image source={imagemPerfil || usuarioIcon} w={40} h={40} alt="foto do usuário" size={50} borderRadius={50} />
         </Box>
+        <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
+            <Box>
+                <TextoNegrito>{nomeUsuario}</TextoNegrito>
+                <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>{tagUsuario}</Text>
+            </Box>
+            {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text> }
+            <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
+                {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
+                                                    <Image source={imagem} mr={10} rounded={10} h={200} w={200} />
+                                                </Pressable>))
+                            )}
+            </ScrollView>
 
         <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
           <Box>

@@ -41,7 +41,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const filtros = useSelector(state => state.usuario.filtros)
     const usuario = useSelector(state => state.usuario.user)
     const dispatch = useDispatch()
-
+    let novoPlaceholder = filtros.radioGeral!=='tudo' || filtros.radioUsuario!=='qualquerUm' || filtros.selectUsuario!=='Qualquer' || !filtros.checkPublicacoes ? extended ? "Pesquise algo... [FILTROS]" : '[FILTROS]' : 'Pesquise algo...'
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>(valorParam || '')
 
@@ -71,20 +71,32 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                     resultadoPost = await searchUtils.buscarPost(valor)
                 } else if (filtros.radioGeral === 'usuarios'){
                     resultadoPerfil = await searchUtils.buscarUsuario(valor)
+
+                    
                 } else if (filtros.radioGeral === 'publicacoes'){
                     resultadoPost = await searchUtils.buscarPost(valor)
+                    
                 } else console.log('por algum motivo, radioGeral é diferente de algum dos 3 valores')
 
-                if(filtros.radioUsuario!=='qualquerUm' && resultadoPerfil.length>0 && usuario.idSeguindo.length>0){
-                    const novoArrayUsuarioSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
-                    resultadoPerfil = novoArrayUsuarioSeguindo
+                if(filtros.radioGeral!=='publicacoes'){
+                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil.length>0){
+                        const getUsuariosSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
+                        resultadoPerfil = getUsuariosSeguindo
+                    }
+                    
+                    if(filtros.selectUsuario!=='Qualquer' && resultadoPerfil.length>0){
+                        const getUsuariosPorCurso = resultadoPerfil.filter((perfil)=> {return filtros.selectUsuario.toUpperCase() === perfil.curso})
+                        resultadoPerfil = getUsuariosPorCurso
+                    }
                 }
+                if(filtros.radioGeral!=='usuarios'){
+                    if(filtros.checkPublicacoes==false && resultadoPost.length>0 && usuario.idSeguindo.length>0){
+                        const getPostsQuemSegue = resultadoPost.filter(post => usuario.idSeguindo.includes(Number(post.userId)))
+                        resultadoPost = getPostsQuemSegue
+                    }
 
-                if(filtros.selectUsuario!=='Qualquer' && resultadoPerfil.length>0){
-                    const novoArrayCurso = resultadoPerfil.filter((perfil)=> {return filtros.selectUsuario.toUpperCase() === perfil.curso})
-                    resultadoPerfil = novoArrayCurso
                 }
-
+                
                 if(resultadoPerfil || resultadoPost){
                     navigation.navigate('pesquisaPalavraChave', {valor: valor, dataPerfil: resultadoPerfil, dataPost: resultadoPost})
                     if(!termos.includes(valor)){
@@ -109,14 +121,14 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                         </Box>
                     )}
 
-                    <Box w={!extended ? "70%" : "85%"}>
+                    <Box w={!extended ? "70%" : "85%"} $md-w={!extended ? '80%' : '90%'}>
                         <Input ref={input} onBlur={desfocarInput} variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid} onSubmitEditing={handlePesquisar}>
                             <InputSlot>
                                 <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20} alt='pesquisa'/></InputIcon>
                             </InputSlot>
                             <InputField 
                                 fontFamily="Poppins_500Medium" 
-                                placeholder={valor!='' ? valor : "Pesquise algo..."} 
+                                placeholder={valor!='' ? valor : novoPlaceholder} 
                                 ml={-10} 
                                 pt={5} 
                                 value={valor}

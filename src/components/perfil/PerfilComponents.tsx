@@ -2,7 +2,7 @@ import { Box, Image, Pressable, Text } from "@gluestack-ui/themed";
 import { BotaoConfigurar, BotaoCurso, BotaoSeguir, BotaoListaSeguidores } from "./PerfilBotoes";
 import { TextoNegrito, Titulo } from "../geral/Texto";
 import { ScrollView } from "@gluestack-ui/themed-native-base";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import ImageView from "react-native-image-viewing"
 import { useSelector } from "react-redux";
@@ -71,7 +71,7 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
     const usuario = useSelector(state => state.usuario.user)
     return <Box flexDirection='row' alignItems="center" justifyContent="space-between" alignSelf="center" w={180} my={10}>
             {!seguir ? <BotaoConfigurar w={35} imgW={15} imgH={15} /> : <BotaoSeguir rounded={20} imgW={15} imgH={12} id1={usuario.id} id2={getUsuario.userId} nomeCompleto={getUsuario.nomeCompleto} />}
-            <BotaoCurso curso={curso}/>
+            <BotaoCurso curso={curso} />
             <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12} getUsuario={getUsuario} /> 
         </Box>
 }
@@ -79,15 +79,15 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
 export function PublicacoesBox({userId}){
     const [dataPost, setDataPost] = useState<any[]>([])
 
-    useEffect(()=>{
-        const buscarPostsUsuario = async()=>{
-            try{
-                // const resultado = await buscarPostPorUserId(userId)
-                // if(resultado[0]) setDataPost(resultado.reverse())
-            }catch (error){
-                console.error(error)
-            }
+    const buscarPostsUsuario = useCallback(async()=>{
+        try{
+            const resultado = await buscarPostPorUserId(userId)
+            if(resultado[0]) setDataPost(resultado.reverse())
+        }catch (error){
+            console.error(error)
         }
+    }, [])
+    useEffect(()=>{
         
         buscarPostsUsuario()
     }, [userId])

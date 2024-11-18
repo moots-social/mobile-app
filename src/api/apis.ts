@@ -7,7 +7,7 @@ import { Alert } from "react-native";
 //172.16.2.183
 //192.168.15.8
 //192.168.1.77
-const baseURL = 'http://192.168.1.77:8080'
+const baseURL = 'http://172.16.2.183:8080'
 
 const apiSemToken = axios.create({
     baseURL,
@@ -98,9 +98,15 @@ export const postApi = {
     excluirPost: (postId: number) => api.delete(`/post/deletar/${postId}`)
 }
 
+export const notificacaoApi = {
+    buscarNotificacoes: (id: number) => api.get(`/notification/${id}`),
+    excluirNotificacao: (notificacaoId: string) => api.delete(`/notification/deletar-notificacao/${notificacaoId}`)
+}
+
 export const apis = {
     semToken: reqSemToken,
     usuario: usuarioApi,
     search: searchApi,
     post: postApi,
+    notificacao: notificacaoApi
 }
