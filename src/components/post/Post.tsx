@@ -1,5 +1,4 @@
-import { Box, Menu, MenuItem, MenuItemLabel, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
-import { Image } from "@gluestack-ui/themed-native-base";
+import { Box, Menu, MenuItem, MenuItemLabel,Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
 import { FullRounded } from "../geral/Rounded";
 import { TextoNegrito } from "../geral/Texto";
 import { BotaoComentar, BotaoCurtirPost, BotaoDescurtirPost, BotaoSalvar } from "../botao/BotoesPostComentario";
