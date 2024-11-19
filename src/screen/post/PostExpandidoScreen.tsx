@@ -23,7 +23,7 @@ export default function PostExpandido({route}) {
         if(resultado!==0){
           setPost(resultado)
         }
-      } else console.log('renderizando post pelo objeto na rota')
+      }
     }
     useEffect(()=>{
       handleBuscarPostPorId()
