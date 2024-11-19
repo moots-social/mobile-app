@@ -5,7 +5,7 @@ import { getTokenStorage, logoutUser } from "../utils/storageUtils";
 //172.16.2.183
 //192.168.15.8
 //192.168.1.77
-const baseURL = 'http://192.168.15.8:8080'
+const baseURL = 'http://172.16.2.183:8080'
 
 const apiSemToken = axios.create({
     baseURL,
@@ -93,7 +93,10 @@ export const searchApi = {
 export const postApi = {
     novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
     curtirPost: (postId: number, like: boolean) => api.put('/post/dar-like', {}, {params: {postId: postId, like: like}}),
-    excluirPost: (postId: number) => api.delete(`/post/deletar/${postId}`)
+    excluirPost: (postId: number) => api.delete(`/post/deletar/${postId}`),
+    criarReport: (postId: number, denuncia: string) => api.post(`/post/criar-report`, {
+        postId, denuncia, contadorDenuncia: 0
+    })
 }
 
 export const notificacaoApi = {
@@ -101,10 +104,18 @@ export const notificacaoApi = {
     excluirNotificacao: (notificacaoId: string) => api.delete(`/notification/deletar-notificacao/${notificacaoId}`)
 }
 
+export const denunciaApi = {
+    buscarTodasAsDenuncias: () => api.get(`/report`),
+    buscarDenunciaPorId: (id: number) => api.get(`/report/${id}`),
+    buscarDenunciasPorPostId: (postId: number) => api.get(`/report/post/${postId}`),
+    excluirDenuncia: (id: number, postId: number) => api.delete(`/report/deletar/${id}/post/${postId}`)
+}
+
 export const apis = {
     semToken: reqSemToken,
     usuario: usuarioApi,
     search: searchApi,
     post: postApi,
-    notificacao: notificacaoApi
+    notificacao: notificacaoApi,
+    denuncia: denunciaApi
 }
