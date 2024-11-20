@@ -9,8 +9,10 @@
     "splash": {
       "image": "./src/assets/SplashScreen.png"
     },
+    "jsEngine": "hermes",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "jsEngine": "jsc"
     }
   }
 }

@@ -1,4 +1,5 @@
-import { Box, Menu, MenuItem, MenuItemLabel,Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
+import { Box, Menu, MenuItem, MenuItemLabel, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
+import { Image } from "@gluestack-ui/themed-native-base";
 import { FullRounded } from "../geral/Rounded";
 import { TextoNegrito } from "../geral/Texto";
 import { BotaoComentar, BotaoCurtirPost, BotaoDescurtirPost, BotaoSalvar } from "../botao/BotoesPostComentario";
@@ -29,10 +30,9 @@ interface IPostProps {
   postId: number;
   deuLike?: boolean
   setRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
-  salvarPost?: (postId: number) => void
 }
 
-export default function Post({
+export default function PostColecao({
   descricaoPost,
   imagemPost,
   imagemPerfil,
@@ -47,10 +47,8 @@ export default function Post({
   postId,
   deuLike,
   setRefresh,
-  salvarPost,
   ...rest
 }: IPostProps) {
-  
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState(false);
   const [index, setIndex] = useState<number>(0);
@@ -63,14 +61,6 @@ export default function Post({
     setIndex(index);
     setIsVisible(true); 
   };
-
-  const handleCurtir = () => {
-    curtirPost(postId, deuLike);
-  };
-
-  const handleSalvar = () => {
-    salvarPost(postId)
-  }
 
   if (isVisible) {
     return (
@@ -110,9 +100,7 @@ export default function Post({
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
-                <BotaoCurtirPost size="2xs" onPress={() => handleCurtir()} />
-                <Text>{contadorLike || 0}</Text>
-                <BotaoSalvar size="2xs" onPress={() => handleSalvar()}/>
+                <BotaoSalvar size="2xs" />
                 </Box>
                 {botaoComentario && <BotaoComentar justifyContent="flex-end" size="2xs" />}
             </Box>

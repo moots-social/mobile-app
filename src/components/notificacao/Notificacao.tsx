@@ -20,16 +20,11 @@ export default function Notificacao({notificacao, onNotificacaoExcluida, ...rest
         switch (notificacao.evento) {
             case 'Seguiu':
               navigation.navigate('outro-perfil', { userId: notificacao.userId });
-              break;
-            case 'Curtiu':
-                alert('curtiu: ' + notificacao.postId)
-                break
-            case 'Comentou':
-                alert('comentou: ' + notificacao.postId)
-                break
+              break
             default:
-              console.warn('Evento não tratado:', notificacao.evento);
-          }
+                navigation.navigate('expandido', {postId: notificacao.postId})
+                break          
+            }
     }
     useEffect(()=>{
         const handleAcao = () =>{
