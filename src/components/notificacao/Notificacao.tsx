@@ -43,7 +43,7 @@ export default function Notificacao({notificacao, onNotificacaoExcluida, ...rest
                 onPress: async()=>{
                     const res = await notificacaoUtils.excluirNotificacao(notificacao.notificationId)
                     if (res===200){
-                        onNotificacaoExcluida(notificacao.id)
+                        onNotificacaoExcluida()
                         abrirToast(toast, 'success', 'Notificação excluída com sucesso.', '', 1000, false)
                         
                     } 
