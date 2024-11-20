@@ -15,10 +15,12 @@ import Loading from "../components/geral/Loading";
 import PerfilOutroUsuario from "../screen/perfil/PerfilOutroUsuarioScreen";
 import { getAnyItemStorage } from "../utils/storageUtils";
 import { useSelector } from "react-redux";
+import Moderador from "../screen/moderador/Moderador";
 
 const { Screen, Navigator } = createStackNavigator();
 
 export default function Stack() {
+  const usuario = useSelector((state: any)=> state.usuario.user)
   const auth = useSelector((state: any) => state.auth.autenticado)
   const [autenticado, setAutenticado] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -50,6 +52,8 @@ export default function Stack() {
             <Screen name="excluir" component={ExcluirConta} options={{ headerShown: false }} />
             <Screen name="colecao" component={Colecao} options={{ headerShown: false }} />
             <Screen name="outro-perfil" component={PerfilOutroUsuario} options={{ headerShown: false }} />
+            {usuario.roles && usuario.roles.includes('ADMIN') && <Screen name="moderador" component={Moderador} options={{ headerShown: false }} />}
+            
           </>
         ) : (
           <>

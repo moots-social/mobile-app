@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native"
 const fecharIcon = require('../../assets/FecharIcon.png')
 const usuarioIcon = require('../../assets/UsuarioIcon.png')
 
-export default function Notificacao({notificacao, ...rest}){
+export default function Notificacao({notificacao, onNotificacaoExcluida, ...rest}){
     const toast = useToast()
     const navigation = useNavigation()
     const [evento, setEvento] = useState<string>('')
@@ -20,16 +20,11 @@ export default function Notificacao({notificacao, ...rest}){
         switch (notificacao.evento) {
             case 'Seguiu':
               navigation.navigate('outro-perfil', { userId: notificacao.userId });
-              break;
-            case 'Curtiu':
-                alert('curtiu: ' + notificacao.postId)
-                break
-            case 'Comentou':
-                alert('comentou: ' + notificacao.postId)
-                break
+              break
             default:
-              console.warn('Evento não tratado:', notificacao.evento);
-          }
+                navigation.navigate('expandido', {postId: notificacao.postId})
+                break          
+            }
     }
     useEffect(()=>{
         const handleAcao = () =>{
@@ -48,6 +43,7 @@ export default function Notificacao({notificacao, ...rest}){
                 onPress: async()=>{
                     const res = await notificacaoUtils.excluirNotificacao(notificacao.notificationId)
                     if (res===200){
+                        onNotificacaoExcluida(notificacao.id)
                         abrirToast(toast, 'success', 'Notificação excluída com sucesso.', '', 1000, false)
                         
                     } 
@@ -62,7 +58,7 @@ export default function Notificacao({notificacao, ...rest}){
     return(
         <Pressable onPress={handlePress} >
             <FullRounded bg="$white" p='$2.5' {...rest}>
-                <Pressable alignSelf="flex-end" onPress={handleExcluirNotificacao}>
+                <Pressable alignSelf="flex-end" p='$1' onPress={handleExcluirNotificacao}>
                     <Image source={fecharIcon} w='$2.5' h='$2.5' alt='fechar'/>
                 </Pressable>
                 <Box flexDirection="row" alignItems="center" mb='$2.5' ml='$2.5'>

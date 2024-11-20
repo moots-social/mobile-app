@@ -9,22 +9,38 @@ const enviarIcon = require('../../assets/EnviarIconRounded.png')
 
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import postUtils from "../../utils/postUtils";
+import Loading from "../../components/geral/Loading";
 export default function PostExpandido({route}) {
-  const {post} = route.params
+  const postId = route.params.postId || null
+  const [post, setPost] = useState<any>(route.params.post || null)
   const usuario = useSelector((state)=> state.usuario.user)
-  
-  return (
+
+    const handleBuscarPostPorId = async()=>{
+      if(!post){
+        const resultado = await postUtils.buscarPostPorId(postId)
+        if(resultado!==0){
+          setPost(resultado)
+        }
+      }
+    }
+    useEffect(()=>{
+      handleBuscarPostPorId()
+    }, [route.params])
+  if(post==null) return <Loading isOpen={true}/>
+  else return (
     <LinearGradientMoots>
       <ScrollView>
 
       <CabecalhoPerfil
-        titulo={`Publicação de ${post.tagUsuario}`}
+        titulo={`Publicação de ${post.tagUsuario || post.tag}`}
         postExpandido={true}
         fontSize={18}
         userId={post.userId}
         />
       <Box alignSelf="center">
-        <Post my={20} $base-w='100%' $md-w='109%' menu={false} botaoComentario={false} nomeUsuario={post.nomeUsuario} tagUsuario={post.tagUsuario} descricaoPost={post.descricaoPost} userId={post.userId} imagemPerfil={post.imagemPerfil} imagemPost={post.imagemPost}/>
+        <Post my={20} $base-w='100%' $md-w='109%' menu={false} botaoComentario={false} nomeUsuario={post.nomeUsuario || post.nomeCompleto} tagUsuario={post.tagUsuario || post.tag} descricaoPost={post.descricaoPost || post.texto} userId={post.userId} imagemPerfil={post.imagemPerfil || post.fotoPerfil} imagemPost={post.imagemPost || post.listImagens}/>
       </Box>
       <RoundedTop
         bg="$white"
@@ -38,7 +54,7 @@ export default function PostExpandido({route}) {
             <Image source={usuario.fotoPerfil || usuarioIcon} rounded={30} w={20} h={20} mr={10} />
             <Textarea w="90%">
               <TextareaInput
-                placeholder={`Diga algo para ${post.tagUsuario}...`}
+                placeholder={`Diga algo para ${post.tagUsuario || post.tag}...`}
                 fontFamily="Poppins_500Medium"
                 fontSize={12}
                 />

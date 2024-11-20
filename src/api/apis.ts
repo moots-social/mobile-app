@@ -1,7 +1,5 @@
 import axios from "axios";
 import { getTokenStorage, logoutUser } from "../utils/storageUtils";
-import { Alert } from "react-native";
-
 //SERVIDOR: 172.16.3.228
 //192.168.209.1
 //172.16.2.183
@@ -93,10 +91,14 @@ export const searchApi = {
 }
 
 export const postApi = {
+    buscarPostPorId: (postId: number) => api.get(`/post/${postId}`),
     novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
     curtirPost: (postId: number, like: boolean) => api.put('/post/dar-like', {}, {params: {postId: postId, like: like}}),
     excluirPost: (postId: number) => api.delete(`/post/deletar/${postId}`),
-    salvarPost: (postId: number) => api.post('/post/salvar-post-colecao', {}, {params: {postId: postId}})
+    salvarPost: (postId: number) => api.post('/post/salvar-post-colecao', {}, {params: {postId: postId}}),
+    criarReport: (postId: number, denuncia: string) => api.post(`/post/criar-report`, {
+        postId, denuncia, contadorDenuncia: 0
+    }),
 }
 
 export const notificacaoApi = {
@@ -104,10 +106,18 @@ export const notificacaoApi = {
     excluirNotificacao: (notificacaoId: string) => api.delete(`/notification/deletar-notificacao/${notificacaoId}`)
 }
 
+export const denunciaApi = {
+    buscarTodasAsDenuncias: () => api.get(`/report`),
+    buscarDenunciaPorId: (id: number) => api.get(`/report/${id}`),
+    buscarDenunciasPorPostId: (postId: number) => api.get(`/report/post/${postId}`),
+    excluirDenuncia: (id: number, postId: number) => api.delete(`/report/deletar/${id}/post/${postId}`)
+}
+
 export const apis = {
     semToken: reqSemToken,
     usuario: usuarioApi,
     search: searchApi,
     post: postApi,
-    notificacao: notificacaoApi
+    notificacao: notificacaoApi,
+    denuncia: denunciaApi
 }

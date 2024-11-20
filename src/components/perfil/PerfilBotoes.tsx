@@ -176,15 +176,15 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
                         </Pressable>
                     </Box>
                         {botaoSelecionado==='seguindo' && seguindo ? (
-                         <FlatList data={seguindo} renderItem={({item})=> 
+                         <FlatList $base-px={20} $md-px={75} data={seguindo} renderItem={({item})=> 
                             <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} navigation={navigation} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId}); setModalVisivel(false); setBotaoSelecionado('seguindo')}}/>
-                            } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20}}/>   
+                            } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}/>   
                         )
                           : ''}
                         {botaoSelecionado==='seguidores' && seguidores ? (
-                            <FlatList data={seguidores} renderItem={({item})=> 
+                            <FlatList $base-px={20} $md-px={75} data={seguidores} renderItem={({item})=> 
                             <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId}); setModalVisivel(false); setBotaoSelecionado('seguindo')}}/>
-                        } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20}}/>) : ''}
+                        } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}/>) : ''}
                 </ModalContent>
             </Modal>
         </Pressable>

@@ -2,6 +2,7 @@ import { Box, Text, Avatar, AvatarImage, Pressable} from "@gluestack-ui/themed";
 import { BotaoListaSeguidores, BotaoSeguir } from "./PerfilBotoes";
 import { Provider } from "react-redux";
 import store from "../../redux/storeProvider";
+import { usuarioIcon } from "./PerfilComponents";
 
 interface ICartaoUsuarioProps{
     cor?: string,
@@ -18,7 +19,7 @@ export default function CartaoUsuario({cor="$lightSeis", corSecundaria="$lightSe
             <Pressable w={120} bg={cor} rounded={15} alignItems="center" py={10} {...rest}>
                 <Box alignItems="center" mb={2}>
                     <Avatar>
-                        <AvatarImage source={usuarioRenderizadoNoCartao.fotoPerfil} bg={corSecundaria} alt='foto do usuário'/>
+                        <AvatarImage source={usuarioRenderizadoNoCartao.fotoPerfil || usuarioIcon} bg={corSecundaria} alt='foto do usuário'/>
                     </Avatar>
                     <Text color="$white" fontFamily="Poppins_700Bold" textAlign="center">{usuarioRenderizadoNoCartao.nomeCompleto}</Text>
                     <Text color="$white" opacity='$80' fontFamily="Poppins_500Medium" textAlign="center" fontSize={12}>{usuarioRenderizadoNoCartao.tag}</Text>

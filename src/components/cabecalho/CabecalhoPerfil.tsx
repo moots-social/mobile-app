@@ -5,7 +5,7 @@ import { MenuPost } from "../post/PostMenu";
 
 interface ICabecalhoPerfilProps{
     titulo: string,
-    userId: number,
+    userId?: number,
     temBotaoVoltar?: boolean,
     postExpandido?: boolean,
     fontSize?: number,

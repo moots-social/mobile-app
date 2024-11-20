@@ -48,6 +48,7 @@ export const buscar = async()=>{
         const res = resultado.data
         if(res) return res
     } catch (error: any) {
+        console.error(error.response.data.error)
         geralUtils.erro(error, 'buscar', 'usuarioUtils', error.response?.status || false)
     }
 }

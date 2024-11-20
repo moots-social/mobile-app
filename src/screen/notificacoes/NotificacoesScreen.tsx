@@ -28,6 +28,9 @@ export default function Notificacoes(){
           setRefreshing(false);
         }}, [])
 
+        const handleNotificacaoExcluida = (id: number) => {
+            if(notificacoes && notificacoes.length>0) onRefresh()
+        }
     useEffect(()=>{
 
         buscarNotificacoes()
@@ -41,7 +44,7 @@ export default function Notificacoes(){
                     {isLoading ? <Loading isOpen={isLoading}/> : (
                     <Box mb={20} mt={5} alignItems="center">
                         {notificacoes && notificacoes.length>0 ? notificacoes?.map((notificacao)=>(
-                            <Notificacao mt={15} notificacao={notificacao} key={notificacao.notificationId}/>
+                            <Notificacao mt={15} notificacao={notificacao} key={notificacao.notificationId} onNotificacaoExcluida={handleNotificacaoExcluida}/>
                         )) : <TextoNegrito mt={15}>Nenhuma notificação recente.</TextoNegrito>}
                     </Box>
                 )}

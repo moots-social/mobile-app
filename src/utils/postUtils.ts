@@ -1,6 +1,16 @@
 import { apis } from "../api/apis"
+import geralUtils from "./geralUtils"
 import { blobUsuario } from "./usuarioUtils"
 
+export const buscarPostPorId = async(postId: number) =>{
+    try {
+        const resultado = await apis.post.buscarPostPorId(postId)
+        if(resultado.data) return resultado.data
+    } catch (error) {
+        geralUtils.erro(error, 'buscarPostPorId', 'postUtils', error.response.status)
+        return 0
+    }
+}
 
 export const enviarNovoPost = async(texto: string, listImagens: string[])=>{
     let novasImagens: string[] = []
@@ -18,6 +28,20 @@ export const enviarNovoPost = async(texto: string, listImagens: string[])=>{
     }
 }
 
+export const denunciarPost = async(postId: number, denuncia: string)=>{
+    try {
+        const req = await apis.post.criarReport(postId, denuncia)
+        if(req.data === 'Reporte realizado com sucesso') return 200
+    } catch (error: any) {
+        console.error(error.response.data.error)
+        geralUtils.erro(error, 'denunciarPost', 'postUtils', error.response.status)
+        return error.response.status || 0
+    }
+}
+
+export default {
+    enviarNovoPost, denunciarPost, buscarPostPorId
+}
 
 //renderização de posts em virtualizedlists
 // export const getCountPosts = (_dados: any[]): number => {
