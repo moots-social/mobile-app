@@ -5,7 +5,7 @@ import { getTokenStorage, logoutUser } from "../utils/storageUtils";
 //172.16.2.183
 //192.168.15.8
 //192.168.1.77
-const baseURL = 'http://172.16.2.183:8080'
+const baseURL = 'http://192.168.1.77:8080'
 
 const apiSemToken = axios.create({
     baseURL,
@@ -77,7 +77,7 @@ export const usuarioApi = {
     excluirConta: (id: number)=> api.delete(`/user/${id}`),
     redefinirSenha: (id: number, senhaAntiga: string, senhaNova: string)=> api.patch(`/user/redefinir-senha/${id}`, {
         senhaAntiga, senhaNova
-    })
+    }),
 }
 
 
@@ -95,9 +95,10 @@ export const postApi = {
     novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
     curtirPost: (postId: number, like: boolean) => api.put('/post/dar-like', {}, {params: {postId: postId, like: like}}),
     excluirPost: (postId: number) => api.delete(`/post/deletar/${postId}`),
+    salvarPost: (postId: number) => api.post('/post/salvar-post-colecao', {}, {params: {postId: postId}}),
     criarReport: (postId: number, denuncia: string) => api.post(`/post/criar-report`, {
         postId, denuncia, contadorDenuncia: 0
-    })
+    }),
 }
 
 export const notificacaoApi = {
