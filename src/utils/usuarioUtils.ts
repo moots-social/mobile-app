@@ -80,7 +80,7 @@ export const atualizarDados = async(usuario: any)=>{
         const resultado = await apis.usuario.atualizar(id, usuario)
         if(resultado.data) return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'atualizarDados', 'usuarioUtils', error.response?.status || false)
         return error.response.status
     }
 }
@@ -115,6 +115,7 @@ export const buscarSemToken = async (id: number) => {
         if(resultado.data) return resultado.data
     }catch(error: any){
         geralUtils.erro(error, 'buscarSemToken', 'usuarioUtils', error.response?.status || false)
+        console.error(error.response.data.error)
         return error.response.status
     }
 }

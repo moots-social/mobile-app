@@ -5,7 +5,7 @@ import { getTokenStorage, logoutUser } from "../utils/storageUtils";
 //172.16.2.183
 //192.168.15.8
 //192.168.1.77
-const baseURL = 'http://192.168.15.8:8080'
+const baseURL = 'http://172.16.2.183:8080'
 
 const apiSemToken = axios.create({
     baseURL,

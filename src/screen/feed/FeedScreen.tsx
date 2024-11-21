@@ -35,7 +35,7 @@ export default function Feed({ navigation }) {
           return { ...post, like: deuLike };
         });
 
-        setPublics(postsComLike.reverse() || []);
+        setPublics(postsComLike || []);
       } catch (error: any) {
         alert(error.response?.message?.error || "Erro ao carregar os posts");
       } finally {
@@ -56,7 +56,7 @@ export default function Feed({ navigation }) {
         return { ...post, like: deuLike };
       });
 
-      setPublics(postsComLike.reverse() || []);
+      setPublics(postsComLike || []);
     } catch (err) {
       console.error(err);
     } finally {

@@ -99,7 +99,9 @@ export default function Bottom(){
                     <IconePersonalizado tab={tab} focused={focused}/>
                 ),
                 tabBarShowLabel: false,
-                tabBarHideOnKeyboard: true
+                tabBarHideOnKeyboard: true,
+                lazy: true,
+                freezeOnBlur: true
                 }}
                />  
  

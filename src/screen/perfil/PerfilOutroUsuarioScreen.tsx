@@ -19,6 +19,7 @@ export default function PerfilOutroUsuario({navigation, route}){
             const buscarUsuario = async()=>{
                 try {
                     const teste = await buscarSemToken(userId)
+                    console.log(teste)
                     setUsuarioARenderizar(teste)
                 } catch (error) {
                     console.error(error)

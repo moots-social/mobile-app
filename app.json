@@ -7,7 +7,8 @@
     "icon": "./assets/mobile-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/SplashScreen.png"
+      "image": "./src/assets/SplashScreen.png",
+      "resizeMode": "cover"
     },
     "jsEngine": "hermes",
     "ios": {

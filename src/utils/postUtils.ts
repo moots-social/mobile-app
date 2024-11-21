@@ -6,7 +6,7 @@ import { blobUsuario } from "./usuarioUtils"
 export const buscarPostPorId = async(postId: number) =>{
     try {
         const resultado = await apis.post.buscarPostPorId(postId)
-        if(resultado.data) return resultado.data
+        return resultado.data
     } catch (error) {
         geralUtils.erro(error, 'buscarPostPorId', 'postUtils', error.response.status)
         return 0
