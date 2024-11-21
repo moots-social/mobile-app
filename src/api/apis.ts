@@ -96,9 +96,15 @@ export const postApi = {
     curtirPost: (postId: number, like: boolean) => api.put('/post/dar-like', {}, {params: {postId: postId, like: like}}),
     excluirPost: (postId: number) => api.delete(`/post/deletar/${postId}`),
     salvarPost: (postId: number) => api.post('/post/salvar-post-colecao', {}, {params: {postId: postId}}),
+    dessalvarPost: (userId: number, postId: number) => api.delete(`/user/${userId}/post/${postId}`),
     criarReport: (postId: number, denuncia: string) => api.post(`/post/criar-report`, {
         postId, denuncia, contadorDenuncia: 0
     }),
+}
+
+export const comentarioApi = {
+    novoComentario: (postId: number, texto: string) => api.post(`/comentario/criar/${postId}`, {texto: texto}),
+    excluirComentari: (comentarioId: number, postId: number) => api.delete(`/comentario/deletar/${comentarioId}/post/${postId}`)
 }
 
 export const notificacaoApi = {
@@ -118,6 +124,7 @@ export const apis = {
     usuario: usuarioApi,
     search: searchApi,
     post: postApi,
+    comentario: comentarioApi,
     notificacao: notificacaoApi,
     denuncia: denunciaApi
 }

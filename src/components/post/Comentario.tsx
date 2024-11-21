@@ -14,7 +14,7 @@ export default function Comentario({fotoPerfil, tag, conteudo, ...rest}: IComent
     return(
         <Box bg="$white" display="flex" px={10} {...rest}>
             <Box flexDirection="row" alignItems="center">
-                <Image source={usuarioIcon} w={30} h={30} mr={5} alt='foto do usuário'/>
+                <Image source={fotoPerfil} w={30} h={30} mr={5} borderRadius={30} alt='foto do usuário'/>
                 <TextoNegrito fontSize={12}>{tag}: </TextoNegrito>
                 <Text fontFamily="Poppins_600SemiBold" fontSize={12}>{conteudo}</Text>
             </Box>

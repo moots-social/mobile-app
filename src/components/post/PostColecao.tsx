@@ -28,7 +28,8 @@ interface IPostProps {
   contadorLike?: number;
   curtirPost?: (postId: number, deuLike: boolean) => void;
   postId: number;
-  deuLike?: boolean
+  deuLike?: boolean;
+  dessalvarPost: (userId: number, postId) => void
   setRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -47,6 +48,7 @@ export default function PostColecao({
   postId,
   deuLike,
   setRefresh,
+  dessalvarPost,
   ...rest
 }: IPostProps) {
   const navigation = useNavigation();
@@ -88,7 +90,7 @@ export default function PostColecao({
                     <TextoNegrito>{nomeUsuario}</TextoNegrito>
                     <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>{tagUsuario}</Text>
                 </Box>
-                {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text> }
+                {descricaoPost && <Tex  t fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Tex> }
                 <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
                     {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
                                                         <Image source={imagem} mr={10} rounded={10} h={200} w={200} />
@@ -100,7 +102,7 @@ export default function PostColecao({
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
-                <BotaoSalvar size="2xs" />
+                <BotaoSalvar size="2xs" onPress={() => dessalvarPost(userId, postId)}/>
                 </Box>
                 {botaoComentario && <BotaoComentar justifyContent="flex-end" size="2xs" />}
             </Box>
