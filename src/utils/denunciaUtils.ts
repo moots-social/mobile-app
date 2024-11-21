@@ -4,19 +4,19 @@ import geralUtils from "./geralUtils"
 export const buscarDenuncias = async() =>{
     try {
         const req = await apis.denuncia.buscarTodasAsDenuncias()
-        if(req.data && req.data.length>0) return req.data
+        return req.data
     } catch (error) {
         geralUtils.erro(error, 'buscarDenuncias', 'denunciaUtils', error.response.status)
         return []
     }
 }
-export const buscarDenunciaPorId = async(id: number) =>{
+export const buscarDenunciaPorId = async(id: string) =>{
     try {
         const req = await apis.denuncia.buscarDenunciaPorId(id)
         if(req.data) return req.data
     } catch (error) {
-        geralUtils.erro(error, 'buscarTodasAsDenuncias', 'denunciaUtils', error.response.status)
-        
+        geralUtils.erro(error, 'buscarDenunciaPorId', 'denunciaUtils', error.response.status)
+        return 0
     }
 }
 export const buscarDenunciasPorPostId = async(postId: number) =>{
@@ -24,17 +24,17 @@ export const buscarDenunciasPorPostId = async(postId: number) =>{
         const req = await apis.denuncia.buscarDenunciasPorPostId(postId)
         if(req.data) return req.data
     } catch (error) {
-        geralUtils.erro(error, 'buscarTodasAsDenuncias', 'denunciaUtils', error.response.status)
-        
+        geralUtils.erro(error, 'buscarDenunciasPorPostId', 'denunciaUtils', error.response.status)
+        return 0
     }
 }
-export const excluirDenuncia = async(id:number, postId: number) =>{
+export const excluirDenuncia = async(id:string, postId: number) =>{
     try {
         const req = await apis.denuncia.excluirDenuncia(id, postId)
         if(req.data) return req.data
     } catch (error) {
-        geralUtils.erro(error, 'buscarTodasAsDenuncias', 'denunciaUtils', error.response.status)
-        
+        geralUtils.erro(error, 'excluirDenuncia', 'denunciaUtils', error.response.status)
+        return 0
     }
 }
 

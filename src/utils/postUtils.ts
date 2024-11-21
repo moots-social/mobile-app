@@ -1,4 +1,5 @@
 import { apis } from "../api/apis"
+import { buscarDenunciasPorPostId, excluirDenuncia } from "./denunciaUtils"
 import geralUtils from "./geralUtils"
 import { blobUsuario } from "./usuarioUtils"
 
@@ -25,6 +26,19 @@ export const enviarNovoPost = async(texto: string, listImagens: string[])=>{
         if(resultado.data) return {post: resultado.data, resultado: 'Post enviado com sucesso.'}
     }catch(error: any){
         return error.response?.status
+    }
+}
+
+export const excluirPost = async(postId: number)=>{
+    try {
+        const denunciasNoPost = await buscarDenunciasPorPostId(postId)
+        if(denunciasNoPost && denunciasNoPost.length>0){
+            denunciasNoPost.map(async(denuncia: any)=>await excluirDenuncia(denuncia.id, postId))
+        }
+        await apis.post.excluirPost(postId)
+    } catch (error) {
+        geralUtils.erro(error, 'excluirPost', 'postUtils', error.response.status)
+        return 0
     }
 }
 

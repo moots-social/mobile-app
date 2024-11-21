@@ -12,6 +12,7 @@ import usuarioUtils, { pararDeSeguir, seguirUsuario } from "../../utils/usuarioU
 import { abrirToast } from "../geral/ToastMoots"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../../redux/useUsuario"
+import { buscarUsuarioPorCurso } from "../../utils/searchUtils"
 
 const seguirIcon = require('../../assets/SeguirIcon.png')
 const listaIcon = require('../../assets/ListaIcon.png')
@@ -50,7 +51,6 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
     
     const usuario = useSelector(state => state.usuario.user) || usuarioLogado
-    console.log(usuario.idSeguindo)
     const dispatch = useDispatch()
     const toast = useToast()
 
@@ -90,7 +90,6 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
         const handleIsSeguindo = async () => {
             const checkIsSeguindo = usuario.idSeguindo.some(dado => dado == id2);
             setIsSeguindo(checkIsSeguindo);
-            console.log('verificado se está seguindo')
         };
     
         handleIsSeguindo();
@@ -191,12 +190,13 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
     )
 }
 export function BotaoCurso({curso, ...rest}: ICursoModalProps){
-
+    const usuario = useSelector(state => state.usuario.user)
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const [botaoVisivel, setBotaoVisivel] = useState<boolean>(false)
     const [textoBotaoAcao, setTextoBotaoAcao] = useState<string>()
 
     const [imagem, setImagem] = useState<any>('')
+    const [usuarios, setUsuarios] = useState<any[]>()
     const [corFundoCartao, setCorFundoCartao] = useState<string>()
     const [corCartao, setCorCartao] = useState<string>()
 
@@ -250,32 +250,53 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
     }
 
     useEffect(()=>{
-        // const buscarUsuarioPeloCurso = useCallback(async()=>{
+        const buscarUsuarios = async()=>{
             
-        // }, [])
+                const resultado = await buscarUsuarioPorCurso(curso)
+                if (resultado!==0){
+                    if(resultado.length<3){
+                        setUsuarios(resultado)
+                    }
+                    else{
+                        // const indices = {
+                        //     index1: Math.floor(Math.random() * resultado.length),
+                        //     index2: Math.floor(Math.random() * resultado.length) ,
+                        //     index3: Math.floor(Math.random() * resultado.length),
+                        // }
+                        // setUsuarios([resultado[indices.index1], resultado[indices.index2], resultado[indices.index3]])
+                        // console.log(usuarios)
+                        setUsuarios([resultado[0], resultado[1]])
+                    }
+                }
+            
+
+        }
+        buscarUsuarios()
         handleImagemCor()
-    }, [curso])
+    }, [isModalVisivel])
 
     return(
         <Pressable onPress={handleAbrir}>
             <Image source={imagem || ''}  w={50} h={50} alt='curso'/>
             <Modal isOpen={isModalVisivel} onClose={handleFechar}>
                 <ModalBackdrop />
-                <ModalContent w={350} h={734}>
+                <ModalContent w='95%' h='90%'>
                     <LinearGreenGradientMoots>
                         <Box alignItems="center" h="100%" justifyContent="space-around" rounded={15} py={20}>
                             <Box alignItems="center" gap={10} w="90%">
                                 <Image source={imagem || ''} w={curso==='mecanica' ? 250 : 200} h={200} alt='icone do curso'/>
                                 <Text textAlign="center" fontSize={20} fontFamily="Poppins_600SemiBold" color="$black" >Essa pessoa realiza o curso de {`${curso.substring(0, 1).toUpperCase()}${curso.substring(1).toLowerCase()}`}</Text>
                             </Box>
-                            <Box alignItems="center" mb={100}>
-                                <TextoNegrito fontSize={12} fontFamily="Poppins_600SemiBold">Encontre mais pessoas realizando esse curso:</TextoNegrito>
-                                <Box flexDirection="row" justifyContent="space-between" w="100%" bg={corFundoCartao} py={15} px={20} rounded={15}>
-                                    <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/>
-                                    <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/>
-                                    <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao}/>
+                            {usuarios && (
+                                <Box alignItems="center" mb={100} w='100%'>
+                                    <TextoNegrito fontSize={12} fontFamily="Poppins_600SemiBold">Encontre mais pessoas realizando esse curso:</TextoNegrito>
+                                    <Box flexDirection="row" justifyContent={usuarios.length===1 ? 'center' : "space-between"} w="100%" bg={corFundoCartao} py={15} px={20} rounded={15}>
+                                        {usuarios && usuarios.length>0 ? usuarios.map((usuarioRenderizado)=> (
+                                            <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao} usuario={usuario} usuarioRenderizadoNoCartao={usuarioRenderizado} vemDeLista={true}/>
+                                        )): ''}
+                                    </Box>
                                 </Box>
-                            </Box>
+                            )}
                             {botaoVisivel ? (
                                 <BotaoSecao onPress={handleFechar} w={140} bg={corFundoCartao}>
                                     Fechar

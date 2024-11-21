@@ -98,6 +98,7 @@ export default function PostExpandido({route}) {
         postExpandido={true}
         fontSize={18}
         userId={post.userId}
+        postId={post.postId || post.id}
         />
       <Box alignSelf="center">
         <Post my={20} $base-w='100%' $md-w='109%' menu={false} botaoComentario={false} nomeUsuario={post.nomeUsuario || post.nomeCompleto} tagUsuario={post.tagUsuario || post.tag} descricaoPost={post.descricaoPost || post.texto} userId={post.userId} imagemPerfil={post.imagemPerfil || post.fotoPerfil} imagemPost={post.imagemPost || post.listImagens} contadorLike={post.contadorLike} salvarPost={handleSalvarPost}/>

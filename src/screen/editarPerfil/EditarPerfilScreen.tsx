@@ -172,7 +172,7 @@ export default function EditarPerfil({navigation}){
                 <Box alignItems="center" py='$2'>
                     <InputPerfil titulo="Nome completo" w="90%" placeholder={usuario.nomeCompleto} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, nomeCompleto: text})}/>
                     <Box w="100%" mt={20}>
-                        <MultiLinhaInputPerfil titulo="Descrição" tituloColor={!checkDescricao ? '$grey' : '$black'} w="90%" placeholder={usuario.descricao!=='' ? usuario.descricao : 'Apresentação, hobbies, gostos...'} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, descricao: text})} isDisabled={!checkDescricao} value={usuarioAtualizado.descricao}/>
+                        <MultiLinhaInputPerfil titulo="Descrição" tituloColor={!checkDescricao ? '$grey' : '$black'} w="90%" placeholder={usuario.descricao==='' || !usuario.descricao ? 'Apresentação, hobbies, gostos...' : usuario.descricao} onChange={(text: string)=>setUsuarioAtualizado({...usuarioAtualizado, descricao: text})} isDisabled={!checkDescricao} value={usuarioAtualizado.descricao}/>
                     </Box>
                     <Checkbox size="sm" pt='$2' isChecked={checkDescricao} onChange={handleCheckChange} >
                         <CheckboxIndicator mr="$2" brc={checkDescricao ? '$black' : "$grey"}>

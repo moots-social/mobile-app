@@ -26,9 +26,9 @@ export default function Notificacoes(){
           console.error(err);
         } finally {
           setRefreshing(false);
-        }}, [])
+    }}, [])
 
-        const handleNotificacaoExcluida = (id: number) => {
+        const handleNotificacaoExcluida = () => {
             if(notificacoes && notificacoes.length>0) onRefresh()
         }
     useEffect(()=>{
