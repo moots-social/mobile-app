@@ -54,7 +54,7 @@ export default function Post({
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState(false);
   const [index, setIndex] = useState<number>(0);
-  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil };
+  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil, contadorLike, postId };
   const [excluiuPost, setExcluiuPost] = useState<boolean>(false);
 
   const imagensFormatadas = imagemPost ? [{ uri: imagemPost[0] }, { uri: imagemPost[1] }, { uri: imagemPost[2] }, { uri: imagemPost[3] }] : [{}];

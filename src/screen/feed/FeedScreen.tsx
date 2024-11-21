@@ -27,8 +27,7 @@ export default function Feed({ navigation }) {
     const buscarPosts = async () => {
       setIsLoading(true);
       try {
-        const resultado = await searchUtils.buscarTodosOsPosts();
-        const posts = resultado.content;
+        const posts = await searchUtils.buscarTodosOsPosts();
 
         const postsComLike = posts.map(post => {
           const likeUsersAsStrings = post.likeUsers.map(userId => String(userId));
@@ -49,8 +48,7 @@ export default function Feed({ navigation }) {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      const novasPublics = await searchUtils.buscarTodosOsPosts();
-      const posts = novasPublics.content;
+      const posts = await searchUtils.buscarTodosOsPosts();
 
       const postsComLike = posts.map(post => {
         const likeUsersAsStrings = post.likeUsers.map(userId => String(userId));
@@ -73,7 +71,6 @@ export default function Feed({ navigation }) {
       const dados = await apis.post.curtirPost(postId, likeStatus);
       const req = await dados.data;
 
-      if (req) {
         // Atualiza apenas o post que foi curtir/descurtir
         setPublics(prevPublics =>
           prevPublics.map((post) =>
@@ -82,7 +79,6 @@ export default function Feed({ navigation }) {
               : post
           )
         );
-      }
       setDeuLike(!deuLike)
     } catch (error: any) {
       console.log(error.response.data.error);
