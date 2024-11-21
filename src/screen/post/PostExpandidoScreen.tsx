@@ -18,6 +18,7 @@ import { TextoNegrito } from "../../components/geral/Texto";
 
 export default function PostExpandido({route}) {
   const [post, setPost] = useState<any>(route.params.post || null)
+  const postId = route.params.postId || null
   const [deuLike, setDeuLike] = useState<boolean>(true);
   const toast = useToast()
   const usuario = useSelector((state)=> state.usuario.user)
@@ -25,8 +26,8 @@ export default function PostExpandido({route}) {
   const [comentou, setComentou] = useState<boolean>(true)
 
   const handleBuscarPostPorId = async()=>{
-    if(post){
-      const resultado = await postUtils.buscarPostPorId(post.postId)
+    if(!post){
+      const resultado = await postUtils.buscarPostPorId(postId || post.postId)
       if(resultado!==0){
         setPost(resultado)
       }
@@ -145,7 +146,7 @@ export default function PostExpandido({route}) {
             />
           ))
         ) : (
-          <TextoNegrito>Sem comentários para esse post</TextoNegrito>
+          <TextoNegrito alignSelf='center' mt='$2'>Seja o primeiro a comentar algo!</TextoNegrito>
         )}
           </Box>
       </RoundedTop>
