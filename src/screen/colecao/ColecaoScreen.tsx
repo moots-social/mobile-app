@@ -11,23 +11,26 @@ import { abrirToast } from "../../components/geral/ToastMoots";
 
 export default function Colecao(){
     const [publics, setPublics] = useState<any>([]);
-    const toat = useToast()
+    const [dessalvou, setDessalvou] = useState<boolean>(true)
+    const toast = useToast()
     const id = useSelector(state => state.usuario.user.userId);
-    console.log("este é id " + id)
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const buscarPostsSalvos = async () => {
-          try {
-            const resposta = await usuarioApi.buscarColecao(id);
-            const posts = resposta.data
-            
-            setPublics(posts);
-          } catch (error: any) {
-            alert(error.response?.message?.error || "Erro ao carregar os posts");
-          } 
+            setLoading(true);
+            try {
+                const resposta = await usuarioApi.buscarColecao(id);
+                setPublics(resposta.data);
+            } catch (error: any) {
+                alert(error.response?.message?.error || "Erro ao carregar os posts");
+            } finally {
+                setLoading(false);
+            }
         };
         buscarPostsSalvos();
-      }, []);
+    });    
     
     const handleDessalvarPost = (userId: number, postId: number) => {
       Alert.alert(
@@ -44,6 +47,7 @@ export default function Colecao(){
               try {
                 await postApi.dessalvarPost(userId, postId);
                 abrirToast(toast, "success", "Post dessalvado com sucesso", "", 2000, true); 
+                setDessalvou(!dessalvou)
               } catch (error: any) {
                 console.error(error);
                 abrirToast(toast, "error", "Erro ao dessalvar o post", "", 2000, true); 
@@ -51,7 +55,7 @@ export default function Colecao(){
             },
           },
         ],
-        { cancelable: true } // Permite fechar clicando fora do alerta
+        { cancelable: true }
       );
     };
       
@@ -62,7 +66,7 @@ export default function Colecao(){
                 {publics && publics.length > 0 && publics[0] !== ''? (
                     publics.map((e: any) => (
                         <PostColecao
-                            key={e.id}
+                            key={e.postId}
                             nomeUsuario={e.nomeCompleto}
                             tagUsuario={e.tag}
                             mb={10}
@@ -76,7 +80,7 @@ export default function Colecao(){
                         />
                         ))
                 ) : (
-                    <TextoNegrito alignSelf='center' mt={15}>Nenhum item salvo.</TextoNegrito>
+                    <TextoNegrito mt={15}>Nenhum item salvo.</TextoNegrito>
                 )}
             </ScrollView>
         </LinearGradientMoots>

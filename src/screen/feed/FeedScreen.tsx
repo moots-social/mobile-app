@@ -89,7 +89,7 @@ export default function Feed({ navigation }) {
     try{
       postApi.salvarPost(postId)
       abrirToast(toast, 'success', 'Post salvo com sucesso', '', 2000, true)
-
+      
     } catch(error: any){
       alert(error.response.message.error || "erro ao salvar post")
     }
