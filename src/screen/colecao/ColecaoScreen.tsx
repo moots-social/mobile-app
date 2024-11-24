@@ -1,4 +1,4 @@
-import { ScrollView, useToast } from "@gluestack-ui/themed";
+import { Box, ScrollView, useToast } from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import { TextoNegrito } from "../../components/geral/Texto";
@@ -8,26 +8,32 @@ import { postApi, usuarioApi } from "../../api/apis";
 import PostColecao from "../../components/post/PostColecao";
 import { Alert } from "react-native";
 import { abrirToast } from "../../components/geral/ToastMoots";
+import VirtualizedPosts from "../../components/geral/VirtualizedPosts";
+import { RefreshControl } from "react-native-gesture-handler";
 
 export default function Colecao(){
-    const [publics, setPublics] = useState<any>([]);
-    const toat = useToast()
-    const id = useSelector(state => state.usuario.user.userId);
-    console.log("este é id " + id)
+    const [refreshing, setRefreshing] = useState<boolean>(false);
+    // const [publics, setPublics] = useState<any>([]);
+    const [dessalvou, setDessalvou] = useState<boolean>(true)
+    const toast = useToast()
+    // const id = useSelector(state => state.usuario.user.userId);
 
-    useEffect(() => {
-        const buscarPostsSalvos = async () => {
-          try {
-            const resposta = await usuarioApi.buscarColecao(id);
-            const posts = resposta.data
-            
-            setPublics(posts);
-          } catch (error: any) {
-            alert(error.response?.message?.error || "Erro ao carregar os posts");
-          } 
-        };
-        buscarPostsSalvos();
-      }, []);
+    // const [loading, setLoading] = useState(true);
+
+    // useEffect(() => {
+    //     const buscarPostsSalvos = async () => {
+    //         setLoading(true);
+    //         try {
+    //             const resposta = await usuarioApi.buscarColecao(id);
+    //             setPublics(resposta.data);
+    //         } catch (error: any) {
+    //             alert(error.response?.message?.error || "Erro ao carregar os posts");
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     buscarPostsSalvos();
+    // });    
     
     const handleDessalvarPost = (userId: number, postId: number) => {
       Alert.alert(
@@ -44,6 +50,7 @@ export default function Colecao(){
               try {
                 await postApi.dessalvarPost(userId, postId);
                 abrirToast(toast, "success", "Post dessalvado com sucesso", "", 2000, true); 
+                setDessalvou(!dessalvou)
               } catch (error: any) {
                 console.error(error);
                 abrirToast(toast, "error", "Erro ao dessalvar o post", "", 2000, true); 
@@ -51,33 +58,41 @@ export default function Colecao(){
             },
           },
         ],
-        { cancelable: true } // Permite fechar clicando fora do alerta
+        { cancelable: true }
       );
     };
-      
+    const onRefresh = () => {
+      setRefreshing(true);
+      setTimeout(()=>{
+        setRefreshing(false);
+        console.log(refreshing)
+      }, 1000)
+    };
     return(
         <LinearGradientMoots>
-            <ScrollView>
+              <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 <CabecalhoPerfil titulo="Sua coleção" mb={5} temBotaoVoltar={false}/>
-                {publics && publics.length > 0 && publics[0] !== ''? (
-                    publics.map((e: any) => (
-                        <PostColecao
-                            key={e.id}
-                            nomeUsuario={e.nomeCompleto}
-                            tagUsuario={e.tag}
-                            mb={10}
-                            ml={15}
-                            imagemPerfil={e.fotoPerfil}
-                            userId={e.userId}
-                            postId={e.postId}
-                            dessalvarPost={handleDessalvarPost}
-                            {...(e.texto && { descricaoPost: e.texto })}
-                            {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
-                        />
-                        ))
-                ) : (
-                    <TextoNegrito alignSelf='center' mt={15}>Nenhum item salvo.</TextoNegrito>
-                )}
+                <Box alignItems='center' mt={35}>
+                  <VirtualizedPosts localDeRenderizacao="colecao" userId={0} refreshState={refreshing}/>
+                  {/* {publics && publics.length > 0 && publics[0] !== ''? (
+                      publics.map((e: any) => (
+                          <PostColecao
+                              nomeUsuario={e.nomeCompleto}
+                              tagUsuario={e.tag}
+                              mb={10}
+                              alignSelf='center'
+                              imagemPerfil={e.fotoPerfil}
+                              userId={e.userId}
+                              postId={e.postId}
+                              dessalvarPost={handleDessalvarPost}
+                              {...(e.texto && { descricaoPost: e.texto })}
+                              {...(e.listImagens && e.listImagens.length > 0 && { imagemPost: e.listImagens })}
+                          />
+                          ))
+                  ) : (
+                      <TextoNegrito mt={15}>Nenhum item salvo.</TextoNegrito>
+                  )} */}
+                </Box>
             </ScrollView>
         </LinearGradientMoots>
     )

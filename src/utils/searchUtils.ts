@@ -52,7 +52,7 @@ export const buscarTodosOsPosts = async () =>{
         return resultado.data
     } catch (error: any) {
         geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
-        return error.response.status
+        return 0
     }
 }
 

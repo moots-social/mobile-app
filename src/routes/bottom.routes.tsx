@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Box, Image } from "@gluestack-ui/themed"
 import { useEffect } from "react"
 import { logoutUser } from "../utils/storageUtils"
-import { buscar, buscarQuemSegue } from "../utils/usuarioUtils"
+import { buscar, buscarColecao, buscarQuemSegue } from "../utils/usuarioUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../redux/useUsuario"
 import { autenticar } from "../redux/useAutenticacao"
@@ -77,7 +77,8 @@ export default function Bottom(){
                         const arrayIdSeguindo = getSeguindo.map(usuario => usuario.userId)
                         getSeguindo = arrayIdSeguindo
                     }
-                    dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo}))
+                    let getColecao = await buscarColecao()
+                    dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo, colecaoSalvos: getColecao}))
                 }
             }catch (error){
                 await logoutUser()
@@ -87,6 +88,8 @@ export default function Bottom(){
         }
         
         getUser()
+        console.log(usuario)
+        
     }, [])
 
     return(
@@ -99,7 +102,9 @@ export default function Bottom(){
                     <IconePersonalizado tab={tab} focused={focused}/>
                 ),
                 tabBarShowLabel: false,
-                tabBarHideOnKeyboard: true
+                tabBarHideOnKeyboard: true,
+                lazy: true,
+                freezeOnBlur: true
                 }}
                />  
  

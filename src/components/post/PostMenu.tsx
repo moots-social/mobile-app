@@ -14,15 +14,16 @@ const menuIcon = require('../../assets/MenuIcon.png')
 interface IPropsMenu{
     userId: number,
     postId: number,
-    setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+    setRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
     const usuario = useSelector((state)=> state.usuario.user)
+    
     const toast = useToast()
     const navigation = useNavigation()
     const [denuncia, setDenuncia] = useState<string>('')
-    const [postUsuarioLogado, setPostUsuarioLogado] = useState<boolean>(userId == usuario.userId)
+    const postUsuarioLogado: boolean = userId == usuario.userId
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const [botaoVisivel, setBotaoVisivel] = useState<boolean>(false)
     const [textoBotaoAcao, setTextoBotaoAcao] = useState<string>('')
@@ -45,11 +46,11 @@ export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
 
     const handleExcluirPost = async() =>{
         const req = await apis.post.excluirPost(postId)
-
+        console.warn(req.data)
         if(req){
             abrirToast(toast, 'success', 'Post excluido com sucesso', '', 2000, true)
-            setRefresh(prev => !prev);
-            navigation.navigate('feed')
+            // setRefresh(prev => !prev);
+            // navigation.navigate('feed')
         }else {
             alert('deu bom não fi ' + postId)
         }
@@ -57,7 +58,7 @@ export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
     }
 
     const handleNavigatePerfil = () =>{
-        if(postUsuarioLogado) navigation.navigate('perfil')
+        if(userId == usuario.userId) navigation.navigate('perfil')
         else navigation.navigate('outro-perfil', {userId})
     }
 
@@ -86,7 +87,7 @@ export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
             <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={handleNavigatePerfil}>
                 <MenuItemLabel>Visitar perfil</MenuItemLabel>
             </MenuItem>
-            {!postUsuarioLogado ? (
+            {userId != usuario.userId ? (
             <MenuItem key="Denunciar" textValue="Denunciar" onPress={()=>handleAbrir('Carregando...')}>
                 <MenuItemLabel>Denunciar publicação</MenuItemLabel>
             </MenuItem>

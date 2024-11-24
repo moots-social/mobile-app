@@ -100,6 +100,7 @@ export const postApi = {
     criarReport: (postId: number, denuncia: string) => api.post(`/post/criar-report`, {
         postId, denuncia, contadorDenuncia: 0
     }),
+    excluirComentario: (comentarioId: number, postId: number) => api.delete(`/comentario/deletar/${comentarioId}/post/${postId}`)
 }
 
 export const comentarioApi = {

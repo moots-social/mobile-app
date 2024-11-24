@@ -9,29 +9,34 @@ const enviarIcon = require('../../assets/EnviarIconRounded.png')
 
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import postUtils from "../../utils/postUtils";
 import Loading from "../../components/geral/Loading";
 import { abrirToast } from "../../components/geral/ToastMoots";
 import { apis, comentarioApi, postApi } from "../../api/apis";
 import { TextoNegrito } from "../../components/geral/Texto";
 
-export default function PostExpandido({route}) {
+export default function PostExpandido({route, navigation}) {
   const [post, setPost] = useState<any>(route.params.post || null)
   const postId = route.params.postId || null
   const [deuLike, setDeuLike] = useState<boolean>(true);
   const toast = useToast()
   const usuario = useSelector((state)=> state.usuario.user)
+  const comentarioRef = useRef(null)
+  const veioDeComentario = route.params.veioDeComentario || false
   const [comentario, setComentario] = useState<string>("")
   const [comentou, setComentou] = useState<boolean>(true)
 
   const handleBuscarPostPorId = async()=>{
-    if(!post){
       const resultado = await postUtils.buscarPostPorId(postId || post.postId)
+      console.log(resultado)
       if(resultado!==0){
+        console.log(resultado)
         setPost(resultado)
+      } else {
+        navigation.navigate('tabs')
+        abrirToast(toast, 'error', 'Não foi possível abrir a publicação. Talvez ela tenha sido excluída.')
       }
-    }
   }
 
   const handleLikeChange = async (postId: string, deuLike: boolean) => {
@@ -66,29 +71,32 @@ export default function PostExpandido({route}) {
   }
 
   const handleNovoComentario = async () => {
-    try {
-      const resposta = await comentarioApi.novoComentario(post.postId, comentario);
-      if (resposta) {
-        setComentario("");
-        abrirToast(toast, "success", "Comentário enviado com sucesso", "", 2000, true);
-
-        const postAtualizado = await postUtils.buscarPostPorId(post.postId);
-        if (postAtualizado !== 0) {
-          setPost(postAtualizado);
+    if(comentario!==''){
+      try {
+        const resposta = await comentarioApi.novoComentario(post.postId, comentario);
+        if (resposta) {
+          setComentario("");
+          abrirToast(toast, "success", "Comentário enviado com sucesso.", "", 1000, false);
+          
+          const postAtualizado = await postUtils.buscarPostPorId(post.postId || postId);
+          if (postAtualizado !== 0) {
+            setPost(postAtualizado);
+          }
         }
-      } else {
-        alert("Erro ao enviar comentário.");
+      } catch (error) {
+        console.error(error);
+        alert(error);
       }
-    } catch (error) {
-      console.error(error);
-      alert(error);
+    } else{
+      abrirToast(toast, 'error', 'Digite algo para enviar um comentário.')
     }
   };  
-
+  
     useEffect(()=>{
       handleBuscarPostPorId()
+      if(veioDeComentario) comentarioRef.current.focus()
     }, [comentou, route.params])
-
+    console.log(post)
   if(post==null) return <Loading isOpen={true}/>
   else return (
     <LinearGradientMoots>
@@ -102,7 +110,19 @@ export default function PostExpandido({route}) {
         postId={post.postId || post.id}
         />
       <Box alignSelf="center">
-        <Post my={20} $base-w='100%' $md-w='109%' menu={false} botaoComentario={false} nomeUsuario={post.nomeUsuario || post.nomeCompleto} tagUsuario={post.tagUsuario || post.tag} descricaoPost={post.descricaoPost || post.texto} userId={post.userId} imagemPerfil={post.imagemPerfil || post.fotoPerfil} imagemPost={post.imagemPost || post.listImagens} contadorLike={post.contadorLike} salvarPost={handleSalvarPost}/>
+        <Post my={20} $base-w='100%' $md-w='109%' 
+        likeUsers={post.likeUsers} 
+        postId={post.postId || postId} 
+        menu={false} 
+        botaoComentario={false} 
+        nomeUsuario={post.nomeUsuario || post.nomeCompleto} 
+        tagUsuario={post.tagUsuario || post.tag} 
+        descricaoPost={post.descricaoPost || post.texto} 
+        userId={post.userId} 
+        imagemPerfil={post.imagemPerfil || post.fotoPerfil} 
+        imagemPost={post.imagemPost || post.listImagens} 
+        contadorLike={post.contadorLike} 
+        salvarPost={handleSalvarPost}/>
       </Box>
       <RoundedTop
         bg="$white"
@@ -121,6 +141,7 @@ export default function PostExpandido({route}) {
                 fontSize={12}
                 value={comentario}
                 onChangeText={(text) => setComentario(text)}
+                ref={comentarioRef}
                 />
               <Pressable onPress={() => handleNovoComentario()}>
                 <Image
@@ -143,6 +164,10 @@ export default function PostExpandido({route}) {
               conteudo={post.texto}
               mt={10}
               fotoPerfil={post.fotoPerfil}
+              comentarioId={post.id}
+              postId={postId || post.postId}
+              userId={post.userId}
+              onComentarioExcluido={handleBuscarPostPorId}
             />
           ))
         ) : (

@@ -1,11 +1,12 @@
-import { Image, Pressable } from "@gluestack-ui/themed"
-import { createContext, useState } from "react";
+import { Icon, Image, Pressable, TrashIcon } from "@gluestack-ui/themed"
+import { useState } from "react";
 import * as ImagePicker from 'expo-image-picker'
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const coracaoIcon = require('../../assets/CoracaoIcon.png')
+const coracaoCurtidoIcon = require('../../assets/coracaoCurtido.png')
 const descurtirIcon = require('../../assets/DescurtirIcon.png')
 const salvarIcon = require('../../assets/SalvarIcon.png')
+const salvouIcon = require('../../assets/SalvouIcon.png')
 const comentarioIcon = require('../../assets/ComentarioIcon.png')
 const galeriaIcon = require('../../assets/GaleriaIcon.png')
 const cameraIcon = require('../../assets/CameraIcon.png')
@@ -37,12 +38,17 @@ export function BotaoDescurtirComentario({ imgW, imgH, ...rest}: IBotaoComentari
         </Pressable>
     )
 }
+export function BotaoExcluirComentario({imgW, imgH, ...rest}){
+    return <Pressable {...rest}>
+        <Icon as={TrashIcon} w={imgW} h={imgH}/>
+    </Pressable>
+}
 
 //abaixo somente post existente
-export function BotaoCurtirPost({size, ...rest}: IBotaoPostProps){
+export function BotaoCurtirPost({size, curtiu, ...rest}){
     return(
         <Pressable {...rest}>
-            <Image source={coracaoIcon} size={size} alt='curtir post'/>
+            <Image source={!curtiu ? coracaoIcon : coracaoCurtidoIcon} size={size} alt='curtir post'/>
         </Pressable>
     )
 }
@@ -53,10 +59,10 @@ export function BotaoDescurtirPost({ size, ...rest}: IBotaoPostProps){
         </Pressable>
     )
 }
-export function BotaoSalvar({size, ...rest}: IBotaoPostProps){
+export function BotaoSalvar({size, salvou, ...rest}){
     return(
         <Pressable {...rest}>
-            <Image source={salvarIcon} size={size} alt='salvar'/>
+            <Image source={!salvou ? salvarIcon : salvouIcon} size={size} alt='salvar'/>
         </Pressable>
     )
 }

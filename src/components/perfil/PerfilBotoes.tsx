@@ -87,8 +87,8 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
     }
     
     useEffect(() => {
-        const handleIsSeguindo = async () => {
-            const checkIsSeguindo = usuario.idSeguindo.some(dado => dado == id2);
+        const handleIsSeguindo = async() => {
+            const checkIsSeguindo = await usuario.idSeguindo.some(dado => dado == id2);
             setIsSeguindo(checkIsSeguindo);
         };
     

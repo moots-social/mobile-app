@@ -79,7 +79,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                 } else console.log('por algum motivo, radioGeral é diferente de algum dos 3 valores')
 
                 if(filtros.radioGeral!=='publicacoes'){
-                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil.length>0){
+                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil){
                         const getUsuariosSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
                         resultadoPerfil = getUsuariosSeguindo
                     }

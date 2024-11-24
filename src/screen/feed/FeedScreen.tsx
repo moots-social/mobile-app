@@ -12,6 +12,7 @@ import { TextoNegrito } from '../../components/geral/Texto';
 import { useSelector } from 'react-redux';
 import searchUtils from '../../utils/searchUtils';
 import { abrirToast } from '../../components/geral/ToastMoots';
+import VirtualizedPosts from '../../components/geral/VirtualizedPosts';
 
 export default function Feed({ navigation }) {
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -28,14 +29,13 @@ export default function Feed({ navigation }) {
       setIsLoading(true);
       try {
         const posts = await searchUtils.buscarTodosOsPosts();
-
         const postsComLike = posts.map(post => {
           const likeUsersAsStrings = post.likeUsers.map(userId => String(userId));
           const deuLike = likeUsersAsStrings.includes(idString);
           return { ...post, like: deuLike };
         });
 
-        setPublics(postsComLike.reverse() || []);
+        setPublics(postsComLike || []);
       } catch (error: any) {
         alert(error.response?.message?.error || "Erro ao carregar os posts");
       } finally {
@@ -45,24 +45,13 @@ export default function Feed({ navigation }) {
     buscarPosts();
   }, [refresh, deuLike]);
 
-  const onRefresh = useCallback(async () => {
+  const onRefresh = () => {
     setRefreshing(true);
-    try {
-      const posts = await searchUtils.buscarTodosOsPosts();
-
-      const postsComLike = posts.map(post => {
-        const likeUsersAsStrings = post.likeUsers.map(userId => String(userId));
-        const deuLike = likeUsersAsStrings.includes(idString);
-        return { ...post, like: deuLike };
-      });
-
-      setPublics(postsComLike.reverse() || []);
-    } catch (err) {
-      console.error(err);
-    } finally {
+    setTimeout(()=>{
       setRefreshing(false);
-    }
-  }, []);
+      console.log(refreshing)
+    }, 1000)
+  };
 
   const handleLikeChange = async (postId: string, deuLike: boolean) => {
     try {
@@ -84,12 +73,13 @@ export default function Feed({ navigation }) {
       console.log(error.response.data.error);
     }
   };
+  
 
   const handleSalvarPost = (postId: number) => {
     try{
       postApi.salvarPost(postId)
       abrirToast(toast, 'success', 'Post salvo com sucesso', '', 2000, true)
-
+      
     } catch(error: any){
       alert(error.response.message.error || "erro ao salvar post")
     }
@@ -104,7 +94,8 @@ export default function Feed({ navigation }) {
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false} />
           <Box alignItems="center" mt={35}>
-            {publics && publics.length > 0 && publics[0] !== '' ? (
+            <VirtualizedPosts userId={0} refreshState={refreshing}/>
+            {/* {publics && publics.length > 0 && publics[0] !== '' ? (
               publics.map((e: any) => (
                 <Post
                   key={e.id}
@@ -125,7 +116,7 @@ export default function Feed({ navigation }) {
               ))
             ) : (
               <TextoNegrito fontSize={14}>Isso é tudo.</TextoNegrito>
-            )}
+            )} */}
           </Box>
         </ScrollView>
         <BotaoNovoPost position="absolute" $base-top="85%" $md-top="90%" $base-right="5%" $md-right="6%" />

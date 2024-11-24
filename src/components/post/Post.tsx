@@ -1,19 +1,27 @@
-import { Box, Menu, MenuItem, MenuItemLabel,Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
+import { Box, Menu, MenuItem, MenuItemLabel,Image, Pressable, ScrollView, Text, useToast } from "@gluestack-ui/themed";
 import { FullRounded } from "../geral/Rounded";
 import { TextoNegrito } from "../geral/Texto";
 import { BotaoComentar, BotaoCurtirPost, BotaoDescurtirPost, BotaoSalvar } from "../botao/BotoesPostComentario";
 import { useNavigation } from "@react-navigation/native";
 import { MenuPost } from "./PostMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageView from "react-native-image-viewing";
 import { usuarioIcon } from "../perfil/PerfilComponents";
 import { StatusBar } from "expo-status-bar";
 import { DimensionValue } from "react-native";
 import FastImage from "react-native-fast-image";
+import postUtils from "../../utils/postUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { abrirToast } from "../geral/ToastMoots";
+import { buscar, buscarColecao } from "../../utils/usuarioUtils";
+import { setarUsuario } from "../../redux/useUsuario";
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
 interface IPostProps {
+  postId: number;
+  nomeUsuario: string;
+  tagUsuario: string;
   descricaoPost: string;
   imagemPost?: string[];
   imagemPerfil?: string;
@@ -21,15 +29,13 @@ interface IPostProps {
   menu?: boolean;
   botaoComentario?: boolean;
   expandivel?: boolean;
-  nomeUsuario: string;
-  tagUsuario: string;
   rw?: DimensionValue;
   contadorLike?: number;
   curtirPost?: (postId: number, deuLike: boolean) => void;
-  postId: number;
   deuLike?: boolean
   setRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
-  salvarPost?: (postId: number) => void
+  salvarPost?: (postId: number) => void,
+  likeUsers: string[]
 }
 
 export default function Post({
@@ -48,15 +54,21 @@ export default function Post({
   deuLike,
   setRefresh,
   salvarPost,
+  likeUsers,
   ...rest
 }: IPostProps) {
   
   const navigation = useNavigation();
+  const toast = useToast()
   const [isVisible, setIsVisible] = useState(false);
   const [index, setIndex] = useState<number>(0);
-  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil, contadorLike, postId };
-  const [excluiuPost, setExcluiuPost] = useState<boolean>(false);
-
+  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil, contadorLike, postId, likeUsers };
+  const usuario = useSelector(state=> state.usuario.user)
+  const dispatch = useDispatch()
+  // const [curtiu, setCurtiu] = useState<boolean>(likeUsers.includes(String(usuario.id)))
+  const [curtiu, setCurtiu] = useState<boolean>()
+  const [salvou, setSalvou] = useState<boolean>()
+  // const [excluiuPost, setExcluiuPost] = useState<boolean>(false);
   const imagensFormatadas = imagemPost ? [{ uri: imagemPost[0] }, { uri: imagemPost[1] }, { uri: imagemPost[2] }, { uri: imagemPost[3] }] : [{}];
 
   const handleExpandirFoto = (index: number) => {
@@ -64,15 +76,65 @@ export default function Post({
     setIsVisible(true); 
   };
 
-  const handleCurtir = () => {
-    curtirPost(postId, deuLike);
-  };
+  const handleCurtirPost = async()=>{
+    if(curtiu){
+      const res = await postUtils.curtirPost(postId, false)
+      if(res!=0){
+        setCurtiu(false)
+        alert('PARABÉNS VC desCURTIU A PORRA DO COMENTARIO')
+      } 
+      else abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
+    } else{
+      const res = await postUtils.curtirPost(postId, true)
+      if(res!=0) {
+        setCurtiu(true)
+        alert('PARABÉNS VC CURTIU A PORRA DO COMENTARIO')
 
-  const handleSalvar = () => {
-    salvarPost(postId)
+      } 
+      else abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
+    }
   }
 
-  if (isVisible) {
+  const handleSalvarPost = async()=>{
+    if (salvou) {
+      const res = await postUtils.removerPostSalvo(postId)
+      if(res==200){
+        setSalvou(false)
+        abrirToast(toast, 'success', 'Publicação removida da coleção com sucesso.', '', 1000, false)
+        
+      }
+    }else{
+      const res = await postUtils.salvarPost(postId)
+      if(res==200){
+        setSalvou(true)
+        abrirToast(toast, 'success', 'Publicação salva com sucesso.', '', 1000, false)
+      }
+    }
+    const listaDeSalvosAtualizada = await buscarColecao()
+    console.log(listaDeSalvosAtualizada)
+    dispatch(setarUsuario({...usuario, colecaoSalvos: listaDeSalvosAtualizada}))
+  }
+  // const handleCurtir = () => {
+    //   curtirPost(postId, deuLike);
+    // };
+    
+    // const handleSalvar = () => {
+      //   salvarPost(postId)
+      // }
+      
+      const handleClickComentario = () =>{
+        navigation.navigate('expandido', {post: postObject, veioDeComentario: true})
+      }
+      
+      useEffect(()=>{
+        const handleIsSalvo = async() =>{
+          const checkIsSalvo = await usuario.colecaoSalvos.some(dado => dado.postId == postId)
+          setSalvou(checkIsSalvo)
+        }
+        handleIsSalvo()
+      }, [usuario.colecaoSalvos])
+      
+      if (isVisible) {
     return (
       <>
         <StatusBar hidden />
@@ -87,7 +149,7 @@ export default function Post({
   }
 
   return (
-    <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject})} {...rest}>
+    <Pressable onPress={()=> navigation.navigate('expandido', {postId: postId})} {...rest}>
         <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20} {...rest}>
         <Box flexDirection="row" w="100%">
             <Box>
@@ -110,17 +172,20 @@ export default function Post({
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
-                <BotaoCurtirPost size="2xs" onPress={() => handleCurtir()} />
-                <Text>{contadorLike || 0}</Text>
-                <BotaoSalvar size="2xs" onPress={() => handleSalvar()}/>
+                {/* <BotaoCurtirPost size="2xs" onPress={() => handleCurtir()} /> */}
+                <BotaoCurtirPost size="2xs" onPress={handleCurtirPost} curtiu={curtiu}/>
+                {/* <Text fontFamily="Poppins_400Regular">{contadorLike || 0}</Text> */}
+                {/* <BotaoSalvar size="2xs" onPress={() => handleSalvar()}/> */}
+                <BotaoSalvar size="2xs" onPress={handleSalvarPost} salvou={salvou}/>
                 </Box>
-                {botaoComentario && <BotaoComentar justifyContent="flex-end" size="2xs" />}
+                {botaoComentario && <BotaoComentar justifyContent="flex-end" size="2xs" onPress={handleClickComentario}/>}
             </Box>
             </Box>
 
         </Box>
             {/* Menu e ações do post */}
-            {menu && <MenuPost userId={userId} postId={postId} setRefresh={setRefresh} />}
+            {/* {menu && <MenuPost userId={userId} postId={postId} setRefresh={setRefresh} />} */}
+            {menu && <MenuPost userId={userId} postId={postId} />}
         </Box>
         </FullRounded>
     </Pressable>

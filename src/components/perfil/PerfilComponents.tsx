@@ -77,23 +77,11 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
 }
 
 export function PublicacoesBox({userId}){
-    const [dataPost, setDataPost] = useState<any[]>([])
-
-    const buscarPostsUsuario = useCallback(async()=>{
-        try{
-            const resultado = await buscarPostPorUserId(userId)
-            if(resultado[0]) setDataPost(resultado.reverse())
-        }catch (error){
-            console.error(error)
-        }
-    }, [])
-    useEffect(()=>{
-        
-        buscarPostsUsuario()
-    }, [userId])
+    
     return <Box alignItems="center">
             <Titulo>Publicações</Titulo>
             {/* {dataPost.length>0 ? <VirtualizedPosts w="100%" dataPost={dataPost}/> : <TextoNegrito fontFamily="Poppins_500Medium">Sem publicações para mostrar.</TextoNegrito>} */}
+            <VirtualizedPosts userId={userId} localDeRenderizacao="perfil"/>
         </Box>
 }
 

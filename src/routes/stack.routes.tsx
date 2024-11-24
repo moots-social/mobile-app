@@ -16,6 +16,7 @@ import PerfilOutroUsuario from "../screen/perfil/PerfilOutroUsuarioScreen";
 import { getAnyItemStorage } from "../utils/storageUtils";
 import { useSelector } from "react-redux";
 import Moderador from "../screen/moderador/Moderador";
+import Inicial from "../screen/login/InicialScreen";
 
 const { Screen, Navigator } = createStackNavigator();
 
@@ -57,6 +58,7 @@ export default function Stack() {
           </>
         ) : (
           <>
+            <Screen name='inicial' component={Inicial} options={{ headerShown: false }} />
             <Screen name="login" component={Login} options={{ headerShown: false }} />
             <Screen name="cadastro" component={Cadastro} options={{ headerShown: false }} />
             <Screen name="info" component={Info} options={{ headerShown: false }} />

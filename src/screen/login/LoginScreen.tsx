@@ -49,7 +49,6 @@ export default function Login({ navigation }) {
   return (
     <LinearGradientMoots>
       <ScrollView>
-        <StatusBar translucent={true}/>
           <Box flex={1}>
 
             <Box display="flex" alignItems="center" justifyContent="center" $base-my={80} $md-my={120}>
@@ -68,13 +67,8 @@ export default function Login({ navigation }) {
                     </TouchableOpacity>
                   </Box>
 
-                  <FormControlInput inputRef={inputSenha} label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)} onSubmitEditing={()=>handleSubmit()} secureTextEntry={true}/>
-                  <Box flexDirection="row" justifyContent="center" mt={2.5} $base-mb='$20' $md-mb='$48' >
-                    <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
-                    <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
-                      <TextoNegrito color="$lightSete">Redefinir senha</TextoNegrito>
-                    </TouchableOpacity>
-                  </Box>
+                  <FormControlInput $base-mb='$20' $md-mb='$48'  inputRef={inputSenha} label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)} onSubmitEditing={()=>handleSubmit()} secureTextEntry={true}/>
+                  
               </Box>
 
                 <BotaoSecao w="80%" $md-h={60} onPress={() => handleSubmit()}>
