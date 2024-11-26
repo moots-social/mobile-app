@@ -1,11 +1,8 @@
 import axios from "axios";
-import { getTokenStorage, logoutUser } from "../utils/storageUtils";
-//SERVIDOR: 172.16.3.228
-//192.168.209.1
-//172.16.2.183
-//192.168.15.8
-//192.168.1.77
-const baseURL = 'http://192.168.15.8:8080'
+import {BASE_URL} from '@env'
+
+import { getTokenStorage, logoutUser } from "../utils/storageUtils"
+const baseURL = BASE_URL
 
 const apiSemToken = axios.create({
     baseURL,

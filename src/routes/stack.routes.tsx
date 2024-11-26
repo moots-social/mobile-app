@@ -25,15 +25,16 @@ export default function Stack() {
   const auth = useSelector((state: any) => state.auth.autenticado)
   const [autenticado, setAutenticado] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-
+  
   useEffect(() => {
-    const checarAutenticacao = async () => {
+    //método que vai dar valor ao state usado posteriormente na renderização de telas de acordo com a autenticação do usuário
+    const verificarAutenticacao = async () => {
       const authStatus = await getAnyItemStorage("auth");
       setAutenticado(authStatus === "true");
       setLoading(false);
     };
 
-    checarAutenticacao();
+    verificarAutenticacao();
   }, [auth]);
 
   if (loading) {

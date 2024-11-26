@@ -1,22 +1,31 @@
+import { useEffect } from "react";
 import { Box, Image } from "@gluestack-ui/themed";
+import { StatusBar } from "expo-status-bar";
+import * as NavigationBar from 'expo-navigation-bar'
+
 import { TextoNegrito } from "../../components/geral/Texto";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import BotaoSecao from "../../components/botao/BotaoSecao";
-import { StatusBar } from "expo-status-bar";
 
 const MootsIcon = require('../../assets/MootsIcon.png')
 const MootsLogo = require('../../assets/MootsTypo.png')
 
 export default function Inicial({navigation}){
+
     const irParaLogin = () => navigation.navigate('login')
     const irParaCadastro = () => navigation.navigate('cadastro')
+
+    useEffect(()=>{
+        NavigationBar.setBackgroundColorAsync('white')
+      }, [])
+
     return(
         <LinearGradientMoots>
-                <StatusBar translucent/>
+            <StatusBar translucent/>
             <Box flex={1} justifyContent="space-between">
                 <Box alignSelf='center' alignItems='center'>
-                    <Image source={MootsIcon} mt='$12' mb='$6'/>
-                    <Image source={MootsLogo} w={182} h={35}/>
+                    <Image source={MootsIcon} mt='$12' mb='$6' $md-size={150}/>
+                    <Image source={MootsLogo} $base-w={182} $base-h={35} $md-w={210} $md-h={50}/>
                 </Box>
                 <Box alignSelf='center' alignItems='center' w='100%' my={30}>
                     <TextoNegrito fontSize={20}>O que deseja fazer?</TextoNegrito>

@@ -16,7 +16,8 @@ export const login = async(email: string, senha: string) =>{
         return 'Autenticado com sucesso.'
     } catch (error: any) {
         geralUtils.erro(error, 'login', 'usuarioUtils', error.response?.status || false)
-        return error.response.status
+        console.error(error.response?.data?.error)
+        return 0
     }finally {
         console.log('requisição finalizada')
     }
@@ -28,6 +29,7 @@ export const criar = async(usuario: any)=>{
     } catch (error: any) {
         geralUtils.erro(error, 'criar', 'usuarioUtils', error.response?.status || false)
         console.error(error.response?.data?.error)
+        return 0
   }
 }
 
@@ -38,6 +40,7 @@ export const buscarEmail = async(email: string)=>{
         return res
     } catch (error: any) {
         geralUtils.erro(error, 'buscarEmail', 'usuarioUtils', error.response?.status || false)
+        console.error(error.response?.data?.error)
         return error.response.status
     }
 }
@@ -48,8 +51,8 @@ export const buscar = async()=>{
         const res = resultado.data
         return res
     } catch (error: any) {
-        console.error(error.response.data.error)
         geralUtils.erro(error, 'buscar', 'usuarioUtils', error.response?.status || false)
+        console.error(error.response?.data?.error)
     }
 }
 
