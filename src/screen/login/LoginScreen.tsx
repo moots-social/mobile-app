@@ -11,7 +11,6 @@ import { login } from "../../utils/usuarioUtils";
 import { abrirToast} from "../../components/geral/ToastMoots";
 import { useDispatch, } from "react-redux";
 import { autenticar } from "../../redux/useAutenticacao";
-
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
@@ -19,7 +18,6 @@ export default function Login({ navigation }) {
   const dispatch = useDispatch()
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
-  
   const inputEmail = useRef(null)
   const inputSenha = useRef(null)
 
