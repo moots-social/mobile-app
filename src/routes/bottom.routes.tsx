@@ -22,6 +22,7 @@ const perfilIcon = require('../assets/UsuarioIcon.png')
 
 const {Screen, Navigator} = createBottomTabNavigator()
 
+//botão de rota com cores e ícones personalizados 
 function IconePersonalizado({tab, focused}: any){
     return  <Box h="100%" w="$12" justifyContent="center" px={10} rounded='$lg' bgColor={focused ? '#EDEDED' : '$white'}>
                 <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.3} rounded={tab.id === 4 ? 30 : 0} />
@@ -32,6 +33,8 @@ function IconePersonalizado({tab, focused}: any){
 export default function Bottom(){
     const dispatch = useDispatch()
     const usuario = useSelector((state: any)=> state.usuario.user)
+
+    //rotas a serem renderizadas quando o usuário estiver autenticado
     const tabs = [
         {
             id: 0,
@@ -67,6 +70,7 @@ export default function Bottom(){
 
     
     useEffect(()=>{
+        //método para buscar os dados relevantes do usuário
         const getUser = async()=>{
             dispatch(autenticar())
             try{
@@ -82,14 +86,11 @@ export default function Bottom(){
                 }
             }catch (error){
                 await logoutUser()
-                console.log('deslogando usuário por não ter dados relacionados.')
             }
             
         }
         
         getUser()
-        console.log(usuario)
-        
     }, [])
 
     return(

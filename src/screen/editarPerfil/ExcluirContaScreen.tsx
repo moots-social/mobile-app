@@ -3,13 +3,9 @@ import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { TextoNegrito } from "../../components/geral/Texto";
 import { useState } from "react";
 import { Alert } from "react-native";
-import { useUsuarioContext } from "../../context/UsuarioContext";
-import SyncStorage from '@react-native-async-storage/async-storage';
-import { usuarioApi } from "../../api/apis";
 import Loading from "../../components/geral/Loading";
 import { logoutUser } from "../../utils/storageUtils";
-import { useDispatch, useSelector } from "react-redux";
-import { desautenticar } from "../../redux/useAutenticacao";
+import { useDispatch, } from "react-redux";
 import { excluirConta } from "../../utils/usuarioUtils";
 import { setarUsuario } from "../../redux/useUsuario";
 
@@ -18,20 +14,17 @@ export default function ExcluirConta(){
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleExcluirConta = async()=>{
-        try{
-            const resultado = await excluirConta()
-            if(resultado){
-                    Alert.alert('Conta excluída', 'Conta excluída com sucesso. Muito obrigado por ter feito parte do Moots!')
-                    setIsLoading(true)
-                    setTimeout(async()=>{
-                        await logoutUser()
-                        setIsLoading(false)
-                    },1000)
-                    dispatch(setarUsuario({}))
-                }
-        }catch(error: any){
-            Alert.alert('Erro', error.response.data.error)
-        }
+        await excluirConta()
+
+        Alert.alert('Conta excluída', 'Conta excluída com sucesso. Muito obrigado por ter feito parte do Moots!')
+        setIsLoading(true)
+        
+        setTimeout(async()=>{
+            await logoutUser()
+            setIsLoading(false)
+        }, 1000)
+        
+        dispatch(setarUsuario({}))
     }
 
     const handleSubmit = ()=>{

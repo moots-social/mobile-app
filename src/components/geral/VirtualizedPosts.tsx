@@ -22,27 +22,25 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                     let resultado = await buscarColecao()
                     if(resultado!=0) setPosts(resultado)
                         break
-                    case 'pesquisa':
-                        setPosts(dataPost)
-                        break
-                        case 'perfil':
-                            resultado = await buscarPostPorUserId(userId)
-                            if(resultado!=0) setPosts(resultado.reverse())
-                                break
-                            default:
-                                console.log('valor de renderização inválido')
-                                setPosts([])
-                                break
-                            }
-                        }else{
-                            console.log('local de renderização não foi definido. passando valor padrão para buscar todos os posts')
-                            
-                            const resultado = await searchUtils.buscarTodosOsPosts()
-                            
-                            if(resultado!=0) setPosts(resultado)
-                                else setPosts(['oi'])
-                        }
-                    }
+                case 'pesquisa':
+                    setPosts(dataPost)
+                    break
+                case 'perfil':
+                    resultado = await buscarPostPorUserId(userId)
+                    if(resultado!=0) setPosts(resultado.reverse())
+                    break
+                default:
+                    console.log('valor de renderização inválido')
+                    setPosts([])
+                    break
+                }
+        }else{
+            const resultado = await searchUtils.buscarTodosOsPosts()
+            
+            if(resultado!=0) setPosts(resultado)
+            else setPosts([])
+        }
+    }
                     
 
     console.log(refreshState)

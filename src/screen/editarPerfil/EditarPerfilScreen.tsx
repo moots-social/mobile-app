@@ -7,7 +7,6 @@ import InputPerfil, { MultiLinhaInputPerfil } from "../../components/geral/Input
 import { ActionCurso } from '../../components/perfil/PerfilBotoes';
 import { useEffect, useState } from 'react';
 import Loading from '../../components/geral/Loading';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { abrirToast} from '../../components/geral/ToastMoots';
 
 import { logoutUser } from '../../utils/storageUtils';
@@ -55,16 +54,7 @@ export default function EditarPerfil({navigation}){
             Alert.alert('Sair', 'Tem certeza que deseja sair?', [
                 {
                     text: 'Sim',
-                    onPress: async() =>{
-                        try {
-                            const autenticado = await AsyncStorage.getItem('auth')
-                            if(autenticado==='true'){
-                                await logoutUser()
-                            }
-                        } catch (error) {
-                            console.error(error)
-                        }
-                    }
+                    onPress: async() => await logoutUser()
                 },
                 {
                     text: 'Não',
@@ -194,7 +184,6 @@ export default function EditarPerfil({navigation}){
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Área do moderador</TextoNegrito>
                         </Pressable>
                         )}
-                        {/* ! */}
                         {!disabledSalvar ? (<Pressable alignItems="center" isDisabled={disabledSalvar} onPress={handleSubmit}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito> 
                         </Pressable>) : <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16}></TextoNegrito>}

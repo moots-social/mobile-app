@@ -1,19 +1,17 @@
-import { Box, Image } from "@gluestack-ui/themed-native-base";
+import { Box, Image, ScrollView, useToast } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/geral/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useRef, useState } from "react";
-import { StatusBar } from "expo-status-bar";
+import { useRef, useState } from "react";
+
 import BotaoSecao from "../../components/botao/BotaoSecao";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import FormControlInput from "../../components/geral/FormControlInput";
-import { useAuthContext } from "../../context/AuthContext";
+
 import { login } from "../../utils/usuarioUtils";
-import { getAnyItemStorage } from "../../utils/storageUtils";
-import { ScrollView, useToast } from "@gluestack-ui/themed";
 import { abrirToast} from "../../components/geral/ToastMoots";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, } from "react-redux";
 import { autenticar } from "../../redux/useAutenticacao";
-import * as NavigationBar from 'expo-navigation-bar'
+
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
@@ -24,6 +22,7 @@ export default function Login({ navigation }) {
   
   const inputEmail = useRef(null)
   const inputSenha = useRef(null)
+
   const handleSubmit = async () => {
     if(email!=='' && senha !==''){
       const res = await login(email, senha)
@@ -37,15 +36,13 @@ export default function Login({ navigation }) {
   };
 
   const handleNextInput = (nextRef) => {
-    if (nextRef.current) {
+    if (nextRef && nextRef.current) {
       nextRef.current.focus();
     } else {
       handleSubmit();
     }
   };
-  useEffect(()=>{
-    NavigationBar.setBackgroundColorAsync('white')
-  }, [])
+  
   return (
     <LinearGradientMoots>
       <ScrollView>

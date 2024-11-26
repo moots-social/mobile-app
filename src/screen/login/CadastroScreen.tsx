@@ -1,14 +1,11 @@
-import { Box, FormControl, Image, Input, ScrollView, Text, VStack,} from "@gluestack-ui/themed-native-base";
-import { styled } from "@gluestack-style/react";
+import {Box, FormControl, Image, Input, ScrollView, Text, VStack, useToast } from "@gluestack-ui/themed";
+import { useRef, useState } from "react";
 import { TextoNegrito, Titulo } from "../../components/geral/Texto";
+import { styled } from "@gluestack-style/react";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import BotaoSecao from "../../components/botao/BotaoSecao";
-import { useRef, useState } from "react";
-import { usuarioApi } from "../../api/apis";
-import { Alert } from "react-native";
 import { buscarEmail } from "../../utils/usuarioUtils";
 import { abrirToast } from "../../components/geral/ToastMoots";
-import { useToast } from "@gluestack-ui/themed";
 
 const image = require("../../assets/MootsIcon.png");
 
@@ -77,12 +74,12 @@ export default function Cadastro({ navigation }) {
         }
       }
     } catch (error) {
-        console.error(error);
+        abrirToast(toast, 'error', 'Não foi possível continuar com o cadastro. Tente novamente mais tarde.', '', 1000, false)
     }
   };
 
   return (
-    <ScrollView>
+  <ScrollView>
 
     <Box flex={1}>
       <LinearGradientMoots>
@@ -164,6 +161,6 @@ export default function Cadastro({ navigation }) {
         </StyledVStack>
       </LinearGradientMoots>
     </Box>
-                    </ScrollView>
+  </ScrollView>
   );
 }
