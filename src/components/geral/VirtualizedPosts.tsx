@@ -21,6 +21,7 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                 case 'colecao':
                     let resultado = await buscarColecao()
                     if(resultado!=0) setPosts(resultado)
+                        
                         break
                     case 'pesquisa':
                         setPosts(dataPost)
@@ -45,13 +46,12 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                     }
                     
 
-    console.log(refreshState)
     useEffect(()=>{
         handleBuscarPosts()
     }, [refreshState])
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
-    return <VirtualizedList contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.id} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
+    return <VirtualizedList contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={3} keyExtractor={(item: any) => item.id} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
         <Post 
         postId={item.postId} 
         descricaoPost={item.texto} 

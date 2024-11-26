@@ -14,10 +14,11 @@ const menuIcon = require('../../assets/MenuIcon.png')
 interface IPropsMenu{
     userId: number,
     postId: number,
+    tagUsuario:string,
     setRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
+export function MenuPost({userId, postId, tagUsuario, setRefresh}: IPropsMenu){
     const usuario = useSelector((state)=> state.usuario.user)
     
     const toast = useToast()
@@ -35,7 +36,6 @@ export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
             setBotaoVisivel(true)
         }, 300)
     }
-
     const handleFechar = (textoBotao: string)=>{
         setTextoBotaoAcao(textoBotao)
         setBotaoVisivel(false)
@@ -87,7 +87,7 @@ export function MenuPost({userId, postId, setRefresh}: IPropsMenu){
             <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={handleNavigatePerfil}>
                 <MenuItemLabel>Visitar perfil</MenuItemLabel>
             </MenuItem>
-            {userId != usuario.userId ? (
+            {userId !== usuario.userId || tagUsuario!== usuario.tag ? (
             <MenuItem key="Denunciar" textValue="Denunciar" onPress={()=>handleAbrir('Carregando...')}>
                 <MenuItemLabel>Denunciar publicação</MenuItemLabel>
             </MenuItem>

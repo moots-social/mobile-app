@@ -94,7 +94,6 @@ export default function PostExpandido({route, navigation}) {
   
     useEffect(()=>{
       handleBuscarPostPorId()
-      if(veioDeComentario) comentarioRef.current.focus()
     }, [comentou, route.params])
     console.log(post)
   if(post==null) return <Loading isOpen={true}/>
@@ -136,6 +135,7 @@ export default function PostExpandido({route, navigation}) {
             <Image source={usuario.fotoPerfil || usuarioIcon} rounded={30} w={20} h={20} mr={10} />
             <Textarea w="90%">
               <TextareaInput
+                autoFocus={veioDeComentario}
                 placeholder={`Diga algo para ${post.tagUsuario || post.tag}...`}
                 fontFamily="Poppins_500Medium"
                 fontSize={12}
