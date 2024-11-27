@@ -57,7 +57,7 @@ export default function NovoPost({navigation}){
             let resultado = await ImagePicker.launchImageLibraryAsync({
                 allowsMultipleSelection: true,
                 selectionLimit: selectionLimit,
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                mediaTypes: 'images',
                 aspect: [4, 3],
                 quality: 0.7,
             })
@@ -73,7 +73,7 @@ export default function NovoPost({navigation}){
             abrirToast(toast, 'error', 'Quatro imagens já foram selecionadas para serem enviadas. Se deseja enviar outra imagem, exclua uma das imagens selecionadas.')
         }else{
             let resultado = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                mediaTypes: 'images',
                 aspect: [4, 3],
                 quality: 1,
             })
