@@ -9,7 +9,6 @@ import { Alert, Keyboard } from "react-native";
 import { abrirToast } from "../geral/ToastMoots";
 import FiltrosModal from "../modal/FiltrosModal";
 import { ScrollView } from "react-native-gesture-handler";
-import { useMiscContext } from "../../context/MiscContext";
 import { useDispatch, useSelector } from "react-redux";
 import searchUtils from "../../utils/searchUtils";
 import { novaListaTermo, novoTermo } from "../../redux/useUsuario";

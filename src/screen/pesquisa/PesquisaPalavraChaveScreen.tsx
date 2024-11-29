@@ -8,9 +8,11 @@ import Post from "../../components/post/Post";
 import { useSelector } from "react-redux";
 
 export default function PesquisaPalavraChave({navigation, route}: any){
+
     const {valor, dataPerfil, dataPost} = route.params
     const usuario = useSelector((state)=> state.usuario.user)
     const filtros = useSelector(state=> state.usuario.filtros)
+    
     return(
         <LinearGradientMoots>
             <ScrollView>
