@@ -12,7 +12,6 @@ export default function Colecao(){
     setRefreshing(true);
     setTimeout(()=>{
       setRefreshing(false);
-      console.log(refreshing)
     }, 1000)
   };
 

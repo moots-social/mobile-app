@@ -179,6 +179,17 @@ export const buscarColecao = async()=>{
     }
 }
 
+export const buscarPostsCurtidos = async() =>{
+    try {
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.buscarPostsCurtidos(Number(id))
+        return resultado.data
+    } catch (error) {
+        geralUtils.erro(error, 'buscarPostsCurtidos', 'usuarioUtils', error.response?.status || false)
+        return 0
+    }
+}
+
 export default {
     login,
     criar,
@@ -193,5 +204,6 @@ export default {
     excluirConta,
     blobUsuario,
     redefinirSenha,
-    buscarColecao
+    buscarColecao,
+    buscarPostsCurtidos,
 }

@@ -1,4 +1,4 @@
-import { Box, Image, Input, InputField, InputIcon, InputSlot, Pressable, styled, useToast } from "@gluestack-ui/themed";
+import { Box, Input, InputField, InputSlot, Pressable, styled, useToast } from "@gluestack-ui/themed";
 import { TextoNegrito } from "../geral/Texto";
 import { useRef, useState } from "react";
 import { StyledShadowBox } from "../../screen/login/CadastroScreen";
@@ -9,12 +9,10 @@ import { Alert, Keyboard } from "react-native";
 import { abrirToast } from "../geral/ToastMoots";
 import FiltrosModal from "../modal/FiltrosModal";
 import { ScrollView } from "react-native-gesture-handler";
-import { useMiscContext } from "../../context/MiscContext";
 import { useDispatch, useSelector } from "react-redux";
 import searchUtils from "../../utils/searchUtils";
 import { novaListaTermo, novoTermo } from "../../redux/useUsuario";
-const botaoEnviar = require('../../assets/EnviarIconRounded.png')
-const pesquisaIcon = require('../../assets/PesquisaIcon.png')
+import { BotaoEnviarNovoPost } from "../botao/BotoesPostComentario";
 
 interface ITermoProps{
     termo: string,
@@ -123,23 +121,16 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
 
                     <Box w={!extended ? "70%" : "85%"} $md-w={!extended ? '80%' : '90%'}>
                         <Input ref={input} onBlur={desfocarInput} variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid} onSubmitEditing={handlePesquisar}>
-                            <InputSlot>
-                                <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20} alt='pesquisa'/></InputIcon>
-                            </InputSlot>
+                            
                             <InputField 
                                 fontFamily="Poppins_500Medium" 
                                 placeholder={valor!='' ? valor : novoPlaceholder} 
-                                ml={-10} 
                                 pt={5} 
                                 value={valor}
                                 onChangeText={(novoValor)=>setValor(novoValor)}
                             />
                             <InputSlot>
-                                    <Pressable onPress={handlePesquisar}>
-                                        <InputIcon w="100%" mr={5} bottom={2}>
-                                            <Image source={botaoEnviar} w={20} h={20} alt='enviar'/>
-                                        </InputIcon>
-                                    </Pressable>
+                                <BotaoEnviarNovoPost onPress={handlePesquisar} mr={5}/>
                             </InputSlot>
                         </Input>
                     </Box>

@@ -1,26 +1,24 @@
-import { Image, Menu, MenuItem, MenuItemLabel, Pressable, Box, Divider, Modal, ModalBackdrop, ModalBody, ModalContent, ModalFooter, ModalHeader, Text, useToast } from "@gluestack-ui/themed"
+import { Image, Menu, MenuItem, MenuItemLabel, Pressable, Box, Divider, Modal, ModalBackdrop, ModalBody, ModalContent, ModalFooter, ModalHeader, Text, useToast, MenuIcon, TrashIcon, ExternalLinkIcon, AlertCircleIcon } from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
 import { useState } from "react"
 import { TextoNegrito, Titulo } from "../geral/Texto"
 import { MultiLinhaInputPerfil } from "../geral/InputPerfil"
 import BotaoSecao from "../botao/BotaoSecao"
 import { useSelector } from "react-redux"
-import { apis } from "../../api/apis"
 import { abrirToast} from "../../components/geral/ToastMoots";
-import postUtils from "../../utils/postUtils"
+import postUtils, { excluirPost } from "../../utils/postUtils"
+import { LazyIcon } from "../geral/LazyImage"
 
 const menuIcon = require('../../assets/MenuIcon.png')
 
 interface IPropsMenu{
     userId: number,
     postId: number,
-    tagUsuario:string,
     setRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function MenuPost({userId, postId, tagUsuario, setRefresh}: IPropsMenu){
+export function MenuPost({userId, postId}: IPropsMenu){
     const usuario = useSelector((state)=> state.usuario.user)
-    
     const toast = useToast()
     const navigation = useNavigation()
     const [denuncia, setDenuncia] = useState<string>('')
@@ -28,7 +26,7 @@ export function MenuPost({userId, postId, tagUsuario, setRefresh}: IPropsMenu){
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const [botaoVisivel, setBotaoVisivel] = useState<boolean>(false)
     const [textoBotaoAcao, setTextoBotaoAcao] = useState<string>('')
-
+    
     const handleAbrir = (textoBotao: string)=>{
         setTextoBotaoAcao(textoBotao)
         setModalVisivel(true)
@@ -45,16 +43,10 @@ export function MenuPost({userId, postId, tagUsuario, setRefresh}: IPropsMenu){
     }
 
     const handleExcluirPost = async() =>{
-        const req = await apis.post.excluirPost(postId)
-        console.warn(req.data)
-        if(req){
-            abrirToast(toast, 'success', 'Post excluido com sucesso', '', 2000, true)
-            // setRefresh(prev => !prev);
-            // navigation.navigate('feed')
-        }else {
-            alert('deu bom não fi ' + postId)
-        }
-    
+        const res = await excluirPost(postId)
+        if(res!==0){
+            abrirToast(toast, 'success', `Post ${postId} excluído com sucesso`, '', 1000, false)
+        } else abrirToast(toast, 'error', `Não foi possível excluir esse post.`, '', 1000, false)
     }
 
     const handleNavigatePerfil = () =>{
@@ -80,19 +72,22 @@ export function MenuPost({userId, postId, tagUsuario, setRefresh}: IPropsMenu){
         <Menu trigger={({ ...triggerProps})=>{
             return(
                 <Pressable {...triggerProps} bg="$white" h={25}>
-                    <Image source={menuIcon} size="2xs" alt='menu'/>
+                    <LazyIcon imagem={menuIcon} style={{width: 28, height: 28}}/>
                 </Pressable>
             )
             }}>
             <MenuItem key="VerPerfil" textValue="VerPerfil" onPress={handleNavigatePerfil}>
+                <MenuIcon as={ExternalLinkIcon} mr='$1'/>
                 <MenuItemLabel>Visitar perfil</MenuItemLabel>
             </MenuItem>
-            {userId !== usuario.userId || tagUsuario!== usuario.tag ? (
+            {userId != usuario.userId  ? (
             <MenuItem key="Denunciar" textValue="Denunciar" onPress={()=>handleAbrir('Carregando...')}>
+                <MenuIcon as={AlertCircleIcon} mr='$1'/>
                 <MenuItemLabel>Denunciar publicação</MenuItemLabel>
             </MenuItem>
             ) : (
                 <MenuItem key="Excluir" textValue="Excluir" onPress={()=>handleExcluirPost()}>
+                <MenuIcon as={TrashIcon} mr='$1'/>
                 <MenuItemLabel>Excluir publicação</MenuItemLabel>
             </MenuItem>
             )}

@@ -21,14 +21,15 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                 case 'colecao':
                     let resultado = await buscarColecao()
                     if(resultado!=0) setPosts(resultado)
-                        
-                        break
+                    else setPosts([])
+                    break
                 case 'pesquisa':
                     setPosts(dataPost)
                     break
                 case 'perfil':
                     resultado = await buscarPostPorUserId(userId)
                     if(resultado!=0) setPosts(resultado.reverse())
+                    else setPosts([])
                     break
                 default:
                     console.log('valor de renderização inválido')
@@ -39,7 +40,9 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
             const resultado = await searchUtils.buscarTodosOsPosts()
             
             if(resultado!=0) setPosts(resultado)
-            else setPosts([])
+            else{
+                setPosts([])
+            } 
         }
     }
                     
@@ -49,7 +52,8 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
     }, [refreshState])
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
-    return <VirtualizedList contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={3} keyExtractor={(item: any) => item.id} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
+    if(posts && posts.length<=0) return <TextoNegrito>Nenhuma publicação encontrada.</TextoNegrito>
+    return <VirtualizedList contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={3} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
         <Post 
         postId={item.postId} 
         descricaoPost={item.texto} 

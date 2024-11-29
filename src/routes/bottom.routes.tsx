@@ -6,10 +6,11 @@ import Colecao from "../screen/colecao/ColecaoScreen"
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
-import { Box, Image } from "@gluestack-ui/themed"
+import { LazyIcon } from "../components/geral/LazyImage"
+import { Box } from "@gluestack-ui/themed"
 import { useEffect } from "react"
 import { logoutUser } from "../utils/storageUtils"
-import { buscar, buscarColecao, buscarQuemSegue } from "../utils/usuarioUtils"
+import { buscar, buscarColecao, buscarPostsCurtidos, buscarQuemSegue } from "../utils/usuarioUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../redux/useUsuario"
 import { autenticar } from "../redux/useAutenticacao"
@@ -25,7 +26,7 @@ const {Screen, Navigator} = createBottomTabNavigator()
 //botão de rota com cores e ícones personalizados 
 function IconePersonalizado({tab, focused}: any){
     return  <Box h="100%" w="$12" justifyContent="center" px={10} rounded='$lg' bgColor={focused ? '#EDEDED' : '$white'}>
-                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.3} rounded={tab.id === 4 ? 30 : 0} />
+                <LazyIcon imagem={tab.icon} style={{width: 30, height: 30, opacity: focused ? 1 : 0.3, borderRadius: tab.id===4 ? 30 : 0}}/>
             </Box>
    
 }
@@ -82,7 +83,11 @@ export default function Bottom(){
                         getSeguindo = arrayIdSeguindo
                     }
                     let getColecao = await buscarColecao()
-                    dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo, colecaoSalvos: getColecao}))
+                    let getPostsCurtidos = await buscarPostsCurtidos()
+                    if(getPostsCurtidos==0){
+                        getPostsCurtidos = []
+                    }
+                    dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo, colecaoSalvos: getColecao, idPostsCurtidos: getPostsCurtidos}))
                 }
             }catch (error){
                 await logoutUser()

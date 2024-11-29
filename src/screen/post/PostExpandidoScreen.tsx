@@ -15,6 +15,8 @@ import Loading from "../../components/geral/Loading";
 import { abrirToast } from "../../components/geral/ToastMoots";
 import { apis, comentarioApi, postApi } from "../../api/apis";
 import { TextoNegrito } from "../../components/geral/Texto";
+import { BotaoEnviarNovoPost } from "../../components/botao/BotoesPostComentario";
+import { LazyIcon } from "../../components/geral/LazyImage";
 
 export default function PostExpandido({route, navigation}) {
   const [post, setPost] = useState<any>(route.params.post || null)
@@ -29,44 +31,21 @@ export default function PostExpandido({route, navigation}) {
 
   const handleBuscarPostPorId = async()=>{
       const resultado = await postUtils.buscarPostPorId(postId || post.postId)
-      console.log(resultado)
       if(resultado!==0){
-        console.log(resultado)
         setPost(resultado)
       } else {
         navigation.navigate('tabs')
-        abrirToast(toast, 'error', 'Não foi possível abrir a publicação. Talvez ela tenha sido excluída.')
+        abrirToast(toast, 'error', 'Não foi possível abrir a publicação.\nTalvez ela tenha sido excluída.', '', 2000, false)
       }
   }
-
-  const handleLikeChange = async (postId: string, deuLike: boolean) => {
-    try {
-      const likeStatus = deuLike ? false : true;
-
-      const dados = await apis.post.curtirPost(postId, likeStatus);
-      const req = await dados.data;
-
-        // Atualiza apenas o post que foi curtir/descurtir
-        setPublics(prevPublics =>
-          prevPublics.map((post) =>
-            post.id === postId
-              ? { ...post, contadorLike: req.contadorLike, like: likeStatus }
-              : post
-          )
-        );
-      setDeuLike(!deuLike)
-    } catch (error: any) {
-      console.log(error.response.data.error);
-    }
-  };
 
   const handleSalvarPost = (postId: number) => {
     try{
       postApi.salvarPost(postId)
-      abrirToast(toast, 'success', 'Post salvo com sucesso', '', 2000, true)
+      abrirToast(toast, 'success', 'Post salvo com sucesso.', '', 2000, true)
 
     } catch(error: any){
-      alert(error.response.message.error || "erro ao salvar post")
+      abrirToast(toast, 'error', 'Tente novamente mais tarde.', 'Erro')
     }
   }
 
@@ -85,7 +64,7 @@ export default function PostExpandido({route, navigation}) {
         }
       } catch (error) {
         console.error(error);
-        alert(error);
+        abrirToast(toast, 'error', 'Não foi possível enviar o comentário.\nTalvez essa publicação tenha sido excluída.', '', 2000, false)
       }
     } else{
       abrirToast(toast, 'error', 'Digite algo para enviar um comentário.')
@@ -95,7 +74,7 @@ export default function PostExpandido({route, navigation}) {
     useEffect(()=>{
       handleBuscarPostPorId()
     }, [comentou, route.params])
-    console.log(post)
+    
   if(post==null) return <Loading isOpen={true}/>
   else return (
     <LinearGradientMoots>
@@ -132,7 +111,7 @@ export default function PostExpandido({route, navigation}) {
         display="flex"
         >
           <Box p={10} flexDirection="row">
-            <Image source={usuario.fotoPerfil || usuarioIcon} rounded={30} w={20} h={20} mr={10} />
+            <LazyIcon imagem={usuario.fotoPerfil || usuarioIcon} style={{borderRadius: 30, width: 20, height: 20, marginRight: 10}}/>
             <Textarea w="90%">
               <TextareaInput
                 autoFocus={veioDeComentario}
@@ -143,15 +122,7 @@ export default function PostExpandido({route, navigation}) {
                 onChangeText={(text) => setComentario(text)}
                 ref={comentarioRef}
                 />
-              <Pressable onPress={() => handleNovoComentario()}>
-                <Image
-                  source={enviarIcon}
-                  w={20}
-                  h={20}
-                  m={5}
-                  alignSelf="flex-end"
-                  />
-              </Pressable>
+                <BotaoEnviarNovoPost alignSelf="flex-end" m={5} onPress={() => handleNovoComentario()}/>
             </Textarea>
           </Box>
           <Divider w="92%" alignSelf="center" h={2} />

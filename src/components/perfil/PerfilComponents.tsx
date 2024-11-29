@@ -6,8 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import ImageView from "react-native-image-viewing"
 import { useSelector } from "react-redux";
-import { buscarPostPorUserId } from "../../utils/searchUtils";
 import VirtualizedPosts from "../geral/VirtualizedPosts";
+import { LazyImage } from "../geral/LazyImage";
 
 interface IFotoCapaBoxProps{
     fotoPerfilSource: any,
@@ -45,10 +45,10 @@ export function FotoCapaBox({fotoPerfilSource, fotoCapaSource, ...rest}: IFotoCa
 
     return <Box display="flex" justifyContent="flex-end" {...rest}>
                 <Pressable onPress={()=>handleExpandirFoto(0)}>            
-                    <Image source={fotoCapaSource} w="100%" h={220} borderBottomLeftRadius={10} borderBottomRightRadius={10} position="relative" zIndex={0} alt='capa'/>
+                    <LazyImage imagem={fotoCapaSource} placeholder={coverIcon} style={{width: '100%', height: 220, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, position: 'relative', zIndex: 0}}/>
                 </Pressable>
                 <Pressable alignSelf="center" zIndex={1} position="absolute" top={170} onPress={()=>handleExpandirFoto(1)}>
-                    <Image source={fotoPerfilSource || usuarioIcon} w={100}  h={100} rounded={60} alt='foto de perfil'/>
+                    <LazyImage imagem={fotoPerfilSource || usuarioIcon} placeholder={usuarioIcon} style={{width: 100, height: 100, borderRadius: 60}}/>
                 </Pressable>
                 <ImageView 
                     images={[{uri: fotoCapaSource}, {uri: fotoPerfilSource || usuarioIcon}]}
@@ -69,23 +69,23 @@ export function TextoBox({nomeCompleto, tag, descricao , ...rest}: ITextoBoxProp
 
 export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxProps){
     const usuario = useSelector(state => state.usuario.user)
-    const [testState, setTestState] = useState<string>('')
+    const [cursoState, setCursoState] = useState<string>('')
     useEffect(()=>{
-        setTestState(curso)
+        setCursoState(curso)
     }, [usuario.curso])
     return <Box flexDirection='row' alignItems="center" justifyContent="space-between" alignSelf="center" w={180} my={10}>
             {!seguir ? <BotaoConfigurar w={35} imgW={15} imgH={15} /> : <BotaoSeguir rounded={20} imgW={15} imgH={12} id1={usuario.id} id2={getUsuario.userId} nomeCompleto={getUsuario.nomeCompleto} />}
-            <BotaoCurso curso={testState} />
+            <BotaoCurso curso={cursoState} />
             <BotaoListaSeguidores rounded={20} w={35} imgW={12} imgH={12} getUsuario={getUsuario} /> 
         </Box>
 }
 
 export function PublicacoesBox({userId}){
+    const [refresh, setRefresh] = useState<boolean>(false)
     
     return <Box alignItems="center">
             <Titulo>Publicações</Titulo>
-            {/* {dataPost.length>0 ? <VirtualizedPosts w="100%" dataPost={dataPost}/> : <TextoNegrito fontFamily="Poppins_500Medium">Sem publicações para mostrar.</TextoNegrito>} */}
-            <VirtualizedPosts userId={userId} localDeRenderizacao="perfil"/>
+            <VirtualizedPosts userId={userId} localDeRenderizacao="perfil" refreshState={refresh}/>
         </Box>
 }
 
