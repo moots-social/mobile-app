@@ -4,8 +4,8 @@ import { Box, Divider, ScrollView, FlatList, VirtualizedList } from "@gluestack-
 import { RoundedTop } from "../../components/geral/Rounded";
 import CartaoUsuario from "../../components/perfil/CartaoUsuario";
 import { TextoNegrito, Titulo } from "../../components/geral/Texto";
-import Post from "../../components/post/Post";
 import { useSelector } from "react-redux";
+import VirtualizedPosts from "../../components/geral/VirtualizedPosts";
 
 export default function PesquisaPalavraChave({navigation, route}: any){
 
@@ -32,9 +32,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                         <Box alignItems="center" minHeight={545}>
                             <Titulo fontFamily="Poppins_500Medium">Publicações</Titulo>
                             {dataPost && dataPost.length>0 ? (
-                                <VirtualizedList contentContainerStyle={{alignItems: 'center'}} w="95%" data={dataPost} initialNumToRender={3} keyExtractor={(item: any) => item.id} getItem={(data, index)=>data[index]} getItemCount={() => dataPost.length} renderItem={({item}: any)=> (
-                                    <Post postId={item.postId} descricaoPost={item.texto} imagemPost={item.listImagens} imagemPerfil={item.fotoPerfil} userId={item.userId} nomeUsuario={item.nomeCompleto} tagUsuario={item.tag} mb={20} rw="100%" mx='$5'/>
-                                )}/>
+                                <VirtualizedPosts localDeRenderizacao="pesquisa" dataPost={dataPost} userId={0} refreshState={false}/>
                             ): <TextoNegrito fontFamily="Poppins_500Medium" >{filtros.radioGeral!=='usuarios' ? 'Nenhuma publicação encontrada.' :
                                 'Filtro para buscar apenas usuários ativado.'}</TextoNegrito>}
                         </Box>

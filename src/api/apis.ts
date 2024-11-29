@@ -65,6 +65,7 @@ export const usuarioApi = {
     buscarQuemSegue: (id: number) => api.get(`/user/buscar-quem-segue/${id}`),
     buscarSeguidores: (id: number) => api.get(`/user/buscar-seguidores/${id}`),
     buscarColecao: (id: number) => api.get(`/user/colecao-salvos/${id}`),
+    buscarPostsCurtidos: (id: number) => api.get(`/user/likedPosts/${id}`),
     atualizar: (id: number, usuario: any) =>{
         const {nomeCompleto, descricao, curso, fotoPerfil, fotoCapa} = usuario
         const resultado = api.put(`/user/atualizar/${id}`, {nomeCompleto, descricao, curso, fotoPerfil, fotoCapa})

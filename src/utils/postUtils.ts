@@ -37,6 +37,7 @@ export const excluirPost = async(postId: number)=>{
             denunciasNoPost.map(async(denuncia: any)=>await excluirDenuncia(denuncia.id, postId))
         }
         await apis.post.excluirPost(postId)
+        return 200
     } catch (error) {
         geralUtils.erro(error, 'excluirPost', 'postUtils', error.response.status)
         return 0

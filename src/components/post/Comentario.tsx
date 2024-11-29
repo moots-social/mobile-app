@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { abrirToast } from "../geral/ToastMoots";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { LazyImage } from "../geral/LazyImage";
 
 //ao implementar lógica, deixar todos como obrigatórios
 interface IComentarioProps{
@@ -49,8 +50,8 @@ export default function Comentario({fotoPerfil, tag, conteudo, comentarioId, pos
     return(
         <Box bg="$white" display="flex" px={10} {...rest}>
             <Box flexDirection="row">
-                <Pressable onPress={handleClickPerfil}>
-                    <Image source={fotoPerfil || usuarioIcon} w={30} h={30} mr={5} borderRadius={30} alt='foto do usuário'/>
+                <Pressable onPress={handleClickPerfil} mr={5}>
+                    <LazyImage imagem={fotoPerfil || usuarioIcon} style={{borderRadius: 30, width: 30, height: 30}} />
                 </Pressable>
                 <Box  flexDirection='row' w='75%'>
                     <TextoNegrito onPress={handleClickPerfil} fontSize={12}>{tag}: </TextoNegrito>
