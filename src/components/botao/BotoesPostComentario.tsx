@@ -15,8 +15,8 @@ const enviarIcon = require('../../assets/EnviarIconRounded.png')
 
 //ao atualizar tamanho do botão, atualizar também tamanho da imagem
 interface IBotaoComentarioProps{
-    imgW: number,
-    imgH: number
+    imgW: number | string,
+    imgH: number | string
 }
 
 interface IBotaoPostProps{
@@ -35,7 +35,7 @@ export function BotaoExcluirComentario({imgW, imgH, ...rest}: IBotaoComentarioPr
 export function BotaoCurtirPost({curtiu, ...rest}){
     return(
         <Pressable {...rest}>
-            <LazyIcon imagem={!curtiu ? coracaoIcon : coracaoCurtidoIcon} style={{width: 30, height: !curtiu ? 28 : 30}}/>
+            <LazyIcon imagem={!curtiu ? coracaoIcon : coracaoCurtidoIcon} style={{width: 28, height: 28}}/>
         </Pressable>
     )
 }

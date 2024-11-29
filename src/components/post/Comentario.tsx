@@ -1,6 +1,6 @@
 import { Box, Image, Pressable, Text, useToast } from "@gluestack-ui/themed";
 import { TextoNegrito } from "../geral/Texto";
-import { BotaoCurtirComentario, BotaoDescurtirComentario, BotaoExcluirComentario } from "../botao/BotoesPostComentario";
+import { BotaoExcluirComentario } from "../botao/BotoesPostComentario";
 import { usuarioIcon } from "../perfil/PerfilComponents";
 import { excluirComentario } from "../../utils/postUtils";
 import { useSelector } from "react-redux";
@@ -8,6 +8,8 @@ import { abrirToast } from "../geral/ToastMoots";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LazyImage } from "../geral/LazyImage";
+import { useState } from "react";
+import { BareLoading } from "../geral/Loading";
 
 //ao implementar lógica, deixar todos como obrigatórios
 interface IComentarioProps{
@@ -24,7 +26,7 @@ export default function Comentario({fotoPerfil, tag, conteudo, comentarioId, pos
     const toast = useToast()
     const navigation = useNavigation()
     const tagUsuarioLogado = useSelector(state => state.usuario.user.tag)
-
+    const [excluindoComentario, setExcluindoComentario] = useState<boolean>(false)
     const handleExcluirComentario=async()=>{
         Alert.alert('Excluir comentário', 'Tem certeza que deseja excluir seu comentário?', [
             {
@@ -32,9 +34,13 @@ export default function Comentario({fotoPerfil, tag, conteudo, comentarioId, pos
                 onPress : async()=>{
                     const res = await excluirComentario(comentarioId, postId)
                     if(res.id){
+                        setExcluindoComentario(true)
                         onComentarioExcluido()
                         abrirToast(toast, 'success', 'Comentário excluído com sucesso.', '', 1000, false)
-                    } else abrirToast(toast, 'error', 'Deu erro man')
+                        setTimeout(()=>{
+                            setExcluindoComentario(false)
+                        }, 500)
+                    } else abrirToast(toast, 'error', 'Erro ao excluir o comentário. Tente novamente mais tarde.')
                 }
             },
             {
@@ -60,7 +66,7 @@ export default function Comentario({fotoPerfil, tag, conteudo, comentarioId, pos
             </Box>
             {tag==tagUsuarioLogado && (
                 <Box flexDirection="row" justifyContent="flex-end" bottom={5}>
-                    <BotaoExcluirComentario imgW='$5' imgH='$5' onPress={handleExcluirComentario}/>
+                    {!excluindoComentario ? <BotaoExcluirComentario imgW='$5' imgH='$5' onPress={handleExcluirComentario}/> : <BareLoading />}
                 </Box>
             )}
         </Box>

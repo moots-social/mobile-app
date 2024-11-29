@@ -3,7 +3,6 @@ import {BASE_URL} from '@env'
 
 import { getTokenStorage, logoutUser } from "../utils/storageUtils"
 const baseURL = BASE_URL
-
 const apiSemToken = axios.create({
     baseURL,
     headers: {

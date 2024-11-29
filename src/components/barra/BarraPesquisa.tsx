@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import searchUtils from "../../utils/searchUtils";
 import { novaListaTermo, novoTermo } from "../../redux/useUsuario";
 import { BotaoEnviarNovoPost } from "../botao/BotoesPostComentario";
+import { BareLoading } from "../geral/Loading";
 
 interface ITermoProps{
     termo: string,
@@ -42,6 +43,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     let novoPlaceholder = filtros.radioGeral!=='tudo' || filtros.radioUsuario!=='qualquerUm' || filtros.selectUsuario!=='Qualquer' || !filtros.checkPublicacoes ? extended ? "Pesquise algo... [FILTROS]" : '[FILTROS]' : 'Pesquise algo...'
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>(valorParam || '')
+    const [enviandoPesquisa, setEnviandoPesquisa] = useState<boolean>(false)
 
     const voltar = () =>{
         navigation.goBack()
@@ -61,6 +63,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
         else{
             setIsInvalid(false)
             try {
+                setEnviandoPesquisa(true)
                 let resultadoPerfil = null
                 let resultadoPost = null
 
@@ -105,7 +108,9 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                     setValor('')
                 }
             } catch (error) {
-                console.error(error)
+                abrirToast(toast, 'error', 'Não foi possível realizar a pesquisa. Tente novamente.')
+            } finally {
+                setEnviandoPesquisa(false)
             }
         }
     }
@@ -130,7 +135,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                                 onChangeText={(novoValor)=>setValor(novoValor)}
                             />
                             <InputSlot>
-                                <BotaoEnviarNovoPost onPress={handlePesquisar} mr={5}/>
+                                {!enviandoPesquisa ? <BotaoEnviarNovoPost onPress={handlePesquisar} mr={10}/> : <BareLoading mr={10}/>}
                             </InputSlot>
                         </Input>
                     </Box>

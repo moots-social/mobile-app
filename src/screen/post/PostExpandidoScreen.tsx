@@ -11,7 +11,7 @@ import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import postUtils from "../../utils/postUtils";
-import Loading from "../../components/geral/Loading";
+import Loading, { BareLoading } from "../../components/geral/Loading";
 import { abrirToast } from "../../components/geral/ToastMoots";
 import { apis, comentarioApi, postApi } from "../../api/apis";
 import { TextoNegrito } from "../../components/geral/Texto";
@@ -19,9 +19,9 @@ import { BotaoEnviarNovoPost } from "../../components/botao/BotoesPostComentario
 import { LazyIcon } from "../../components/geral/LazyImage";
 
 export default function PostExpandido({route, navigation}) {
+  const [enviandoComentario, setEnviandoComentario] = useState<boolean>(false)
   const [post, setPost] = useState<any>(route.params.post || null)
   const postId = route.params.postId || null
-  const [deuLike, setDeuLike] = useState<boolean>(true);
   const toast = useToast()
   const usuario = useSelector((state)=> state.usuario.user)
   const comentarioRef = useRef(null)
@@ -52,6 +52,7 @@ export default function PostExpandido({route, navigation}) {
   const handleNovoComentario = async () => {
     if(comentario!==''){
       try {
+        setEnviandoComentario(true)
         const resposta = await comentarioApi.novoComentario(post.postId, comentario);
         if (resposta) {
           setComentario("");
@@ -65,6 +66,8 @@ export default function PostExpandido({route, navigation}) {
       } catch (error) {
         console.error(error);
         abrirToast(toast, 'error', 'Não foi possível enviar o comentário.\nTalvez essa publicação tenha sido excluída.', '', 2000, false)
+      } finally {
+        setEnviandoComentario(false)
       }
     } else{
       abrirToast(toast, 'error', 'Digite algo para enviar um comentário.')
@@ -122,7 +125,8 @@ export default function PostExpandido({route, navigation}) {
                 onChangeText={(text) => setComentario(text)}
                 ref={comentarioRef}
                 />
-                <BotaoEnviarNovoPost alignSelf="flex-end" m={5} onPress={() => handleNovoComentario()}/>
+                {/* <BotaoEnviarNovoPost alignSelf="flex-end" m={5} onPress={() => handleNovoComentario()}/> */}
+                {!enviandoComentario ? <BotaoEnviarNovoPost alignSelf="flex-end" m={5} onPress={() => handleNovoComentario()}/> : <BareLoading m={5} alignSelf='flex-end'/>}
             </Textarea>
           </Box>
           <Divider w="92%" alignSelf="center" h={2} />

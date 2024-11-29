@@ -7,6 +7,7 @@ interface ILazyProps{
 
 const postPlaceholder = require('../../assets/PlaceholderImagemPost.png')
 const iconPlaceholder = require('../../assets/PlaceholderIconMoots.png')
+
 export function LazyImage({imagem, placeholder, ...rest}: Partial<ILazyProps>){
     return <Image 
             source={imagem}

@@ -45,7 +45,7 @@ export function MenuPost({userId, postId}: IPropsMenu){
     const handleExcluirPost = async() =>{
         const res = await excluirPost(postId)
         if(res!==0){
-            abrirToast(toast, 'success', `Post ${postId} excluído com sucesso`, '', 1000, false)
+            abrirToast(toast, 'success', `Sua publicação foi excluída com sucesso.\nRecarregue a página para que o post não apareça mais.`, '', 1000, false)
         } else abrirToast(toast, 'error', `Não foi possível excluir esse post.`, '', 1000, false)
     }
 

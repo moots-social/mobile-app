@@ -1,4 +1,4 @@
-import { Box, CloseIcon, Icon, Image, Pressable, ScrollView, Text, Textarea, TextareaInput, useToast} from "@gluestack-ui/themed";
+import { Box, Image, ScrollView, Textarea, TextareaInput, useToast} from "@gluestack-ui/themed";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import { RoundedBottom } from "../../components/geral/Rounded";
@@ -11,9 +11,10 @@ import ImageView from "react-native-image-viewing"
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria} from "../../components/botao/BotoesPostComentario";
 import { Alert } from "react-native";
-
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { useSelector } from "react-redux";
+import { LazyImage } from "../../components/geral/LazyImage";
+import { BareLoading } from "../../components/geral/Loading";
 
 export default function NovoPost({navigation}){
     const toast = useToast()
@@ -22,6 +23,7 @@ export default function NovoPost({navigation}){
     const [uris, setUris] = useState<string[]>([''])
     const [isVisible, setIsVisible] = useState(false)
     const [index, setIndex] = useState<number>(0)
+    const [enviandoPost, setEnviandoPost] = useState<boolean>(false)
     const usuario = useSelector((state)=> state.usuario.user)
     
     const handleExpandirFoto = (index: number) => {
@@ -31,6 +33,7 @@ export default function NovoPost({navigation}){
 
     const handleSubmit = async()=>{
         try {
+            setEnviandoPost(true)
             if(texto === '' && imagens.length == 0){
                 abrirToast(toast, 'error', 'Digite algo ou selecione uma imagem para criar uma nova publicação.')
             }else{ 
@@ -44,7 +47,9 @@ export default function NovoPost({navigation}){
                 }
             }
         } catch (error) {
-            alert(error)
+            abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
+        } finally{
+            setEnviandoPost(false)
         }
     }
 
@@ -53,7 +58,6 @@ export default function NovoPost({navigation}){
                 abrirToast(toast, 'error', 'Quatro imagens já foram selecionadas para serem enviadas. Se deseja enviar outra imagem, exclua uma das imagens selecionadas.')
         }else{
             let selectionLimit: number = 4 - imagens.length
-            console.log(selectionLimit)
             let resultado = await ImagePicker.launchImageLibraryAsync({
                 allowsMultipleSelection: true,
                 selectionLimit: selectionLimit,
@@ -101,7 +105,7 @@ export default function NovoPost({navigation}){
 
     useEffect(() => {
         const getUriImagens = () => {
-            if(imagens.length>0) setUris(imagens.map((imagem) => imagem.uri))
+            setUris(imagens.map((imagem) => imagem.uri))
         };
     
         getUriImagens()
@@ -131,7 +135,7 @@ export default function NovoPost({navigation}){
                                     <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false}>
                                     {imagens.length>0 && imagens.map((imagem, index) => {
                                             return <TouchableOpacity onLongPress={()=>handleRemoverImagem(index)} onPress={()=>handleExpandirFoto(index)}>
-                                                    <Image source={imagem} mr={10} rounded={10} h={200} w={200}/>
+                                                    <LazyImage imagem={imagem} style={{width: 200, height: 200, borderRadius: 10, marginRight: 10}}/>
                                                 </TouchableOpacity>
                                         })}
                                     </ScrollView>
@@ -142,7 +146,7 @@ export default function NovoPost({navigation}){
                                     <BotaoGaleria onPress={selecionarImagem}/>
                                     <BotaoCamera onPress={tirarFoto}/>
                                 </Box>
-                                <BotaoEnviarNovoPost onPress={handleSubmit}/>
+                                {!enviandoPost ? <BotaoEnviarNovoPost onPress={handleSubmit}/> : <BareLoading />}
                             </Box>
                         </Box>
                     </RoundedBottom>
