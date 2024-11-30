@@ -14,6 +14,8 @@ import { abrirToast } from "../geral/ToastMoots";
 import { buscarColecao, buscarPostsCurtidos } from "../../utils/usuarioUtils";
 import { setarUsuario } from "../../redux/useUsuario";
 import {LazyImage} from "../geral/LazyImage";
+import { StatusBar } from "expo-status-bar";
+import { BareLoading } from "../geral/Loading";
 
 interface IPostProps {
   postId: number;
@@ -62,34 +64,52 @@ export default function Post({
   const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil, contadorLike, postId, likeUsers };
   const usuario = useSelector(state=> state.usuario.user)
   const dispatch = useDispatch()
-  const [curtiu, setCurtiu] = useState<boolean>()
-  const [salvou, setSalvou] = useState<boolean>()
+  const [curtiu, setCurtiu] = useState<boolean>(false)
+  const [salvou, setSalvou] = useState<boolean>(false)
+  const [clicouCurtiu, setClicouCurtiu] = useState<boolean>()
+  const [clicouSalvou, setClicouSalvou] = useState<boolean>()
+  const [mostrarTextoCompleto, setMostrarTextoCompleto] = useState<boolean>(false)
   const imagensFormatadas = imagemPost ? [{ uri: imagemPost[0] }, { uri: imagemPost[1] }, { uri: imagemPost[2] }, { uri: imagemPost[3] }] : [{}];
 
+  const textoResumido = descricaoPost?.length > 0
+  ? mostrarTextoCompleto ? descricaoPost : descricaoPost.substring(0, 100)
+  : ""
   const handleExpandirFoto = (index: number) => {
     setIndex(index);
     setIsVisible(true); 
   };
 
   const handleCurtirPost = async()=>{
+    setClicouCurtiu(true)
     if(curtiu){
       const res = await postUtils.curtirPost(postId, false)
+      console.log(res)
       if(res==0){
         abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
+        setClicouCurtiu(false)
+        return
       } 
     } else{
       const res = await postUtils.curtirPost(postId, true)
+      console.log(res)
       if(res==0) {
         abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
+        setClicouCurtiu(false)
+        return
       }
+      abrirToast(toast, 'success', `Você curtiu a publicação de ${tagUsuario}.`, '', 1000, false)
     }
     const listaCurtidasAtualizadas = await buscarPostsCurtidos()
     dispatch(setarUsuario({...usuario, idPostsCurtidos: listaCurtidasAtualizadas}))
+    setClicouCurtiu(false)
+    console.log(curtiu)
   }
 
   const handleSalvarPost = async()=>{
+    setClicouSalvou(true)
     if (salvou) {
       const res = await postUtils.removerPostSalvo(postId)
+      console.log(res)
       if(res==200){
         // setSalvou(false)
         abrirToast(toast, 'success', 'Publicação removida da coleção com sucesso.', '', 1000, false)
@@ -97,6 +117,7 @@ export default function Post({
       }
     }else{
       const res = await postUtils.salvarPost(postId)
+      console.log(res)
       if(res==200){
         // setSalvou(true)
         abrirToast(toast, 'success', 'Publicação salva com sucesso.', '', 1000, false)
@@ -104,6 +125,7 @@ export default function Post({
     }
     const listaDeSalvosAtualizada = await buscarColecao()
     dispatch(setarUsuario({...usuario, colecaoSalvos: listaDeSalvosAtualizada}))
+    setClicouSalvou(false)
   }
       const handleClickComentario = () =>{
         navigation.navigate('expandido', {post: postObject, veioDeComentario: true})
@@ -113,40 +135,43 @@ export default function Post({
         navigation.navigate('outro-perfil', {userId})
       }
       
+      const handleIsSalvo = async() =>{
+        const checkIsSalvo = await usuario.colecaoSalvos.some(dado => dado.postId == postId)
+        setSalvou(checkIsSalvo)
+      }
       useEffect(()=>{
-        const handleIsSalvo = async() =>{
-          const checkIsSalvo = await usuario.colecaoSalvos.some(dado => dado.postId == postId)
-          setSalvou(checkIsSalvo)
-        }
         handleIsSalvo()
-      }, [postId, usuario.colecaoSalvos])
+      }, [postId, usuario.colecaoSalvos, clicouSalvou])
       
+      const handleIsCurtido = async()=>{
+        const checkIsCurtido = await usuario.idPostsCurtidos.some(dado => dado == postId)
+        setCurtiu(checkIsCurtido)
+      }
       useEffect(()=>{
-        const handleIsCurtido = async()=>{
-          const checkIsCurtido = await usuario.idPostsCurtidos.some(dado => dado == postId)
-          setCurtiu(checkIsCurtido)
-        }
         
         handleIsCurtido()
-      }, [postId, usuario.idPostsCurtidos])
-  return (
-    <>
+      }, [postId, usuario.idPostsCurtidos, clicouCurtiu])
+      return (
+        <>
     <Pressable onPress={()=> navigation.navigate('expandido', {postId: postId})} {...rest}>
         <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20} {...rest}>
         <Box flexDirection="row" w="100%">
-            <Pressable onPress={handleIrProPerfil} >
-            {/* <Image source={imagemPerfil || usuarioIcon} w={40} h={40} alt="foto do usuário" size={50} borderRadius={50} /> */}
-            <LazyImage imagem={usuarioIcon} style={{width: 40, height: 40, borderRadius: 50}} placeholder=''/>
+            <Pressable onPress={handleIrProPerfil} h={42}>
+              <LazyImage imagem={usuarioIcon} style={{width: 40, height: 40, borderRadius: 50, }} placeholder=''/>
             </Pressable >
             <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
                 <Box>
                     <TextoNegrito >{nomeUsuario}</TextoNegrito>
                     <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>{tagUsuario}</Text>
                 </Box>
-                {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text> }
+                {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{textoResumido}{descricaoPost.length>100 && !mostrarTextoCompleto ? '...' : ''}</Text> }
+                {descricaoPost.length>100 && (
+                  <Pressable onPress={()=>setMostrarTextoCompleto(!mostrarTextoCompleto)} >
+                    <TextoNegrito color='$lightSete'>{mostrarTextoCompleto ? 'Mostrar menos' : 'Ler mais'}</TextoNegrito>
+                  </Pressable>
+                )}
                 <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
                     {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
-                                                        {/* <Image source={imagem} mr={10} rounded={10} h={200} w={200} /> */}
                                                         <LazyImage imagem={imagem} style={{marginRight: 10, borderRadius: 10, width: 200, height: 200}}/>
                                                     </Pressable>))
                                 )}
@@ -156,8 +181,8 @@ export default function Post({
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
-                <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/>
-                <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/>
+                  {!clicouCurtiu ? <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/> : <BareLoading />}
+                  {!clicouSalvou ? <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/> : <BareLoading />}
                 </Box>
                 {botaoComentario && <BotaoComentar justifyContent="flex-end" onPress={handleClickComentario}/>}
             </Box>
@@ -173,6 +198,8 @@ export default function Post({
           imageIndex={index}
           visible={isVisible}
           onRequestClose={() => setIsVisible(false)}
+          backgroundColor="#000"
+          presentationStyle="overFullScreen"
         />
   </>
     

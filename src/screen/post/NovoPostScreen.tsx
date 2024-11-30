@@ -12,18 +12,21 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { BotaoCamera, BotaoEnviarNovoPost, BotaoGaleria} from "../../components/botao/BotoesPostComentario";
 import { Alert } from "react-native";
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LazyImage } from "../../components/geral/LazyImage";
 import { BareLoading } from "../../components/geral/Loading";
+import { setarUsuario } from "../../redux/useUsuario";
 
 export default function NovoPost({navigation}){
     const toast = useToast()
+    const dispatch = useDispatch()
     const [ texto, setTexto ] = useState<string>('')
     const [ imagens, setImagens ]= useState<ImagePicker.ImagePickerAsset[]>([])
     const [uris, setUris] = useState<string[]>([''])
     const [isVisible, setIsVisible] = useState(false)
     const [index, setIndex] = useState<number>(0)
     const [enviandoPost, setEnviandoPost] = useState<boolean>(false)
+    
     const usuario = useSelector((state)=> state.usuario.user)
     
     const handleExpandirFoto = (index: number) => {
@@ -39,6 +42,7 @@ export default function NovoPost({navigation}){
             }else{ 
                 const resultado = await enviarNovoPost(texto, uris)
                 if(resultado && resultado.resultado === 'Post enviado com sucesso.'){
+                    dispatch(setarUsuario({...usuario, novoPost: true}))
                     navigation.navigate('tabs')
                     abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 2000, false)
                     setImagens([])

@@ -83,7 +83,7 @@ export function BotoesPerfilBox({curso, seguir, getUsuario}: IBotoesPerfilBoxPro
 export function PublicacoesBox({userId}){
     const [refresh, setRefresh] = useState<boolean>(false)
     
-    return <Box alignItems="center">
+    return <Box alignItems="center" >
             <Titulo>Publicações</Titulo>
             <VirtualizedPosts userId={userId} localDeRenderizacao="perfil" refreshState={refresh}/>
         </Box>

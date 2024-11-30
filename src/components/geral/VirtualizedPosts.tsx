@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import searchUtils, { buscarPostPorUserId } from "../../utils/searchUtils";
 import { buscarColecao } from "../../utils/usuarioUtils";
 import { TextoNegrito } from "./Texto";
+import { useSelector } from "react-redux";
 
 interface IVirtualizedPostsProps{
     dataPost?: any[],
@@ -14,6 +15,7 @@ interface IVirtualizedPostsProps{
 
 export default function VirtualizedPosts({dataPost, localDeRenderizacao, refreshState, userId, ...rest}: IVirtualizedPostsProps){
     const [posts, setPosts] = useState<any[]>()
+    const usuario = useSelector(state => state.usuario.user)
 
     const handleBuscarPosts = async()=>{
         if(localDeRenderizacao){
@@ -46,6 +48,9 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
         }
     }
                     
+    useEffect(()=>{
+        if(localDeRenderizacao) handleBuscarPosts()
+    }, [usuario.novoPost])
 
     useEffect(()=>{
         handleBuscarPosts()
@@ -53,7 +58,7 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
     if(posts && posts.length<=0) return <TextoNegrito>Nenhuma publicação encontrada.</TextoNegrito>
-    return <VirtualizedList contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={3} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
+    return <VirtualizedList  contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={3} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
         <Post 
         postId={item.postId} 
         descricaoPost={item.texto} 

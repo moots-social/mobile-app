@@ -35,7 +35,7 @@ export function BotaoExcluirComentario({imgW, imgH, ...rest}: IBotaoComentarioPr
 export function BotaoCurtirPost({curtiu, ...rest}){
     return(
         <Pressable {...rest}>
-            <LazyIcon imagem={!curtiu ? coracaoIcon : coracaoCurtidoIcon} style={{width: 28, height: 28}}/>
+            <LazyIcon imagem={!curtiu ? coracaoIcon : coracaoCurtidoIcon} style={{width: 33, height: 28}}/>
         </Pressable>
     )
 }
