@@ -1,12 +1,8 @@
 import axios from "axios";
-import { getTokenStorage, logoutUser } from "../utils/storageUtils";
-//SERVIDOR: 172.16.3.228
-//192.168.209.1
-//172.16.2.183
-//192.168.15.8
-//192.168.1.77
-const baseURL = 'http://192.168.15.8:8080'
+import {BASE_URL} from '@env'
 
+import { getTokenStorage, logoutUser } from "../utils/storageUtils"
+const baseURL = BASE_URL
 const apiSemToken = axios.create({
     baseURL,
     headers: {
@@ -68,6 +64,7 @@ export const usuarioApi = {
     buscarQuemSegue: (id: number) => api.get(`/user/buscar-quem-segue/${id}`),
     buscarSeguidores: (id: number) => api.get(`/user/buscar-seguidores/${id}`),
     buscarColecao: (id: number) => api.get(`/user/colecao-salvos/${id}`),
+    buscarPostsCurtidos: (id: number) => api.get(`/user/likedPosts/${id}`),
     atualizar: (id: number, usuario: any) =>{
         const {nomeCompleto, descricao, curso, fotoPerfil, fotoCapa} = usuario
         const resultado = api.put(`/user/atualizar/${id}`, {nomeCompleto, descricao, curso, fotoPerfil, fotoCapa})
@@ -100,6 +97,7 @@ export const postApi = {
     criarReport: (postId: number, denuncia: string) => api.post(`/post/criar-report`, {
         postId, denuncia, contadorDenuncia: 0
     }),
+    excluirComentario: (comentarioId: number, postId: number) => api.delete(`/comentario/deletar/${comentarioId}/post/${postId}`)
 }
 
 export const comentarioApi = {

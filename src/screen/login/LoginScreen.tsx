@@ -1,19 +1,16 @@
-import { Box, Image } from "@gluestack-ui/themed-native-base";
+import { Box, Image, ScrollView, useToast } from "@gluestack-ui/themed";
 import { Titulo, TextoNegrito } from "../../components/geral/Texto";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useRef, useState } from "react";
-import { StatusBar } from "expo-status-bar";
+import { useRef, useState } from "react";
+
 import BotaoSecao from "../../components/botao/BotaoSecao";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import FormControlInput from "../../components/geral/FormControlInput";
-import { useAuthContext } from "../../context/AuthContext";
+
 import { login } from "../../utils/usuarioUtils";
-import { getAnyItemStorage } from "../../utils/storageUtils";
-import { ScrollView, useToast } from "@gluestack-ui/themed";
 import { abrirToast} from "../../components/geral/ToastMoots";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, } from "react-redux";
 import { autenticar } from "../../redux/useAutenticacao";
-import * as NavigationBar from 'expo-navigation-bar'
 const image = require("../../assets/MootsIcon.png")
 
 export default function Login({ navigation }) {
@@ -21,9 +18,9 @@ export default function Login({ navigation }) {
   const dispatch = useDispatch()
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
-  
   const inputEmail = useRef(null)
   const inputSenha = useRef(null)
+
   const handleSubmit = async () => {
     if(email!=='' && senha !==''){
       const res = await login(email, senha)
@@ -37,19 +34,16 @@ export default function Login({ navigation }) {
   };
 
   const handleNextInput = (nextRef) => {
-    if (nextRef.current) {
+    if (nextRef && nextRef.current) {
       nextRef.current.focus();
     } else {
       handleSubmit();
     }
   };
-  useEffect(()=>{
-    NavigationBar.setBackgroundColorAsync('white')
-  }, [])
+  
   return (
     <LinearGradientMoots>
       <ScrollView>
-        <StatusBar translucent={true}/>
           <Box flex={1}>
 
             <Box display="flex" alignItems="center" justifyContent="center" $base-my={80} $md-my={120}>
@@ -68,13 +62,8 @@ export default function Login({ navigation }) {
                     </TouchableOpacity>
                   </Box>
 
-                  <FormControlInput inputRef={inputSenha} label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)} onSubmitEditing={()=>handleSubmit()} secureTextEntry={true}/>
-                  <Box flexDirection="row" justifyContent="center" mt={2.5} $base-mb='$20' $md-mb='$48' >
-                    <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
-                    <TouchableOpacity onPress={() => {navigation.navigate("cadastro")}}>
-                      <TextoNegrito color="$lightSete">Redefinir senha</TextoNegrito>
-                    </TouchableOpacity>
-                  </Box>
+                  <FormControlInput $base-mb='$20' $md-mb='$48'  inputRef={inputSenha} label="Senha" loginOuCadastro={true} onChange={(text) => setSenha(text)} onSubmitEditing={()=>handleSubmit()} secureTextEntry={true}/>
+                  
               </Box>
 
                 <BotaoSecao w="80%" $md-h={60} onPress={() => handleSubmit()}>

@@ -1,19 +1,26 @@
-import { Box, Menu, MenuItem, MenuItemLabel,Image, Pressable, ScrollView, Text } from "@gluestack-ui/themed";
+import { Box, Pressable, ScrollView, Text, useToast } from "@gluestack-ui/themed";
 import { FullRounded } from "../geral/Rounded";
 import { TextoNegrito } from "../geral/Texto";
-import { BotaoComentar, BotaoCurtirPost, BotaoDescurtirPost, BotaoSalvar } from "../botao/BotoesPostComentario";
+import { BotaoComentar, BotaoCurtirPost, BotaoSalvar } from "../botao/BotoesPostComentario";
 import { useNavigation } from "@react-navigation/native";
 import { MenuPost } from "./PostMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageView from "react-native-image-viewing";
 import { usuarioIcon } from "../perfil/PerfilComponents";
-import { StatusBar } from "expo-status-bar";
 import { DimensionValue } from "react-native";
-import FastImage from "react-native-fast-image";
-
-const menuIcon = require('../../assets/MenuIcon.png')
+import postUtils from "../../utils/postUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { abrirToast } from "../geral/ToastMoots";
+import { buscarColecao, buscarPostsCurtidos } from "../../utils/usuarioUtils";
+import { setarUsuario } from "../../redux/useUsuario";
+import {LazyImage} from "../geral/LazyImage";
+import { StatusBar } from "expo-status-bar";
+import { BareLoading } from "../geral/Loading";
 
 interface IPostProps {
+  postId: number;
+  nomeUsuario: string;
+  tagUsuario: string;
   descricaoPost: string;
   imagemPost?: string[];
   imagemPerfil?: string;
@@ -21,15 +28,13 @@ interface IPostProps {
   menu?: boolean;
   botaoComentario?: boolean;
   expandivel?: boolean;
-  nomeUsuario: string;
-  tagUsuario: string;
   rw?: DimensionValue;
   contadorLike?: number;
   curtirPost?: (postId: number, deuLike: boolean) => void;
-  postId: number;
   deuLike?: boolean
   setRefresh?: React.Dispatch<React.SetStateAction<boolean>>;
-  salvarPost?: (postId: number) => void
+  salvarPost?: (postId: number) => void,
+  likeUsers: string[]
 }
 
 export default function Post({
@@ -48,60 +53,126 @@ export default function Post({
   deuLike,
   setRefresh,
   salvarPost,
+  likeUsers,
   ...rest
 }: IPostProps) {
   
   const navigation = useNavigation();
+  const toast = useToast()
   const [isVisible, setIsVisible] = useState(false);
   const [index, setIndex] = useState<number>(0);
-  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil, contadorLike, postId };
-  const [excluiuPost, setExcluiuPost] = useState<boolean>(false);
-
+  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil, contadorLike, postId, likeUsers };
+  const usuario = useSelector(state=> state.usuario.user)
+  const dispatch = useDispatch()
+  const [curtiu, setCurtiu] = useState<boolean>(false)
+  const [salvou, setSalvou] = useState<boolean>(false)
+  const [clicouCurtiu, setClicouCurtiu] = useState<boolean>()
+  const [clicouSalvou, setClicouSalvou] = useState<boolean>()
+  const [mostrarTextoCompleto, setMostrarTextoCompleto] = useState<boolean>(false)
   const imagensFormatadas = imagemPost ? [{ uri: imagemPost[0] }, { uri: imagemPost[1] }, { uri: imagemPost[2] }, { uri: imagemPost[3] }] : [{}];
 
+  const textoResumido = descricaoPost?.length > 0
+  ? mostrarTextoCompleto ? descricaoPost : descricaoPost.substring(0, 100)
+  : ""
   const handleExpandirFoto = (index: number) => {
     setIndex(index);
     setIsVisible(true); 
   };
 
-  const handleCurtir = () => {
-    curtirPost(postId, deuLike);
-  };
-
-  const handleSalvar = () => {
-    salvarPost(postId)
+  const handleCurtirPost = async()=>{
+    setClicouCurtiu(true)
+    if(curtiu){
+      const res = await postUtils.curtirPost(postId, false)
+      console.log(res)
+      if(res==0){
+        abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
+        setClicouCurtiu(false)
+        return
+      } 
+    } else{
+      const res = await postUtils.curtirPost(postId, true)
+      console.log(res)
+      if(res==0) {
+        abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
+        setClicouCurtiu(false)
+        return
+      }
+      abrirToast(toast, 'success', `Você curtiu a publicação de ${tagUsuario}.`, '', 1000, false)
+    }
+    const listaCurtidasAtualizadas = await buscarPostsCurtidos()
+    dispatch(setarUsuario({...usuario, idPostsCurtidos: listaCurtidasAtualizadas}))
+    setClicouCurtiu(false)
+    console.log(curtiu)
   }
 
-  if (isVisible) {
-    return (
-      <>
-        <StatusBar hidden />
-        <ImageView
-          images={imagensFormatadas}
-          imageIndex={index}
-          visible={isVisible}
-          onRequestClose={() => setIsVisible(false)}
-        />
-      </>
-    );
+  const handleSalvarPost = async()=>{
+    setClicouSalvou(true)
+    if (salvou) {
+      const res = await postUtils.removerPostSalvo(postId)
+      console.log(res)
+      if(res==200){
+        // setSalvou(false)
+        abrirToast(toast, 'success', 'Publicação removida da coleção com sucesso.', '', 1000, false)
+        
+      }
+    }else{
+      const res = await postUtils.salvarPost(postId)
+      console.log(res)
+      if(res==200){
+        // setSalvou(true)
+        abrirToast(toast, 'success', 'Publicação salva com sucesso.', '', 1000, false)
+      }
+    }
+    const listaDeSalvosAtualizada = await buscarColecao()
+    dispatch(setarUsuario({...usuario, colecaoSalvos: listaDeSalvosAtualizada}))
+    setClicouSalvou(false)
   }
-
-  return (
-    <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject})} {...rest}>
+      const handleClickComentario = () =>{
+        navigation.navigate('expandido', {post: postObject, veioDeComentario: true})
+      }
+      
+      const handleIrProPerfil = () =>{
+        navigation.navigate('outro-perfil', {userId})
+      }
+      
+      const handleIsSalvo = async() =>{
+        const checkIsSalvo = await usuario.colecaoSalvos.some(dado => dado.postId == postId)
+        setSalvou(checkIsSalvo)
+      }
+      useEffect(()=>{
+        handleIsSalvo()
+      }, [postId, usuario.colecaoSalvos, clicouSalvou])
+      
+      const handleIsCurtido = async()=>{
+        const checkIsCurtido = await usuario.idPostsCurtidos.some(dado => dado == postId)
+        setCurtiu(checkIsCurtido)
+      }
+      useEffect(()=>{
+        
+        handleIsCurtido()
+      }, [postId, usuario.idPostsCurtidos, clicouCurtiu])
+      return (
+        <>
+    <Pressable onPress={()=> navigation.navigate('expandido', {postId: postId})} {...rest}>
         <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20} {...rest}>
         <Box flexDirection="row" w="100%">
-            <Box>
-            <Image source={imagemPerfil || usuarioIcon} w={40} h={40} alt="foto do usuário" size={50} borderRadius={50} />
-            </Box>
+            <Pressable onPress={handleIrProPerfil} h={42}>
+              <LazyImage imagem={usuarioIcon} style={{width: 40, height: 40, borderRadius: 50, }} placeholder=''/>
+            </Pressable >
             <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
                 <Box>
-                    <TextoNegrito>{nomeUsuario}</TextoNegrito>
+                    <TextoNegrito >{nomeUsuario}</TextoNegrito>
                     <Text fontFamily="Poppins_500Medium" color="#b6b3b3" fontSize={14}>{tagUsuario}</Text>
                 </Box>
-                {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{descricaoPost}</Text> }
+                {descricaoPost && <Text fontFamily="Poppins_500Medium" fontSize={14}>{textoResumido}{descricaoPost.length>100 && !mostrarTextoCompleto ? '...' : ''}</Text> }
+                {descricaoPost.length>100 && (
+                  <Pressable onPress={()=>setMostrarTextoCompleto(!mostrarTextoCompleto)} >
+                    <TextoNegrito color='$lightSete'>{mostrarTextoCompleto ? 'Mostrar menos' : 'Ler mais'}</TextoNegrito>
+                  </Pressable>
+                )}
                 <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
                     {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
-                                                        <Image source={imagem} mr={10} rounded={10} h={200} w={200} />
+                                                        <LazyImage imagem={imagem} style={{marginRight: 10, borderRadius: 10, width: 200, height: 200}}/>
                                                     </Pressable>))
                                 )}
                 </ScrollView>
@@ -110,19 +181,27 @@ export default function Post({
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
-                <BotaoCurtirPost size="2xs" onPress={() => handleCurtir()} />
-                <Text>{contadorLike || 0}</Text>
-                <BotaoSalvar size="2xs" onPress={() => handleSalvar()}/>
+                  {!clicouCurtiu ? <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/> : <BareLoading />}
+                  {!clicouSalvou ? <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/> : <BareLoading />}
                 </Box>
-                {botaoComentario && <BotaoComentar justifyContent="flex-end" size="2xs" />}
+                {botaoComentario && <BotaoComentar justifyContent="flex-end" onPress={handleClickComentario}/>}
             </Box>
             </Box>
 
         </Box>
-            {/* Menu e ações do post */}
-            {menu && <MenuPost userId={userId} postId={postId} setRefresh={setRefresh} />}
+            {menu && <MenuPost userId={userId} postId={postId}/>}
         </Box>
         </FullRounded>
     </Pressable>
+        <ImageView
+          images={imagensFormatadas}
+          imageIndex={index}
+          visible={isVisible}
+          onRequestClose={() => setIsVisible(false)}
+          backgroundColor="#000"
+          presentationStyle="overFullScreen"
+        />
+  </>
+    
   );
 }

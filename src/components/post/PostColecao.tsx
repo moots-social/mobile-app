@@ -54,7 +54,7 @@ export default function PostColecao({
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState(false);
   const [index, setIndex] = useState<number>(0);
-  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, imagemPost, imagemPerfil };
+  const postObject = { nomeUsuario, tagUsuario, descricaoPost, userId, postId, imagemPost, imagemPerfil };
   const [excluiuPost, setExcluiuPost] = useState<boolean>(false);
 
   const imagensFormatadas = imagemPost ? [{ uri: imagemPost[0] }, { uri: imagemPost[1] }, { uri: imagemPost[2] }, { uri: imagemPost[3] }] : [{}];
@@ -79,7 +79,7 @@ export default function PostColecao({
   }
 
   return (
-    <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject})} {...rest}>
+    <Pressable onPress={()=> navigation.navigate('expandido', {post: postObject, postId: postObject.postId })} {...rest}>
         <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20} {...rest}>
         <Box flexDirection="row" w="100%">
             <Box>
@@ -102,6 +102,8 @@ export default function PostColecao({
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
+                <BotaoCurtirPost size="2xs" onPress={() => handleCurtir()} />
+                <Text fontFamily="Poppins_400Regular">{contadorLike || 0}</Text>
                 <BotaoSalvar size="2xs" onPress={() => dessalvarPost(userId, postId)}/>
                 </Box>
                 {botaoComentario && <BotaoComentar justifyContent="flex-end" size="2xs" />}

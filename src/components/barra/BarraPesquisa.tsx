@@ -1,4 +1,4 @@
-import { Box, Image, Input, InputField, InputIcon, InputSlot, Pressable, styled, useToast } from "@gluestack-ui/themed";
+import { Box, Input, InputField, InputSlot, Pressable, styled, useToast } from "@gluestack-ui/themed";
 import { TextoNegrito } from "../geral/Texto";
 import { useRef, useState } from "react";
 import { StyledShadowBox } from "../../screen/login/CadastroScreen";
@@ -9,12 +9,11 @@ import { Alert, Keyboard } from "react-native";
 import { abrirToast } from "../geral/ToastMoots";
 import FiltrosModal from "../modal/FiltrosModal";
 import { ScrollView } from "react-native-gesture-handler";
-import { useMiscContext } from "../../context/MiscContext";
 import { useDispatch, useSelector } from "react-redux";
 import searchUtils from "../../utils/searchUtils";
 import { novaListaTermo, novoTermo } from "../../redux/useUsuario";
-const botaoEnviar = require('../../assets/EnviarIconRounded.png')
-const pesquisaIcon = require('../../assets/PesquisaIcon.png')
+import { BotaoEnviarNovoPost } from "../botao/BotoesPostComentario";
+import { BareLoading } from "../geral/Loading";
 
 interface ITermoProps{
     termo: string,
@@ -44,6 +43,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     let novoPlaceholder = filtros.radioGeral!=='tudo' || filtros.radioUsuario!=='qualquerUm' || filtros.selectUsuario!=='Qualquer' || !filtros.checkPublicacoes ? extended ? "Pesquise algo... [FILTROS]" : '[FILTROS]' : 'Pesquise algo...'
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>(valorParam || '')
+    const [enviandoPesquisa, setEnviandoPesquisa] = useState<boolean>(false)
 
     const voltar = () =>{
         navigation.goBack()
@@ -63,6 +63,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
         else{
             setIsInvalid(false)
             try {
+                setEnviandoPesquisa(true)
                 let resultadoPerfil = null
                 let resultadoPost = null
 
@@ -79,7 +80,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                 } else console.log('por algum motivo, radioGeral é diferente de algum dos 3 valores')
 
                 if(filtros.radioGeral!=='publicacoes'){
-                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil.length>0){
+                    if(filtros.radioUsuario==='quemSegue' && resultadoPerfil){
                         const getUsuariosSeguindo = resultadoPerfil.filter(perfil => usuario.idSeguindo.includes(Number(perfil.userId)))
                         resultadoPerfil = getUsuariosSeguindo
                     }
@@ -107,7 +108,9 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                     setValor('')
                 }
             } catch (error) {
-                console.error(error)
+                abrirToast(toast, 'error', 'Não foi possível realizar a pesquisa. Tente novamente.')
+            } finally {
+                setEnviandoPesquisa(false)
             }
         }
     }
@@ -123,23 +126,16 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
 
                     <Box w={!extended ? "70%" : "85%"} $md-w={!extended ? '80%' : '90%'}>
                         <Input ref={input} onBlur={desfocarInput} variant="rounded" h={35} borderWidth={2} borderColor={isInvalid ? "#FF0000" : "$black"} isInvalid={isInvalid} onSubmitEditing={handlePesquisar}>
-                            <InputSlot>
-                                <InputIcon w="100%" ml={10} bottom={2}><Image source={pesquisaIcon} w={20} h={20} alt='pesquisa'/></InputIcon>
-                            </InputSlot>
+                            
                             <InputField 
                                 fontFamily="Poppins_500Medium" 
                                 placeholder={valor!='' ? valor : novoPlaceholder} 
-                                ml={-10} 
                                 pt={5} 
                                 value={valor}
                                 onChangeText={(novoValor)=>setValor(novoValor)}
                             />
                             <InputSlot>
-                                    <Pressable onPress={handlePesquisar}>
-                                        <InputIcon w="100%" mr={5} bottom={2}>
-                                            <Image source={botaoEnviar} w={20} h={20} alt='enviar'/>
-                                        </InputIcon>
-                                    </Pressable>
+                                {!enviandoPesquisa ? <BotaoEnviarNovoPost onPress={handlePesquisar} mr={10}/> : <BareLoading mr={10}/>}
                             </InputSlot>
                         </Input>
                     </Box>

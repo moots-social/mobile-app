@@ -2,17 +2,17 @@ import { Pressable, Image, Modal, ModalBackdrop, ModalContent, Box, Text, Action
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { LinearGreenGradientMoots } from "../geral/LinearGradientMoots"
 import { TextoNegrito } from "../geral/Texto"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import BotaoSecao from "../botao/BotaoSecao"
 import CartaoUsuario from "./CartaoUsuario"
 import { Alert } from "react-native"
-import { getTokenStorage } from "../../utils/storageUtils"
 import usuarioUtils, { pararDeSeguir, seguirUsuario } from "../../utils/usuarioUtils"
 import { abrirToast } from "../geral/ToastMoots"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../../redux/useUsuario"
-import { buscarUsuarioPorCurso } from "../../utils/searchUtils"
+import { LazyIcon } from "../geral/LazyImage"
+import { BareLoading } from "../geral/Loading"
 
 const seguirIcon = require('../../assets/SeguirIcon.png')
 const listaIcon = require('../../assets/ListaIcon.png')
@@ -49,12 +49,13 @@ interface IBotaoListaSeguidores{
 }
 export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeCompleto, ...rest}: IBotaoSeguirProps){
     const [isSeguindo, setIsSeguindo] = useState<boolean>()
-    
+    const [clicouBotao, setClicouBotao] = useState<boolean>(false)
     const usuario = useSelector(state => state.usuario.user) || usuarioLogado
     const dispatch = useDispatch()
     const toast = useToast()
 
     const handlePararDeSeguir = async()=>{
+        setClicouBotao(true)
         const resultado = await pararDeSeguir(id1, id2)
         if(resultado===200){
             setIsSeguindo(false)
@@ -63,10 +64,12 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
                 idSeguindo: usuario.idSeguindo.filter(id => id != id2)
             }))
             abrirToast(toast, 'success', `Você parou de seguir ${nomeCompleto}.`)
-        } 
+        }
+        setClicouBotao(false) 
     }
     
     const handleSeguirUsuario = async()=>{
+        setClicouBotao(true)
         const resultado = await seguirUsuario(id1, id2)
         if(resultado === 200){
             setIsSeguindo(true)
@@ -80,15 +83,17 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
                     onPress: async() => await handlePararDeSeguir()
                 },
                 {
-                    text: 'Não'
+                    text: 'Não',
+                    // onPress: () =>setClicouBotao(false)
                 }
             ])
         }
+        setClicouBotao(false)
     }
     
     useEffect(() => {
-        const handleIsSeguindo = async () => {
-            const checkIsSeguindo = usuario.idSeguindo.some(dado => dado == id2);
+        const handleIsSeguindo = async() => {
+            const checkIsSeguindo = await usuario.idSeguindo.some(dado => dado == id2);
             setIsSeguindo(checkIsSeguindo);
         };
     
@@ -96,7 +101,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
     }, [usuario.idSeguindo])
     return(
         <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario}  borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
-            <Image source={seguirIcon} w={imgW} h={imgH} m={10} alt='seguir'/>
+            {!clicouBotao ? <LazyIcon imagem={seguirIcon} style={{width: imgW, height: imgH, margin: 10}} /> : <BareLoading color='$black' m={7}/>}
         </Pressable>
     )
 }
@@ -106,13 +111,12 @@ export function BotaoConfigurar({imgW=10, imgH=10, ...rest}: IBotaoConfigurarPro
     const navigation = useNavigation()
     return(
         <Pressable bg="$lightTres" rounded={20} justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>navigation.navigate('editar')} {...rest}>
-            <Image source={editarIcon} w={imgW} h={imgH} m={10} alt='editar'/>
+            <LazyIcon imagem={editarIcon} style={{width: imgW, height: imgH, margin: 10}} />
         </Pressable>
     )
 }
 export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IBotaoListaSeguidores){
     const usuario = useSelector((state)=> state.usuario.user)
-
     const navigation = useNavigation()
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const[botaoSelecionado, setBotaoSelecionado] = useState<string>('seguindo')
@@ -133,7 +137,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
             const resultado = await usuarioUtils.buscarQuemSegue(getUsuario.userId)
             if(resultado){
                 setSeguindo(resultado)
-            }
+            } else setSeguindo([])
         } catch (error) {
             setSeguindo([])
         }
@@ -144,7 +148,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
             const resultado = await usuarioUtils.buscarSeguidores(getUsuario.userId)
             if(resultado){
                 setSeguidores(resultado)
-            }
+            } else setSeguidores([])
             
         } catch (error) {
             setSeguidores([])
@@ -158,11 +162,11 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
         else if (botaoSelecionado==='seguidores'){
             getSeguidores()
         }
-    }, [isModalVisivel, botaoSelecionado])
+    }, [getUsuario.userId, isModalVisivel, botaoSelecionado])
     
     return(
         <Pressable bg="$lightDois" borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>setModalVisivel(true)} {...rest}>
-            <Image source={listaIcon} w={imgW} h={imgH} m={10} alt='lista'/>
+            <LazyIcon imagem={listaIcon} style={{width: imgW, height: imgH, margin: 10}} />
             <Modal isOpen={isModalVisivel} onClose={()=>{setModalVisivel(false); setBotaoSelecionado('seguindo')}}>
                 <ModalBackdrop/>
                 <ModalContent  bg="$white" h="80%" w="80%">
@@ -175,30 +179,27 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
                         </Pressable>
                     </Box>
                         {botaoSelecionado==='seguindo' && seguindo ? (
-                         <FlatList $base-px={20} $md-px={75} data={seguindo} renderItem={({item})=> 
+                         <FlatList $base-px={20} $md-px={75} data={seguindo} numColumns={2} $md-numColumns={3} renderItem={({item})=> 
                             <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} navigation={navigation} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId}); setModalVisivel(false); setBotaoSelecionado('seguindo')}}/>
-                            } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}/>   
+                            } contentContainerStyle={{flexDirection: 'row', justifyContent: 'space-between'}}/>   
                         )
                           : ''}
                         {botaoSelecionado==='seguidores' && seguidores ? (
-                            <FlatList $base-px={20} $md-px={75} data={seguidores} renderItem={({item})=> 
+                            <FlatList $base-px={20} $md-px={75} data={seguidores} numColumns={2} $md-numColumns={3} renderItem={({item})=> 
                             <CartaoUsuario mb={20} usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={true} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId}); setModalVisivel(false); setBotaoSelecionado('seguindo')}}/>
-                        } contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}/>) : ''}
+                        } contentContainerStyle={{flexDirection: 'row', justifyContent: 'space-between'}}/>) : ''}
                 </ModalContent>
             </Modal>
         </Pressable>
     )
 }
-export function BotaoCurso({curso, ...rest}: ICursoModalProps){
-    const usuario = useSelector(state => state.usuario.user)
+export function BotaoCurso({curso}: ICursoModalProps){
     const [isModalVisivel, setModalVisivel] = useState<boolean>(false)
     const [botaoVisivel, setBotaoVisivel] = useState<boolean>(false)
     const [textoBotaoAcao, setTextoBotaoAcao] = useState<string>()
 
     const [imagem, setImagem] = useState<any>('')
-    const [usuarios, setUsuarios] = useState<any[]>()
-    const [corFundoCartao, setCorFundoCartao] = useState<string>()
-    const [corCartao, setCorCartao] = useState<string>()
+    const [corFundo, setCorFundo] = useState<string>()
 
     const handleAbrir = ()=>{
         setModalVisivel(true)
@@ -219,89 +220,53 @@ export function BotaoCurso({curso, ...rest}: ICursoModalProps){
     const handleImagemCor = () =>{
         if(curso==='desenvolvimento'.toUpperCase()) {
             setImagem(desenvolvimentoIcon)
-            setCorCartao("$lightSeis")
-            setCorFundoCartao("$lightSete")
+            setCorFundo("$lightSete")
             return
         }
         if(curso==='mecanica'.toUpperCase()) {
             setImagem(mecanicaIcon)
-            setCorCartao("#F82C2C")
-            setCorFundoCartao("#923333")
+            setCorFundo("#923333")
             return
         }
         if(curso==='redes'.toUpperCase()) {
             setImagem(redesIcon)
-            setCorCartao("#78C8E1")
-            setCorFundoCartao("#174A95")
+            setCorFundo("#174A95")
             return
         }
         if(curso==='qualidade'.toUpperCase()) {
             setImagem(qualidadeIcon)
-            setCorCartao("#FFBE3D")
-            setCorFundoCartao("#BB861C")
+            setCorFundo("#BB861C")
             return
         }
         if(curso==='fic'.toUpperCase()) {
             setImagem(ficIcon)
-            setCorCartao("#FD9BF9")
-            setCorFundoCartao("#C50ABD")
+            setCorFundo("#C50ABD")
             return
         }
     }
 
+    
     useEffect(()=>{
-        const buscarUsuarios = async()=>{
-            
-                const resultado = await buscarUsuarioPorCurso(curso)
-                if (resultado!==0){
-                    if(resultado.length<3){
-                        setUsuarios(resultado)
-                    }
-                    else{
-                        // const indices = {
-                        //     index1: Math.floor(Math.random() * resultado.length),
-                        //     index2: Math.floor(Math.random() * resultado.length) ,
-                        //     index3: Math.floor(Math.random() * resultado.length),
-                        // }
-                        // setUsuarios([resultado[indices.index1], resultado[indices.index2], resultado[indices.index3]])
-                        // console.log(usuarios)
-                        setUsuarios([resultado[0], resultado[1]])
-                    }
-                }
-            
-
-        }
-        buscarUsuarios()
         handleImagemCor()
-    }, [isModalVisivel])
+    }, [curso])
 
     return(
         <Pressable onPress={handleAbrir}>
-            <Image source={imagem || ''}  w={50} h={50} alt='curso'/>
+            <LazyIcon imagem={imagem || ''} style={{width: 50, height: 50}}/>
             <Modal isOpen={isModalVisivel} onClose={handleFechar}>
                 <ModalBackdrop />
                 <ModalContent w='95%' h='90%'>
                     <LinearGreenGradientMoots>
                         <Box alignItems="center" h="100%" justifyContent="space-around" rounded={15} py={20}>
-                            <Box alignItems="center" gap={10} w="90%">
-                                <Image source={imagem || ''} w={curso==='mecanica' ? 250 : 200} h={200} alt='icone do curso'/>
+                            <Box alignItems="center" gap={10} w="90%" mb={100}>
+                                <LazyIcon imagem={imagem || ''} style={{width: curso==='mecanica' ? 250 : 200, height: 200}}/>
                                 <Text textAlign="center" fontSize={20} fontFamily="Poppins_600SemiBold" color="$black" >Essa pessoa realiza o curso de {`${curso.substring(0, 1).toUpperCase()}${curso.substring(1).toLowerCase()}`}</Text>
                             </Box>
-                            {usuarios && (
-                                <Box alignItems="center" mb={100} w='100%'>
-                                    <TextoNegrito fontSize={12} fontFamily="Poppins_600SemiBold">Encontre mais pessoas realizando esse curso:</TextoNegrito>
-                                    <Box flexDirection="row" justifyContent={usuarios.length===1 ? 'center' : "space-between"} w="100%" bg={corFundoCartao} py={15} px={20} rounded={15}>
-                                        {usuarios && usuarios.length>0 ? usuarios.map((usuarioRenderizado)=> (
-                                            <CartaoUsuario cor={corCartao} corSecundaria={corFundoCartao} usuario={usuario} usuarioRenderizadoNoCartao={usuarioRenderizado} vemDeLista={true}/>
-                                        )): ''}
-                                    </Box>
-                                </Box>
-                            )}
                             {botaoVisivel ? (
-                                <BotaoSecao onPress={handleFechar} w={140} bg={corFundoCartao}>
+                                <BotaoSecao onPress={handleFechar} w={140} bg={corFundo}>
                                     Fechar
                                 </BotaoSecao>
-                            ): <TextoNegrito color={corFundoCartao}>{textoBotaoAcao}</TextoNegrito> }
+                            ): <TextoNegrito color={corFundo}>{textoBotaoAcao}</TextoNegrito> }
                             
                         </Box>
                     </LinearGreenGradientMoots>

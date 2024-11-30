@@ -18,10 +18,11 @@ export default function PerfilOutroUsuario({navigation, route}){
         } else {
             const buscarUsuario = async()=>{
                 try {
-                    const teste = await buscarSemToken(userId)
-                    setUsuarioARenderizar(teste)
+                    const user = await buscarSemToken(userId)
+                    setUsuarioARenderizar(user)
                 } catch (error) {
                     console.error(error)
+                    navigation.goBack()
                 }
             }
 

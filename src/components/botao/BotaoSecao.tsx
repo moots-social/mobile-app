@@ -3,10 +3,11 @@ import { ReactNode } from "react";
 import { Button, ButtonText } from "@gluestack-ui/themed";
 
 interface botaoSecao extends IButtonProps{
-    children: ReactNode;
+    children: ReactNode,
+    color?: any,
 }
 
-export default function BotaoSecao({children, ...props} : botaoSecao){
+export default function BotaoSecao({children, color, ...props} : botaoSecao){
     return (
         
     <Button
@@ -27,7 +28,7 @@ export default function BotaoSecao({children, ...props} : botaoSecao){
         
         {...props}
     >
-        <ButtonText fontFamily="Poppins_700Bold">{children}</ButtonText>
+        <ButtonText fontFamily="Poppins_700Bold" color={color || '$white'}>{children}</ButtonText>
     </Button>
     )
 }

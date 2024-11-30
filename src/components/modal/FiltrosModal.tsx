@@ -4,6 +4,7 @@ import { TextoNegrito, Titulo } from "../geral/Texto";
 import BotaoSecao from "../botao/BotaoSecao";
 import { useDispatch, useSelector } from "react-redux";
 import { setarFiltros, setarFiltrosPadrao } from "../../redux/useUsuario";
+import { LazyIcon } from "../geral/LazyImage";
 
 const filtroIcon = require('../../assets/FiltroIcon.png')
 
@@ -80,7 +81,7 @@ export default function FiltrosModal({...rest}){
         <Box {...rest}>
 
             <Pressable onPress={()=>{handleAbrir('Carregando...')}} ref={ref}>
-                <Image source={filtroIcon} w={30} h={30} alt='filtro'/>
+                <LazyIcon imagem={filtroIcon} style={{width: 30, height: 30}}/>
             </Pressable>
 
             <Modal isOpen={modalVisivel} onClose={()=>{

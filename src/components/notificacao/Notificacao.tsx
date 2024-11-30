@@ -65,7 +65,7 @@ export default function Notificacao({notificacao, onNotificacaoExcluida, ...rest
                     {/* <Box mr={10}>
                         <Image source={usuarioIcon} w={40} h={40} alt='foto da notificação'/>
                     </Box> */}
-                    <Box w="85%">
+                    <Box w='95%'>
                         <TextoNegrito flexWrap="wrap" >{notificacao.userTag} {evento}</TextoNegrito>
                     </Box>
                 </Box>

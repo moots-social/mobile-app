@@ -4,9 +4,6 @@ import InputPerfil from "../../components/geral/InputPerfil";
 import { TextoNegrito } from "../../components/geral/Texto";
 import { useState } from "react";
 
-import SyncStorage from '@react-native-async-storage/async-storage';
-import { usuarioApi } from "../../api/apis";
-import { Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { redefinirSenha } from "../../utils/usuarioUtils";
 import { setarUsuario } from "../../redux/useUsuario";

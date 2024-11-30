@@ -8,15 +8,15 @@ import { useSelector } from 'react-redux'
 export default function PerfilUsuario() {
 
   const usuario = useSelector(state => state.usuario.user)
-  const [isLoading, setIsLoading] = useState(true)
-    useEffect(()=>{
-        setTimeout(()=>{
-        setIsLoading(false)
-        }, 150)
-    }, [])
+  // const [isLoading, setIsLoading] = useState(true)
+  //   useEffect(()=>{
+  //       setTimeout(()=>{
+  //       setIsLoading(false)
+  //       }, 150)
+  //   }, [])
   return (
     <LinearGradientMoots>
-      <Loading isOpen={isLoading} />
+      {/* <Loading isOpen={isLoading} /> */}
       <PerfilBox objetoARenderizar={usuario} seguir={false}/>
     </LinearGradientMoots>
   )

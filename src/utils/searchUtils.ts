@@ -7,7 +7,7 @@ export const buscarUsuario = async (query: string) =>{
         return resultado.data
     } catch (error: any) {
         geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
-        return error.response.status
+        return 0
     }
 }
 export const buscarUsuarioPorCurso = async (curso: string) =>{
@@ -52,7 +52,7 @@ export const buscarTodosOsPosts = async () =>{
         return resultado.data
     } catch (error: any) {
         geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
-        return error.response.status
+        return 0
     }
 }
 

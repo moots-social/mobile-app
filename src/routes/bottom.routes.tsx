@@ -6,10 +6,11 @@ import Colecao from "../screen/colecao/ColecaoScreen"
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
-import { Box, Image } from "@gluestack-ui/themed"
+import { LazyIcon } from "../components/geral/LazyImage"
+import { Box } from "@gluestack-ui/themed"
 import { useEffect } from "react"
 import { logoutUser } from "../utils/storageUtils"
-import { buscar, buscarQuemSegue } from "../utils/usuarioUtils"
+import { buscar, buscarColecao, buscarPostsCurtidos, buscarQuemSegue } from "../utils/usuarioUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { setarUsuario } from "../redux/useUsuario"
 import { autenticar } from "../redux/useAutenticacao"
@@ -22,9 +23,10 @@ const perfilIcon = require('../assets/UsuarioIcon.png')
 
 const {Screen, Navigator} = createBottomTabNavigator()
 
+//botão de rota com cores e ícones personalizados 
 function IconePersonalizado({tab, focused}: any){
     return  <Box h="100%" w="$12" justifyContent="center" px={10} rounded='$lg' bgColor={focused ? '#EDEDED' : '$white'}>
-                <Image source={tab.icon} w={30} h={30} opacity={focused ? 1 : 0.3} rounded={tab.id === 4 ? 30 : 0} />
+                <LazyIcon imagem={tab.icon} style={{width: 30, height: 30, opacity: focused ? 1 : 0.3, borderRadius: tab.id===4 ? 30 : 0}}/>
             </Box>
    
 }
@@ -32,6 +34,8 @@ function IconePersonalizado({tab, focused}: any){
 export default function Bottom(){
     const dispatch = useDispatch()
     const usuario = useSelector((state: any)=> state.usuario.user)
+
+    //rotas a serem renderizadas quando o usuário estiver autenticado
     const tabs = [
         {
             id: 0,
@@ -67,6 +71,7 @@ export default function Bottom(){
 
     
     useEffect(()=>{
+        //método para buscar os dados relevantes do usuário
         const getUser = async()=>{
             dispatch(autenticar())
             try{
@@ -77,11 +82,15 @@ export default function Bottom(){
                         const arrayIdSeguindo = getSeguindo.map(usuario => usuario.userId)
                         getSeguindo = arrayIdSeguindo
                     }
-                    dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo}))
+                    let getColecao = await buscarColecao()
+                    let getPostsCurtidos = await buscarPostsCurtidos()
+                    if(getPostsCurtidos==0){
+                        getPostsCurtidos = []
+                    }
+                    dispatch(setarUsuario({...getUsuario, idSeguindo: getSeguindo, colecaoSalvos: getColecao, idPostsCurtidos: getPostsCurtidos}))
                 }
             }catch (error){
                 await logoutUser()
-                console.log('deslogando usuário por não ter dados relacionados.')
             }
             
         }
@@ -99,7 +108,9 @@ export default function Bottom(){
                     <IconePersonalizado tab={tab} focused={focused}/>
                 ),
                 tabBarShowLabel: false,
-                tabBarHideOnKeyboard: true
+                tabBarHideOnKeyboard: true,
+                lazy: true,
+                freezeOnBlur: true
                 }}
                />  
  

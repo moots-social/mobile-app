@@ -37,9 +37,11 @@ export default function Denuncia({postId, denunciaId, motivo, onDenunciaExcluida
             {
                 text: 'Sim',
                 onPress: async() => {
-                    await excluirPost(postId)
-                    abrirToast(toast, 'success', `Post ${postId} excluído com sucesso`, '', 1000, false)
-                    onPostExcluido()
+                    const res = await excluirPost(postId)
+                    if(res!==0){
+                        abrirToast(toast, 'success', `Post ${postId} excluído com sucesso`, '', 1000, false)
+                        onPostExcluido()
+                    } else abrirToast(toast, 'error', `Não foi possível excluir esse post.`, '', 1000, false)
                 }
             },
             {

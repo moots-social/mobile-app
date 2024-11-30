@@ -142,7 +142,6 @@ export default function Info({navigation, route}){
         }else{
           imagem = ''
         }
-        alert(`imagem: ${imagem}`)
         const res = await criar({...create, fotoPerfil: imagem})
         if (res === `Usuário "${create.nomeCompleto}" criado com sucesso.`) {
           Alert.alert('Cadastro', `Você criou sua conta com sucesso. Realize o login para usar o app.`)

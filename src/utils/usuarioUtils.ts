@@ -16,7 +16,8 @@ export const login = async(email: string, senha: string) =>{
         return 'Autenticado com sucesso.'
     } catch (error: any) {
         geralUtils.erro(error, 'login', 'usuarioUtils', error.response?.status || false)
-        return error.response.status
+        console.error(error.response?.data?.error)
+        return 0
     }finally {
         console.log('requisição finalizada')
     }
@@ -28,6 +29,7 @@ export const criar = async(usuario: any)=>{
     } catch (error: any) {
         geralUtils.erro(error, 'criar', 'usuarioUtils', error.response?.status || false)
         console.error(error.response?.data?.error)
+        return 0
   }
 }
 
@@ -38,6 +40,7 @@ export const buscarEmail = async(email: string)=>{
         return res
     } catch (error: any) {
         geralUtils.erro(error, 'buscarEmail', 'usuarioUtils', error.response?.status || false)
+        console.error(error.response?.data?.error)
         return error.response.status
     }
 }
@@ -46,10 +49,10 @@ export const buscar = async()=>{
         const id = await storage.getIdStorage()
         const resultado = await apis.usuario.buscar(Number(id))
         const res = resultado.data
-        if(res) return res
+        return res
     } catch (error: any) {
-        console.error(error.response.data.error)
         geralUtils.erro(error, 'buscar', 'usuarioUtils', error.response?.status || false)
+        console.error(error.response?.data?.error)
     }
 }
 
@@ -80,7 +83,7 @@ export const atualizarDados = async(usuario: any)=>{
         const resultado = await apis.usuario.atualizar(id, usuario)
         if(resultado.data) return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'atualizarDados', 'usuarioUtils', error.response?.status || false)
         return error.response.status
     }
 }
@@ -115,6 +118,7 @@ export const buscarSemToken = async (id: number) => {
         if(resultado.data) return resultado.data
     }catch(error: any){
         geralUtils.erro(error, 'buscarSemToken', 'usuarioUtils', error.response?.status || false)
+        console.error(error.response.data.error)
         return error.response.status
     }
 }
@@ -164,6 +168,28 @@ export const redefinirSenha = async(senhaAntiga: string, senhaNova: string)=>{
     }
 }
 
+export const buscarColecao = async()=>{
+    try {
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.buscarColecao(Number(id))
+        return resultado.data
+    } catch (error) {
+        geralUtils.erro(error, 'buscarColecao', 'usuarioUtils', error.response?.status || false)
+        return 0
+    }
+}
+
+export const buscarPostsCurtidos = async() =>{
+    try {
+        const id = await storage.getIdStorage()
+        const resultado = await apis.usuario.buscarPostsCurtidos(Number(id))
+        return resultado.data
+    } catch (error) {
+        geralUtils.erro(error, 'buscarPostsCurtidos', 'usuarioUtils', error.response?.status || false)
+        return 0
+    }
+}
+
 export default {
     login,
     criar,
@@ -178,4 +204,6 @@ export default {
     excluirConta,
     blobUsuario,
     redefinirSenha,
+    buscarColecao,
+    buscarPostsCurtidos,
 }

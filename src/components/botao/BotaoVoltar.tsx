@@ -1,6 +1,6 @@
-import { Image, Pressable } from "@gluestack-ui/themed"
+import { Pressable } from "@gluestack-ui/themed"
 import { useNavigation } from "@react-navigation/native"
-
+import { LazyIcon } from "../geral/LazyImage"
 const VoltarIcon = require('../../assets/VoltarIcon.png')
 
 export default function BotaoVoltar({onPress, ...rest}: any){
@@ -8,7 +8,7 @@ export default function BotaoVoltar({onPress, ...rest}: any){
 
     return(
         <Pressable onPress={onPress ? onPress : ()=>navigation.goBack()} {...rest}>
-            <Image source={VoltarIcon} size="2xs" alt='voltar'/>
+            <LazyIcon imagem={VoltarIcon} style={{width: 28, height: 28}}/>
         </Pressable>
     )
 }
