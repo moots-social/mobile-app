@@ -179,8 +179,10 @@ export default function Post({
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
-                  {!clicouCurtiu ? <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/> : <BareLoading />}
-                  {!clicouSalvou ? <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/> : <BareLoading />}
+                  {/* {!clicouCurtiu ? <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/> : <BareLoading />} */}
+                  {/* {!clicouSalvou ? <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/> : <BareLoading />} */}
+                  <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/>
+                  <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/>
                 </Box>
                 {botaoComentario && <BotaoComentar justifyContent="flex-end" onPress={handleClickComentario}/>}
             </Box>

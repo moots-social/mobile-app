@@ -23,7 +23,7 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                             <Titulo fontFamily="Poppins_500Medium">Perfis</Titulo>
                             <Box flexDirection="row" flexWrap="wrap" gap={5} ml={7.5}>
                             {dataPerfil && dataPerfil.length>0 ? dataPerfil.map((item)=>{
-                                return <CartaoUsuario usuario={usuario} usuarioRenderizadoNoCartao={item} vemDeLista={false} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId})}} seguir={usuario.id!=item.userId}/>
+                                return <CartaoUsuario usuario={usuario} usuarioRenderizadoNoCartao={item} key={item.userId} vemDeLista={false} onPress={()=>{navigation.navigate('outro-perfil', {userId: item.userId})}} seguir={usuario.id!=item.userId}/>
                                     }): <TextoNegrito fontFamily="Poppins_500Medium">{filtros.radioGeral!=='publicacoes' ? 'Nenhum perfil encontrado.' :
                                         'Filtro para buscar apenas publicações ativado.'}</TextoNegrito>}
                             </Box>

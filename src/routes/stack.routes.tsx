@@ -60,9 +60,9 @@ export default function Stack() {
         ) : (
           <>
             <Screen name='inicial' component={Inicial} options={{ headerShown: false }} />
-            <Screen name="login" component={Login} options={{ headerShown: false }} />
             <Screen name="cadastro" component={Cadastro} options={{ headerShown: false }} />
             <Screen name="info" component={Info} options={{ headerShown: false }} />
+            <Screen name="login" component={Login} options={{ headerShown: false }} />
           </>
         )}
       </Navigator>

@@ -1,7 +1,7 @@
 import { Icon, Image, Pressable, TrashIcon } from "@gluestack-ui/themed"
-import { useState } from "react";
-import * as ImagePicker from 'expo-image-picker'
 import { LazyIcon } from "../geral/LazyImage";
+import Animated, {useSharedValue, withTiming} from 'react-native-reanimated';
+import { useEffect, useState } from "react";
 
 const coracaoIcon = require('../../assets/CoracaoIcon.png')
 const coracaoCurtidoIcon = require('../../assets/coracaoCurtido.png')
@@ -33,25 +33,48 @@ export function BotaoExcluirComentario({imgW, imgH, ...rest}: IBotaoComentarioPr
 
 //abaixo somente post existente
 export function BotaoCurtirPost({curtiu, ...rest}){
-    
+    const scale = useSharedValue(curtiu ? 1 : 0.8)
+
+    useEffect(()=>{
+        scale.value = withTiming(curtiu ? 1 : 0.8, { duration: 100 });
+    }, [curtiu])
+
     return(
         <Pressable $active-opacity={0.6} {...rest}>
-            <LazyIcon imagem={!curtiu ? coracaoIcon : coracaoCurtidoIcon} style={{width: 33, height: 28}}/>
+            <Animated.Image 
+                source={!curtiu ? coracaoIcon : coracaoCurtidoIcon}
+                style={{
+                    width: 33,
+                    height: 28,
+                    transform: [{scale}],
+                }}
+            />
         </Pressable>
     )
 }
 
 export function BotaoSalvar({salvou, ...rest}){
+        const scale = useSharedValue(salvou ? 1 : 0.8)
+
+        useEffect(()=>{
+            scale.value = withTiming(salvou ? 1 : 0.8, { duration: 100 });
+        }, [salvou])
         return(
         <Pressable $active-opacity={0.6} {...rest}>
-            <LazyIcon imagem={!salvou ? salvarIcon : salvouIcon} style={{width: 28, height: 28}}/>
+            <Animated.Image 
+                source={!salvou ? salvarIcon : salvouIcon}
+                style={{
+                    width: 28,
+                    height: 28,
+                    transform: [{scale}],
+                }}
+            />
         </Pressable>
     )
 }
 export function BotaoComentar({size, ...rest}: IBotaoPostProps){
     return(
         <Pressable $active-opacity={0.6} {...rest}>
-            {/* <Image source={comentarioIcon} size={size} alt='comentar'/> */}
             <LazyIcon imagem={comentarioIcon} style={{width: 28, height: 28}} />
         </Pressable>
     )
@@ -62,7 +85,6 @@ export function BotaoGaleria({...rest}){
     
     return(
         <Pressable $active-opacity={0.6} w={30} h={20} {...rest}>
-            {/* <Image source={galeriaIcon} w={26} h={20} alt='abrir galeria'/> */}
             <LazyIcon imagem={galeriaIcon} style={{width: 26, height: 20}}/>
         </Pressable>
     )
