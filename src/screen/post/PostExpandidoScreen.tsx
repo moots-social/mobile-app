@@ -5,15 +5,13 @@ import Post from "../../components/post/Post";
 import { RoundedTop } from "../../components/geral/Rounded";
 import Comentario from "../../components/post/Comentario";
 
-const enviarIcon = require('../../assets/EnviarIconRounded.png')
-
 import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import postUtils from "../../utils/postUtils";
+import postUtils, { salvarPost } from "../../utils/postUtils";
 import Loading, { BareLoading } from "../../components/geral/Loading";
 import { abrirToast } from "../../components/geral/ToastMoots";
-import { apis, comentarioApi, postApi } from "../../api/apis";
+import { comentarioApi } from "../../api/apis";
 import { TextoNegrito } from "../../components/geral/Texto";
 import { BotaoEnviarNovoPost } from "../../components/botao/BotoesPostComentario";
 import { LazyIcon } from "../../components/geral/LazyImage";
@@ -41,7 +39,7 @@ export default function PostExpandido({route, navigation}) {
 
   const handleSalvarPost = (postId: number) => {
     try{
-      postApi.salvarPost(postId)
+      salvarPost(postId)
       abrirToast(toast, 'success', 'Post salvo com sucesso.', '', 2000, true)
 
     } catch(error: any){

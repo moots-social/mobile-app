@@ -8,6 +8,7 @@ import ImageView from "react-native-image-viewing"
 import { useSelector } from "react-redux";
 import VirtualizedPosts from "../geral/VirtualizedPosts";
 import { LazyImage } from "../geral/LazyImage";
+import { BotaoNovoPost, BotaoRecarregarPosts } from "../botao/BotaoMais";
 
 interface IFotoCapaBoxProps{
     fotoPerfilSource: any,
@@ -60,10 +61,19 @@ export function FotoCapaBox({fotoPerfilSource, fotoCapaSource, ...rest}: IFotoCa
 }
 
 export function TextoBox({nomeCompleto, tag, descricao , ...rest}: ITextoBoxProps){
+    const [mostrarTextoCompleto, setMostrarTextoCompleto] = useState<boolean>(false)
+
+    const textoResumido = descricao?.length > 0 ? mostrarTextoCompleto ? descricao : descricao.substring(0, 75) : ""
+
     return <Box mt={60} alignItems="center" alignSelf="center" w="90%" {...rest}>
               <Text fontFamily='Poppins_600SemiBold' fontSize={26} color='$black' textAlign='center'>{nomeCompleto}</Text>
               <Text fontFamily='Poppins_500Medium' fontSize={18} color='#B6B3B3' textAlign='center'>{tag}</Text>
-              {descricao!=='' && <Text fontFamily='Poppins_500Medium' fontSize={18} color='#737373' textAlign='center'>{descricao}</Text>}
+              {descricao!=='' && <Text fontFamily='Poppins_500Medium' fontSize={18} color='#737373' textAlign='center'>{textoResumido}{descricao.length>75 && !mostrarTextoCompleto ? '...' : ''}</Text>}
+              {descricao.length>75 && (
+                  <Pressable onPress={()=>setMostrarTextoCompleto(!mostrarTextoCompleto)} >
+                    <TextoNegrito color='$lightTres'>{mostrarTextoCompleto ? 'Mostrar menos' : 'Ler mais'}</TextoNegrito>
+                  </Pressable>
+                )}
             </Box>
 }
 
@@ -84,7 +94,10 @@ export function PublicacoesBox({userId}){
     const [refresh, setRefresh] = useState<boolean>(false)
     
     return <Box alignItems="center" >
-            <Titulo>Publicações</Titulo>
+            <Box flexDirection='row' justifyContent='center' alignItems='center'>
+                <Titulo top={1}>Publicações  </Titulo>
+                <BotaoRecarregarPosts onPress={()=>setRefresh(!refresh)}/>
+            </Box>
             <VirtualizedPosts userId={userId} localDeRenderizacao="perfil" refreshState={refresh}/>
         </Box>
 }

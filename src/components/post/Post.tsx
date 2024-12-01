@@ -38,7 +38,7 @@ interface IPostProps {
 }
 
 export default function Post({
-  descricaoPost,
+  descricaoPost='',
   imagemPost,
   imagemPerfil,
   userId,
@@ -88,7 +88,8 @@ export default function Post({
         abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
         setClicouCurtiu(false)
         return
-      } 
+      }
+      setCurtiu((prevCurtiu) => !prevCurtiu)
     } else{
       const res = await postUtils.curtirPost(postId, true)
       console.log(res)
@@ -97,6 +98,7 @@ export default function Post({
         setClicouCurtiu(false)
         return
       }
+      setCurtiu((prevCurtiu) => !prevCurtiu)
       abrirToast(toast, 'success', `Você curtiu a publicação de ${tagUsuario}.`, '', 1000, false)
     }
     const listaCurtidasAtualizadas = await buscarPostsCurtidos()
@@ -144,19 +146,20 @@ export default function Post({
       }, [postId, usuario.colecaoSalvos, clicouSalvou])
       
       const handleIsCurtido = async()=>{
+        console.log(usuario.idPostsCurtidos)
         const checkIsCurtido = await usuario.idPostsCurtidos.some(dado => dado == postId)
         setCurtiu(checkIsCurtido)
       }
+      
       useEffect(()=>{
-        
         handleIsCurtido()
-      }, [postId, usuario.idPostsCurtidos, clicouCurtiu])
+      }, [clicouCurtiu, usuario.idPostsCurtidos])
       return (
         <>
     <Pressable onPress={()=> navigation.navigate('expandido', {postId: postId})} {...rest}>
         <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20} {...rest}>
         <Box flexDirection="row" w="100%">
-            <Pressable onPress={handleIrProPerfil} h={42}>
+            <Pressable $active-opacity={0.6} onPress={handleIrProPerfil} h={42}>
               <LazyImage imagem={usuarioIcon} style={{width: 40, height: 40, borderRadius: 50, }} placeholder=''/>
             </Pressable >
             <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
@@ -171,7 +174,7 @@ export default function Post({
                   </Pressable>
                 )}
                 <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
-                    {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable onPress={()=>handleExpandirFoto(index)}>
+                    {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable $active-opacity={0.6} onPress={()=>handleExpandirFoto(index)}>
                                                         <LazyImage imagem={imagem} style={{marginRight: 10, borderRadius: 10, width: 200, height: 200}}/>
                                                     </Pressable>))
                                 )}

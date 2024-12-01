@@ -144,7 +144,7 @@ export default function EditarPerfil({navigation}){
                         <Image source={usuarioAtualizado.fotoPerfil || usuario.fotoPerfil || UsuarioIcon} rounded={60}/>
                         <ActionCurso curso={usuario.curso} />
                     </Box>
-                    <Pressable onPress={()=>setOpcoesVisivel(true)}>
+                    <Pressable $active-opacity={0.6} onPress={()=>setOpcoesVisivel(true)}>
                         <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Alterar foto de perfil ou capa</TextoNegrito>
                         <Actionsheet isOpen={isOpcoesVisivel} onClose={()=>setOpcoesVisivel(false)}>
                             <ActionsheetBackdrop/>
@@ -173,21 +173,21 @@ export default function EditarPerfil({navigation}){
                 </Box>
                 <Box alignItems="center">
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$black">Avançado</Text>
-                        <Pressable alignItems="center" onPress={()=>navigation.navigate('redefinir')}>
+                        <Pressable alignItems="center" $active-opacity={0.6} onPress={()=>navigation.navigate('redefinir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Redefinir senha</TextoNegrito>
                         </Pressable>
-                        <Pressable alignItems="center" onPress={()=>navigation.navigate('excluir')}>
+                        <Pressable alignItems="center" $active-opacity={0.6} onPress={()=>navigation.navigate('excluir')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Excluir conta</TextoNegrito>
                         </Pressable>
                         {usuario.roles && usuario.roles.includes('ADMIN') && (
-                        <Pressable alignItems="center" onPress={()=>navigation.navigate('moderador')}>
+                        <Pressable alignItems="center" $active-opacity={0.6} onPress={()=>navigation.navigate('moderador')}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Área do moderador</TextoNegrito>
                         </Pressable>
                         )}
-                        {!disabledSalvar ? (<Pressable alignItems="center" isDisabled={disabledSalvar} onPress={handleSubmit}>
+                        {!disabledSalvar ? (<Pressable alignItems="center" $active-opacity={0.6} isDisabled={disabledSalvar} onPress={handleSubmit}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito> 
                         </Pressable>) : <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16}></TextoNegrito>}
-                <Pressable alignItems="center" onPress={()=>handleLogout()} mt={20}>
+                <Pressable alignItems="center" $active-opacity={0.6} onPress={()=>handleLogout()} mt={20}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Sair</Text>
                 </Pressable>
                 </Box>

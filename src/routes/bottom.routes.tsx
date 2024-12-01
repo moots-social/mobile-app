@@ -26,7 +26,7 @@ const {Screen, Navigator} = createBottomTabNavigator()
 //botão de rota com cores e ícones personalizados 
 function IconePersonalizado({tab, focused}: any){
     return  <Box h="100%" w="$12" justifyContent="center" px={10} rounded='$lg' bgColor={focused ? '#EDEDED' : '$white'}>
-                <LazyIcon imagem={tab.icon} style={{width: 30, height: 30, opacity: focused ? 1 : 0.3, borderRadius: tab.id===4 ? 30 : 0}}/>
+                <LazyIcon imagem={tab.icon} style={{width: 30, height: 30, opacity: focused ? 0.8 : 0.3, borderRadius: tab.id===4 ? 30 : 0}}/>
             </Box>
    
 }

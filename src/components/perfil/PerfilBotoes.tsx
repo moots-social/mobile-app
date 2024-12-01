@@ -100,7 +100,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
         handleIsSeguindo();
     }, [usuario.idSeguindo])
     return(
-        <Pressable bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario}  borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
+        <Pressable $active-opacity={0.6} bg={!isSeguindo ? "$lightTres" : '#FF5050'} onPress={handleSeguirUsuario}  borderColor="$black" justifyContent="center" alignItems="center" {...rest}>
             {!clicouBotao ? <LazyIcon imagem={seguirIcon} style={{width: imgW, height: imgH, margin: 10}} /> : <BareLoading color='$black' m={7}/>}
         </Pressable>
     )
@@ -110,7 +110,7 @@ export function BotaoSeguir({imgW=20, imgH=16, id1, id2, usuarioLogado, nomeComp
 export function BotaoConfigurar({imgW=10, imgH=10, ...rest}: IBotaoConfigurarProps){
     const navigation = useNavigation()
     return(
-        <Pressable bg="$lightTres" rounded={20} justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>navigation.navigate('editar')} {...rest}>
+        <Pressable $active-opacity={0.6} bg="$lightTres" rounded={20} justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>navigation.navigate('editar')} {...rest}>
             <LazyIcon imagem={editarIcon} style={{width: imgW, height: imgH, margin: 10}} />
         </Pressable>
     )
@@ -165,7 +165,7 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
     }, [getUsuario.userId, isModalVisivel, botaoSelecionado])
     
     return(
-        <Pressable bg="$lightDois" borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>setModalVisivel(true)} {...rest}>
+        <Pressable $active-opacity={0.6} bg="$lightDois" borderColor="$black" justifyContent="center" alignItems="center" maxWidth={35} maxHeight={35} onPress={()=>setModalVisivel(true)} {...rest}>
             <LazyIcon imagem={listaIcon} style={{width: imgW, height: imgH, margin: 10}} />
             <Modal isOpen={isModalVisivel} onClose={()=>{setModalVisivel(false); setBotaoSelecionado('seguindo')}}>
                 <ModalBackdrop/>
@@ -251,7 +251,7 @@ export function BotaoCurso({curso}: ICursoModalProps){
     }, [curso])
 
     return(
-        <Pressable onPress={handleAbrir}>
+        <Pressable $active-opacity={0.6} onPress={handleAbrir}>
             <LazyIcon imagem={imagem || ''} style={{width: 50, height: 50}}/>
             <Modal isOpen={isModalVisivel} onClose={handleFechar}>
                 <ModalBackdrop />
@@ -300,7 +300,7 @@ export function ActionCurso({curso}: ICursoModalProps){
         handleImagem()
     }, [])
     return(
-        <Pressable onPress={()=>setOpcoesVisivel(true)}>
+        <Pressable $active-opacity={0.6} onPress={()=>setOpcoesVisivel(true)}>
             <Image source={imagem} alt='icone do curso'/>
             <Actionsheet isOpen={isOpcoesVisivel} onClose={()=>setOpcoesVisivel(false)}>
                 <ActionsheetBackdrop/>

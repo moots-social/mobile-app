@@ -5,7 +5,7 @@ import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import BotaoSecao from "../../components/botao/BotaoSecao";
 import { useRef, useState } from "react";
 import { usuarioApi } from "../../api/apis";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import { buscarEmail } from "../../utils/usuarioUtils";
 import { abrirToast } from "../../components/geral/ToastMoots";
 import { useToast } from "@gluestack-ui/themed";
@@ -151,7 +151,9 @@ export default function Cadastro({ navigation }) {
               
               <Box flexDirection="row" mt={2.5} mb={65}>
                 <TextoNegrito>Já tem uma conta? </TextoNegrito>
-                <TextoNegrito color="#468B51" onPress={() => navigation.navigate('login')}>Realizar login</TextoNegrito>
+                <TouchableOpacity onPress={() => navigation.navigate('login')}>
+                  <TextoNegrito color="#468B51">Realizar login</TextoNegrito>
+                </TouchableOpacity>
               </Box>
             </Box>
 

@@ -71,7 +71,7 @@ export function MenuPost({userId, postId}: IPropsMenu){
 
         <Menu trigger={({ ...triggerProps})=>{
             return(
-                <Pressable {...triggerProps} bg="$white" h={25}>
+                <Pressable $active-opacity={0.6} {...triggerProps} bg="$white" h={25}>
                     <LazyIcon imagem={menuIcon} style={{width: 28, height: 28}}/>
                 </Pressable>
             )

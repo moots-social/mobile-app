@@ -29,7 +29,7 @@ export default function Notificacoes(){
     }}, [])
 
         const handleNotificacaoExcluida = () => {
-            if(notificacoes && notificacoes.length>0) onRefresh()
+            onRefresh()
         }
     useEffect(()=>{
 

@@ -44,10 +44,6 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
     const [isInvalid, setIsInvalid] = useState<boolean>(false)
     const [valor, setValor] = useState<string>(valorParam || '')
     const [enviandoPesquisa, setEnviandoPesquisa] = useState<boolean>(false)
-
-    const voltar = () =>{
-        navigation.goBack()
-    }
     
     const desfocarInput = () => {
         input.current.blur()
@@ -120,7 +116,7 @@ export default function BarraPesquisa({extended=true, valorParam='', ...rest}){
                 <Box  flexDirection="row" justifyContent={!extended ? "space-around" : "space-between"} alignItems="center" py={10} pt={30}>
                     {!extended && (
                         <Box>
-                            <BotaoVoltar onPress={()=>voltar()}/>
+                            <BotaoVoltar/>
                         </Box>
                     )}
 
@@ -193,7 +189,7 @@ export function TermoRecente({termo, ...rest}: ITermoProps){
         ])
     }
     return(
-        <Pressable bg="$add1" alignItems= "center" rounded= {15} px={10} onPress={handlePress} onLongPress={handleLongPress} {...rest}>
+        <Pressable $active-opacity={0.8} bg="$add1" alignItems="center" rounded= {15} px={10} onPress={handlePress} onLongPress={handleLongPress} {...rest}>
             <TextoNegrito color="$lightSeis">{termo}</TextoNegrito>
         </Pressable>
     )

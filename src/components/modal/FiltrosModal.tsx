@@ -80,7 +80,7 @@ export default function FiltrosModal({...rest}){
     return(
         <Box {...rest}>
 
-            <Pressable onPress={()=>{handleAbrir('Carregando...')}} ref={ref}>
+            <Pressable $active-opacity={0.6} onPress={()=>{handleAbrir('Carregando...')}} ref={ref}>
                 <LazyIcon imagem={filtroIcon} style={{width: 30, height: 30}}/>
             </Pressable>
 

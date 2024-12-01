@@ -49,12 +49,6 @@ export default function RedefinirSenha({navigation}){
                 <Box>
                     <Box alignItems="center" my={20} >
                         <InputPerfil type='password' titulo='Senha atual' w="90%" onChange={(text: string)=>handleSenhaAntigaChange(text)}/>
-                        <Box flexDirection="row" mt={5}>
-                            <TextoNegrito>Esqueceu sua senha? </TextoNegrito>
-                            <Pressable>
-                                <TextoNegrito color="$lightSete">Redefinir senha</TextoNegrito>
-                            </Pressable>
-                        </Box>
                     </Box>
                     <Box>
                         <InputPerfil type='password' titulo='Nova senha' w="90%" onChange={(text: string)=>handleNovaSenhaChange(text)}/>
@@ -63,7 +57,7 @@ export default function RedefinirSenha({navigation}){
                         <InputPerfil type='password' titulo='Repita a nova senha' w="90%" onChange={(text: string)=>handleConfirmaNovaSenhaChange(text)}/>
                     </Box>
                 </Box>
-                <Pressable alignItems="center" onPress={handleSubmit}>
+                <Pressable $active-opacity={0.6} alignItems="center" onPress={handleSubmit}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="$lightSete">Salvar alterações</Text>
                 </Pressable>
             </Box>

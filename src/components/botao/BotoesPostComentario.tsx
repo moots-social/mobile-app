@@ -26,30 +26,31 @@ interface IBotaoPostProps{
 
 //abaixo somente comentario
 export function BotaoExcluirComentario({imgW, imgH, ...rest}: IBotaoComentarioProps){
-    return <Pressable {...rest}>
+    return <Pressable $active-opacity={0.6} {...rest}>
         <Icon as={TrashIcon} w={imgW} h={imgH}/>
     </Pressable>
 }
 
 //abaixo somente post existente
 export function BotaoCurtirPost({curtiu, ...rest}){
+    
     return(
-        <Pressable {...rest}>
+        <Pressable $active-opacity={0.6} {...rest}>
             <LazyIcon imagem={!curtiu ? coracaoIcon : coracaoCurtidoIcon} style={{width: 33, height: 28}}/>
         </Pressable>
     )
 }
 
 export function BotaoSalvar({salvou, ...rest}){
-    return(
-        <Pressable {...rest}>
+        return(
+        <Pressable $active-opacity={0.6} {...rest}>
             <LazyIcon imagem={!salvou ? salvarIcon : salvouIcon} style={{width: 28, height: 28}}/>
         </Pressable>
     )
 }
 export function BotaoComentar({size, ...rest}: IBotaoPostProps){
     return(
-        <Pressable {...rest}>
+        <Pressable $active-opacity={0.6} {...rest}>
             {/* <Image source={comentarioIcon} size={size} alt='comentar'/> */}
             <LazyIcon imagem={comentarioIcon} style={{width: 28, height: 28}} />
         </Pressable>
@@ -60,7 +61,7 @@ export function BotaoComentar({size, ...rest}: IBotaoPostProps){
 export function BotaoGaleria({...rest}){
     
     return(
-        <Pressable w={30} h={20} {...rest}>
+        <Pressable $active-opacity={0.6} w={30} h={20} {...rest}>
             {/* <Image source={galeriaIcon} w={26} h={20} alt='abrir galeria'/> */}
             <LazyIcon imagem={galeriaIcon} style={{width: 26, height: 20}}/>
         </Pressable>
@@ -70,7 +71,7 @@ export function BotaoGaleria({...rest}){
 export function BotaoCamera({...rest}){
 
     return(
-        <Pressable w={30} h={20} {...rest}>
+        <Pressable $active-opacity={0.6} w={30} h={20} {...rest}>
             <LazyIcon imagem={cameraIcon} style={{width: 28, height: 20}}/>
         </Pressable>
     )
@@ -78,7 +79,7 @@ export function BotaoCamera({...rest}){
 
 export function BotaoEnviarNovoPost({...rest}){
     return(
-        <Pressable {...rest} >
+        <Pressable $active-opacity={0.6} {...rest} >
             <LazyIcon imagem={enviarIcon} style={{width: 20, height: 20}}/>
         </Pressable>
     )

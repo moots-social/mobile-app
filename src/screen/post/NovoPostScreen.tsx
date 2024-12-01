@@ -15,9 +15,9 @@ import { usuarioIcon } from "../../components/perfil/PerfilComponents";
 import { useDispatch, useSelector } from "react-redux";
 import { LazyImage } from "../../components/geral/LazyImage";
 import { BareLoading } from "../../components/geral/Loading";
-import { setarUsuario } from "../../redux/useUsuario";
 
-export default function NovoPost({navigation}){
+export default function NovoPost({navigation, route}){
+    const {onPostEnviado} = route.params
     const toast = useToast()
     const dispatch = useDispatch()
     const [ texto, setTexto ] = useState<string>('')
@@ -42,12 +42,12 @@ export default function NovoPost({navigation}){
             }else{ 
                 const resultado = await enviarNovoPost(texto, uris)
                 if(resultado && resultado.resultado === 'Post enviado com sucesso.'){
-                    dispatch(setarUsuario({...usuario, novoPost: true}))
                     navigation.navigate('tabs')
                     abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 2000, false)
                     setImagens([])
                     setUris([])
                     setTexto('')
+                    onPostEnviado()
                 }
             }
         } catch (error) {
@@ -133,7 +133,7 @@ export default function NovoPost({navigation}){
                                     <TextoNegrito ml={2}>{usuario.nomeCompleto}</TextoNegrito>
                                 </Box>
                                 <Box justifyContent="center" >
-                                    <Textarea ml={38} brw={0} w="85%" minHeight={100} maxHeight={150} bottom={10}>
+                                    <Textarea ml={38} brw={0} w="85%" bottom={10}>
                                         <TextareaInput fontFamily="Poppins_500Medium" placeholder="No que você está pensando?" value={texto} onChangeText={(text)=>setTexto(text)} />
                                     </Textarea>
                                     <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false}>

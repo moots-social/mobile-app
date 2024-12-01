@@ -48,9 +48,9 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
         }
     }
                     
-    useEffect(()=>{
-        if(localDeRenderizacao) handleBuscarPosts()
-    }, [usuario.novoPost])
+    // useEffect(()=>{
+    //     if(localDeRenderizacao) handleBuscarPosts()
+    // }, [usuario.novoPost])
 
     useEffect(()=>{
         handleBuscarPosts()
@@ -58,8 +58,9 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
     if(posts && posts.length<=0) return <TextoNegrito>Nenhuma publicação encontrada.</TextoNegrito>
-    return <VirtualizedList  contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={3} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
-        <Post 
+    return <VirtualizedList  contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
+        <Post
+        key={item.postId}
         postId={item.postId} 
         descricaoPost={item.texto} 
         imagemPost={item.listImagens} 
