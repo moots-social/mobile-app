@@ -77,7 +77,7 @@ export default function Bottom(){
             try{
                 const getUsuario = await buscar()
                 if(getUsuario){
-                    let getSeguindo = await buscarQuemSegue()
+                    let getSeguindo = await buscarQuemSegue(getUsuario.userId)
                     if(getSeguindo.length>0){
                         const arrayIdSeguindo = getSeguindo.map(usuario => usuario.userId)
                         getSeguindo = arrayIdSeguindo

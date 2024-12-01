@@ -88,18 +88,19 @@ export const atualizarDados = async(usuario: any)=>{
     }
 }
 
-export const buscarQuemSegue = async(userId: number | string)=>{
+export const buscarQuemSegue = async(userId: number)=>{
     try {
         const id = await storage.getIdStorage()
         const resultado = await apis.usuario.buscarQuemSegue(userId)
         if (resultado.data) return resultado.data
     } catch (error: any) {
+        console.error(error.response.data)
         geralUtils.erro(error, 'buscarQuemSegue', 'usuarioUtils', error.response?.status || false)
         console.warn('se status for igual a 409, ignorar')
         return []
     }
 }
-export const buscarSeguidores = async(userId: number | string)=>{
+export const buscarSeguidores = async(userId: number)=>{
     try {
         const id = await storage.getIdStorage()
         const resultado = await apis.usuario.buscarSeguidores(userId)
