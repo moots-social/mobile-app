@@ -19,7 +19,7 @@ export default function CartaoUsuario({cor="$lightSeis", corSecundaria="$lightSe
         <Provider store={store}>
             <Pressable w={120} bg={cor} rounded={15} alignItems="center" py={10} {...rest}>
                 <Box alignItems="center" mb={2}>
-                    <LazyImage imagem={usuarioRenderizadoNoCartao.fotoPerfil || usuarioIcon} placeholder={usuarioIcon} style={{width: 40, height: 40}}/>
+                    <LazyImage imagem={usuarioRenderizadoNoCartao.fotoPerfil || usuarioIcon} placeholder={usuarioIcon} style={{width: 40, height: 40, borderRadius: 30}}/>
                     <Text color="$white" fontFamily="Poppins_700Bold" textAlign="center">{usuarioRenderizadoNoCartao.nomeCompleto}</Text>
                     <Text color="$white" opacity='$80' fontFamily="Poppins_500Medium" textAlign="center" fontSize={12}>{usuarioRenderizadoNoCartao.tag}</Text>
                 </Box>
