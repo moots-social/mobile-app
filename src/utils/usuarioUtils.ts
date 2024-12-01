@@ -88,10 +88,10 @@ export const atualizarDados = async(usuario: any)=>{
     }
 }
 
-export const buscarQuemSegue = async(userId?: number)=>{
+export const buscarQuemSegue = async(userId: number | string)=>{
     try {
         const id = await storage.getIdStorage()
-        const resultado = await apis.usuario.buscarQuemSegue(userId || Number(id))
+        const resultado = await apis.usuario.buscarQuemSegue(userId)
         if (resultado.data) return resultado.data
     } catch (error: any) {
         geralUtils.erro(error, 'buscarQuemSegue', 'usuarioUtils', error.response?.status || false)
@@ -99,10 +99,10 @@ export const buscarQuemSegue = async(userId?: number)=>{
         return []
     }
 }
-export const buscarSeguidores = async(userId?: number)=>{
+export const buscarSeguidores = async(userId: number | string)=>{
     try {
         const id = await storage.getIdStorage()
-        const resultado = await apis.usuario.buscarSeguidores(userId || Number(id))
+        const resultado = await apis.usuario.buscarSeguidores(userId)
         
         if (resultado.data) return resultado.data
     } catch (error: any) {

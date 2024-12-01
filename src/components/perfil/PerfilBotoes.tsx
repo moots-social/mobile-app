@@ -144,7 +144,6 @@ export function BotaoListaSeguidores({imgW=16, imgH=16, getUsuario, ...rest}: IB
     }
     const getSeguidores = async()=>{
         try {
-            
             const resultado = await usuarioUtils.buscarSeguidores(getUsuario.userId)
             if(resultado){
                 setSeguidores(resultado)

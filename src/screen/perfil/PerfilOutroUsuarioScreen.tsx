@@ -9,7 +9,7 @@ import Loading from "../../components/geral/Loading";
 export default function PerfilOutroUsuario({navigation, route}){
     const [usuarioARenderizar, setUsuarioARenderizar] = useState()
     const [isLoading, setIsLoading] = useState(true)
-    const { userId } = route.params // Aqui você acessa o userId
+    const { userId } = route.params
     const usuario = useSelector((state: any) => state.usuario.user)
 
     useEffect(()=>{
