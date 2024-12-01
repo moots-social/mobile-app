@@ -6,7 +6,7 @@ import { TextoNegrito } from "../../components/geral/Texto";
 import InputPerfil, { MultiLinhaInputPerfil } from "../../components/geral/InputPerfil";
 import { ActionCurso } from '../../components/perfil/PerfilBotoes';
 import { useEffect, useState } from 'react';
-import Loading from '../../components/geral/Loading';
+import Loading, { BareLoading } from '../../components/geral/Loading';
 import { abrirToast} from '../../components/geral/ToastMoots';
 
 import { logoutUser } from '../../utils/storageUtils';
@@ -29,6 +29,7 @@ export default function EditarPerfil({navigation}){
     
     const [checkDescricao, setCheckDescricao] = useState<boolean>(false)
     const [disabledSalvar, setDisabledSalvar] = useState<boolean>(true)
+    const [clicouSalvar, setClicouSalvar] = useState<boolean>(false)
     
     const handleOpcaoEscolhida = (opcao: string)=>{
         setOpcoesVisivel(false)
@@ -68,8 +69,8 @@ export default function EditarPerfil({navigation}){
 
 
     const handleSubmit = async()=>{
-        
         try{
+            setClicouSalvar(true)
             let imagem = ''
             let imagem2= ''
             if(usuarioAtualizado.fotoPerfil!=='') {
@@ -96,15 +97,17 @@ export default function EditarPerfil({navigation}){
                 setIsLoading(true)
                 setTimeout(()=>{
                     setIsLoading(false)
-                    setDisabledSalvar(true)
                     setCheckDescricao(false)
                     setUsuarioAtualizado({nomeCompleto: '', descricao: usuario.descricao, curso: '', fotoPerfil: '', fotoCapa: ''})
                     abrirToast(toast, 'success', 'Alterações realizadas com sucesso.', '', 800, false)
                 },500)
-           }else throw new Error('Não foi possível editar seu perfil. Tente novamente mais tarde.')
+            }else throw new Error('Não foi possível editar seu perfil. Tente novamente mais tarde.')
             
         }catch(error: any){
             abrirToast(toast, 'error', String(error))
+        }finally{
+            setDisabledSalvar(true)
+            setClicouSalvar(false)
         }
     }
 
@@ -184,9 +187,9 @@ export default function EditarPerfil({navigation}){
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Área do moderador</TextoNegrito>
                         </Pressable>
                         )}
-                        {!disabledSalvar ? (<Pressable alignItems="center" $active-opacity={0.6} isDisabled={disabledSalvar} onPress={handleSubmit}>
+                        {!disabledSalvar && !clicouSalvar ? (<Pressable alignItems="center" $active-opacity={0.6} isDisabled={disabledSalvar} onPress={handleSubmit}>
                             <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16} color="$lightSete" mt={3}>Salvar alterações</TextoNegrito> 
-                        </Pressable>) : <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16}></TextoNegrito>}
+                        </Pressable>) : !disabledSalvar && clicouSalvar ? <BareLoading mt={3}/> : <TextoNegrito fontFamily="Poppins_600SemiBold" fontSize={16}></TextoNegrito>}
                 <Pressable alignItems="center" $active-opacity={0.6} onPress={()=>handleLogout()} mt={20}>
                     <Text fontFamily="Poppins_600SemiBold" fontSize={24} color="#FF2626">Sair</Text>
                 </Pressable>

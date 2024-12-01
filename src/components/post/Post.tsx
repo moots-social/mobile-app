@@ -83,7 +83,6 @@ export default function Post({
     setClicouCurtiu(true)
     if(curtiu){
       const res = await postUtils.curtirPost(postId, false)
-      console.log(res)
       if(res==0){
         abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
         setClicouCurtiu(false)
@@ -92,7 +91,6 @@ export default function Post({
       setCurtiu((prevCurtiu) => !prevCurtiu)
     } else{
       const res = await postUtils.curtirPost(postId, true)
-      console.log(res)
       if(res==0) {
         abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')
         setClicouCurtiu(false)
@@ -111,18 +109,16 @@ export default function Post({
     setClicouSalvou(true)
     if (salvou) {
       const res = await postUtils.removerPostSalvo(postId)
-      console.log(res)
       if(res==200){
         // setSalvou(false)
         abrirToast(toast, 'success', 'Publicação removida da coleção com sucesso.', '', 1000, false)
-        
+        setSalvou((prevSalvou) => !prevSalvou)
       }
     }else{
       const res = await postUtils.salvarPost(postId)
-      console.log(res)
       if(res==200){
-        // setSalvou(true)
         abrirToast(toast, 'success', 'Publicação salva com sucesso.', '', 1000, false)
+        setSalvou((prevSalvou) => !prevSalvou)
       }
     }
     const listaDeSalvosAtualizada = await buscarColecao()
@@ -143,10 +139,9 @@ export default function Post({
       }
       useEffect(()=>{
         handleIsSalvo()
-      }, [postId, usuario.colecaoSalvos, clicouSalvou])
+      }, [usuario.colecaoSalvos, clicouSalvou])
       
       const handleIsCurtido = async()=>{
-        console.log(usuario.idPostsCurtidos)
         const checkIsCurtido = await usuario.idPostsCurtidos.some(dado => dado == postId)
         setCurtiu(checkIsCurtido)
       }
