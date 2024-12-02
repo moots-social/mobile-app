@@ -16,6 +16,7 @@ enum Curso {
   
     constructor(
       public id: number,
+      public userId: number | string,
       public nomeCompleto: string,
       public tag: string,
       public email: string,

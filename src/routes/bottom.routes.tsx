@@ -75,9 +75,9 @@ export default function Bottom(){
         const getUser = async()=>{
             dispatch(autenticar())
             try{
-                const getUsuario = await buscar()
+                const getUsuario: Usuario = await buscar()
                 if(getUsuario){
-                    let getSeguindo = await buscarQuemSegue(getUsuario.userId)
+                    let getSeguindo = await buscarQuemSegue(Number(getUsuario.userId))
                     if(getSeguindo.length>0){
                         const arrayIdSeguindo = getSeguindo.map(usuario => usuario.userId)
                         getSeguindo = arrayIdSeguindo
