@@ -88,6 +88,7 @@ export const searchApi = {
 }
 
 export const postApi = {
+    buscarTodosOsPosts: () => api.get('/post/find-all'),
     buscarPostPorId: (postId: number) => api.get(`/post/${postId}`),
     novoPost: (texto: string, listImagens: string[]) => api.post(`/post/criar`, {texto: texto, listImagens: listImagens}),
     curtirPost: (postId: number, like: boolean) => api.put('/post/dar-like', {}, {params: {postId: postId, like: like}}),

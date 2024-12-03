@@ -17,7 +17,7 @@ import { LazyImage } from "../../components/geral/LazyImage";
 import { BareLoading } from "../../components/geral/Loading";
 
 export default function NovoPost({navigation, route}){
-    const {onPostEnviado} = route.params
+    const onPostEnviado = route.params?.onPostEnviado || (()=>console.log('post enviado com sucesso.'))
     const toast = useToast()
     const dispatch = useDispatch()
     const [ texto, setTexto ] = useState<string>('')
@@ -47,7 +47,18 @@ export default function NovoPost({navigation, route}){
                     setImagens([])
                     setUris([])
                     setTexto('')
-                    onPostEnviado()
+                    console.log('sse will work')
+                } else {
+                    if(resultado===403){
+                        navigation.navigate('tabs')
+                        abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 2000, false)
+                        setImagens([])
+                        setUris([])
+                        onPostEnviado()
+                        console.log('sse wont work')
+
+                    }
+                    else throw new Error
                 }
             }
         } catch (error) {

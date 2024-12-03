@@ -10,7 +10,8 @@ const usuarioSlice = createSlice({
       radioUsuario: 'qualquerUm',
       selectUsuario: 'Qualquer',
       checkPublicacoes: true,
-    }
+    },
+    notificacoes: []
   },
   reducers: {
     setarUsuario: (state, action) => {
@@ -49,13 +50,15 @@ const usuarioSlice = createSlice({
           checkPublicacoes: true,
         }
     }
+  },
+  setarNotificacoes: (state, action) =>{ 
+    return {
+      ...state,
+      notificacoes: [...state.notificacoes, action.payload]
+    }
   }
 }});
 
-export const { setarUsuario, novoTermo, novaListaTermo, setarFiltros, setarFiltrosPadrao } = usuarioSlice.actions;
-
-// export const storeUsuario = configureStore({
-//   reducer: usuarioSlice.reducer  
-// });
+export const { setarUsuario, novoTermo, novaListaTermo, setarFiltros, setarFiltrosPadrao, setarNotificacoes } = usuarioSlice.actions;
 
 export default usuarioSlice.reducer;

@@ -5,7 +5,6 @@ import Notificacao from "../../components/notificacao/Notificacao";
 import { useCallback, useEffect, useState } from "react";
 import Loading from "../../components/geral/Loading";
 import notificacaoUtils from "../../utils/notificacaoUtils";
-import { useDispatch, useSelector } from "react-redux";
 import { TextoNegrito } from "../../components/geral/Texto";
 
 export default function Notificacoes(){
@@ -32,7 +31,6 @@ export default function Notificacoes(){
             onRefresh()
         }
     useEffect(()=>{
-
         buscarNotificacoes()
         setIsLoading(false)
     }, [])

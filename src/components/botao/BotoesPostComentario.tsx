@@ -33,10 +33,10 @@ export function BotaoExcluirComentario({imgW, imgH, ...rest}: IBotaoComentarioPr
 
 //abaixo somente post existente
 export function BotaoCurtirPost({curtiu, ...rest}){
-    const scale = useSharedValue(curtiu ? 1 : 0.8)
+    const scale = useSharedValue(curtiu ? 1 : 0.7)
 
     useEffect(()=>{
-        scale.value = withTiming(curtiu ? 1 : 0.8, { duration: 100 });
+        scale.value = withTiming(curtiu ? 1 : 0.7, { duration: 100 });
     }, [curtiu])
 
     return(
@@ -54,10 +54,10 @@ export function BotaoCurtirPost({curtiu, ...rest}){
 }
 
 export function BotaoSalvar({salvou, ...rest}){
-        const scale = useSharedValue(salvou ? 1 : 0.8)
+        const scale = useSharedValue(salvou ? 1 : 0.7)
 
         useEffect(()=>{
-            scale.value = withTiming(salvou ? 1 : 0.8, { duration: 100 });
+            scale.value = withTiming(salvou ? 1 : 0.7, { duration: 100 });
         }, [salvou])
         return(
         <Pressable $active-opacity={0.6} {...rest}>

@@ -5,6 +5,8 @@ import searchUtils, { buscarPostPorUserId } from "../../utils/searchUtils";
 import { buscarColecao } from "../../utils/usuarioUtils";
 import { TextoNegrito } from "./Texto";
 import { useSelector } from "react-redux";
+import {BASE_URL} from '@env'
+import EventSource from "react-native-sse";
 
 interface IVirtualizedPostsProps{
     dataPost?: any[],
@@ -17,8 +19,34 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
     const [posts, setPosts] = useState<any[]>()
     const usuario = useSelector(state => state.usuario.user)
 
+    useEffect(()=>{
+        if(localDeRenderizacao && localDeRenderizacao==='feed'){
+            const eventSource = new EventSource(`${BASE_URL}/post/stream-sse`)
+            
+            eventSource.addEventListener('open', ()=>{
+                console.log('CONEXÃO ABRIDA MEU VELHO')
+            })
+    
+            eventSource.addEventListener('message', (event) => {
+                console.log('NOVA MENSAGEM MEU PARCEIRINHO:', event.data);
+                const novoPost = JSON.parse(event.data)
+                setPosts((prevPosts) => [novoPost, ...(prevPosts || []), ])
+            });
+    
+            eventSource.addEventListener('error', (event) => {
+                console.error('CONEXÃO CAIU MEU CAMPEÃO:', event);
+            });
+    
+            eventSource.open();
+    
+            return ()=>{
+                eventSource.close()
+            }
+        }
+    }, [])
+
     const handleBuscarPosts = async()=>{
-        if(localDeRenderizacao){
+        if(localDeRenderizacao && localDeRenderizacao.toLowerCase()!=='feed'){
             switch (localDeRenderizacao.toLowerCase()){
                 case 'colecao':
                     let resultado = await buscarColecao()
@@ -40,8 +68,9 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                 }
         }else{
             const resultado = await searchUtils.buscarTodosOsPosts()
-            
-            if(resultado!=0) setPosts(resultado)
+            if(resultado!=0){
+                 setPosts(resultado)
+            }
             else{
                 setPosts([])
             } 

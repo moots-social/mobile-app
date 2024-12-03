@@ -155,7 +155,7 @@ export default function Post({
         <FullRounded bg="$white" w={rw ? rw : menu ? "90%" : "100%"} py={20} px={10} pr={20} {...rest}>
         <Box flexDirection="row" w="100%">
             <Pressable $active-opacity={0.6} onPress={handleIrProPerfil} h={42}>
-              <LazyImage imagem={usuarioIcon} style={{width: 40, height: 40, borderRadius: 50, }} placeholder=''/>
+              <LazyImage imagem={imagemPerfil || usuarioIcon} style={{width: 40, height: 40, borderRadius: 50, }} placeholder=''/>
             </Pressable >
             <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
                 <Box>

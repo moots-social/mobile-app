@@ -93,11 +93,15 @@ export const removerPostSalvo = async(postId: number) =>{
         return 0
     }
 }
-export default {
-    enviarNovoPost, denunciarPost, buscarPostPorId, excluirComentario, curtirPost, salvarPost, removerPostSalvo
+export const buscarTodosOsPosts = async () =>{
+    try {
+        const resultado = await apis.post.buscarTodosOsPosts()
+        return resultado.data
+    } catch (error: any) {
+        geralUtils.erro(error, 'buscarTodosOsPosts', 'postUtils', error.response?.status || false)
+        return 0
+    }
 }
-
-//renderização de posts em virtualizedlists
-// export const getCountPosts = (_dados: any[]): number => {
-//     return _dados.length
-// }
+export default {
+    enviarNovoPost, denunciarPost, buscarPostPorId, excluirComentario, curtirPost, salvarPost, removerPostSalvo, buscarTodosOsPosts
+}
