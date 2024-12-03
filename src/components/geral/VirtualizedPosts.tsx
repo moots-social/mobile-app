@@ -77,9 +77,6 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
         }
     }
                     
-    // useEffect(()=>{
-    //     if(localDeRenderizacao) handleBuscarPosts()
-    // }, [usuario.novoPost])
 
     useEffect(()=>{
         handleBuscarPosts()
