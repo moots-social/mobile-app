@@ -14,6 +14,14 @@
     "ios": {
       "supportsTablet": true,
       "jsEngine": "jsc"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9346c794-6f08-47ae-8c66-8dd63bae393d"
+      }
+    },
+    "android": {
+      "package": "com.sntpbl.Moots.test1"
     }
   }
 }
