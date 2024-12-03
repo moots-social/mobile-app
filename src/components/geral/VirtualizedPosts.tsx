@@ -1,7 +1,7 @@
 import { VirtualizedList } from "@gluestack-ui/themed";
 import Post from "../post/Post";
 import { useEffect, useState } from "react";
-import searchUtils, { buscarPostPorUserId } from "../../utils/searchUtils";
+import searchUtils, { buscarPostPorUserId, buscarPostsPaginados } from "../../utils/searchUtils";
 import { buscarColecao } from "../../utils/usuarioUtils";
 import { TextoNegrito } from "./Texto";
 import { useSelector } from "react-redux";
@@ -17,6 +17,7 @@ interface IVirtualizedPostsProps{
 
 export default function VirtualizedPosts({dataPost, localDeRenderizacao, refreshState, userId, ...rest}: IVirtualizedPostsProps){
     const [posts, setPosts] = useState<any[]>()
+    const [pagina, setPagina] = useState<number>(0)
     const usuario = useSelector(state => state.usuario.user)
 
     useEffect(()=>{
@@ -28,28 +29,34 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
             })
     
             eventSource.addEventListener('message', (event) => {
-                console.log('NOVA MENSAGEM MEU PARCEIRINHO:', event.data);
+                console.log('NOVO POST MEU PARCEIRINHO:', event.data);
                 const novoPost = JSON.parse(event.data)
                 setPosts((prevPosts) => [novoPost, ...(prevPosts || []), ])
             });
     
             eventSource.addEventListener('error', (event) => {
-                console.error('CONEXÃO CAIU MEU CAMPEÃO:', event);
+                console.error('CONEXÃO CAIU MEU CAMPEÃO: ' + event);
             });
     
             eventSource.open();
     
             return ()=>{
                 eventSource.close()
+                console.log('conexão fechada')
             }
         }
     }, [])
 
     const handleBuscarPosts = async()=>{
-        if(localDeRenderizacao && localDeRenderizacao.toLowerCase()!=='feed'){
+        if(localDeRenderizacao){
             switch (localDeRenderizacao.toLowerCase()){
+                case 'feed':
+                    let resultado = await buscarPostsPaginados(pagina)
+                    if(resultado!=0) setPosts(resultado)
+                    else setPosts([])
+                    break
                 case 'colecao':
-                    let resultado = await buscarColecao()
+                    resultado = await buscarColecao()
                     if(resultado!=0) setPosts(resultado)
                     else setPosts([])
                     break
@@ -77,6 +84,12 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
         }
     }
                     
+    const handleEndReachedFeed = () =>{
+        if(localDeRenderizacao && localDeRenderizacao==='feed'){
+            setPagina((prevPagina)=>prevPagina+1)
+        }
+
+    }
     // useEffect(()=>{
     //     if(localDeRenderizacao) handleBuscarPosts()
     // }, [usuario.novoPost])
@@ -87,7 +100,7 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
     if(posts && posts.length<=0) return <TextoNegrito>Nenhuma publicação encontrada.</TextoNegrito>
-    return <VirtualizedList  contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
+    return <VirtualizedList onEndReached={handleEndReachedFeed}contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
         <Post
         key={item.postId}
         postId={item.postId} 
