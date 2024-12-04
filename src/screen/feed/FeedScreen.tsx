@@ -44,7 +44,6 @@ export default function Feed({navigation}) {
   const handleGetFotoPerfil = (fotosPerfil: string[]) =>{
       console.log(`${fotosPerfil.length} foto(s) recebida(s)`)
       setFotosPerfil(fotosPerfil)
-      console.log(fotosPerfil)
   }
   // if (isLoading) return <Loading isOpen={isLoading} />;
   return (
@@ -54,7 +53,7 @@ export default function Feed({navigation}) {
         <ScrollView ref={scrollRef} onScroll={handleDescerTela} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <CabecalhoPerfil titulo="Feed" temBotaoVoltar={false} userId={0} postId={0}/>
           <Box alignItems="center" mt={35}>
-            <VirtualizedPosts userId={0} refreshState={refreshing} localDeRenderizacao='feed' onMessageGetFotoPerfil={handleGetFotoPerfil}/>
+            <VirtualizedPosts userId={0} refreshState={refreshing} localDeRenderizacao='feed' onMessageGetFotoPerfil={(fotosPerfil: string[]) =>handleGetFotoPerfil(fotosPerfil)}/>
           </Box>
         </ScrollView>
         <BotaoNovoPost position="absolute" $base-top="85%" $md-top="90%" $base-right="5%" $md-right="6%" onPress={()=>navigation.navigate('novoPost', {onPostEnviado: onRefresh})}/>

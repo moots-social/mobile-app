@@ -10,9 +10,10 @@ import EventSource from "react-native-sse";
 import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BareLoading } from "./Loading";
+import { usuarioIcon } from "../perfil/PerfilComponents";
 interface IVirtualizedPostsProps{
     dataPost?: any[],
-    localDeRenderizacao?: string,
+    localDeRenderizacao: string,
     refreshState: boolean,
     userId: number,
     onMessageEvent?: (posts: any)=>void,
@@ -38,7 +39,7 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
     const usuario = useSelector(state => state.usuario.user)
 
     useEffect(()=>{
-        if(localDeRenderizacao && localDeRenderizacao==='feed'){
+        if(localDeRenderizacao==='feed'){
             const eventSource = new EventSource(`${BASE_URL}/post/stream-sse`)
             
             eventSource.addEventListener('open', ()=>{
@@ -50,18 +51,20 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                 const novoPost = JSON.parse(event.data)
 
                 await cache.set(String(novoPost.postId), novoPost)
-                const lruPostId = await AsyncStorage.getItem('posts:_lru')
-                if (lruPostId) {
-                    const formattedLru = JSON.parse(lruPostId)
-                    const lruPosts = await Promise.all(
-                        formattedLru.map(async (id: string) => {
-                            const post = await cache.get(id);
-                            return post;
-                        })
-                    );
-                    setLru(lruPosts)
+                // const lruPostId = await AsyncStorage.getItem('posts:_lru')
+                // if (lruPostId) {
+                //     const formattedLru = JSON.parse(lruPostId)
+                //     const lruPosts = await Promise.all(
+                //         formattedLru.map(async (id: string) => {
+                //             const post = await cache.get(id);
+                //             return post;
+                //         })
+                //     );
+                //     setLru(lruPosts)
                      
-                }
+                // }
+                const cachedPost = await cache.peek(String(novoPost.postId))
+                setLru([...lru, cachedPost])
             });
     
             eventSource.addEventListener('error', (event) => {
@@ -76,12 +79,29 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
             }
         }
     }, [])
+
+    const handleGetPostFeed = async() =>{
+        const posts = await buscarPostsPaginados(pagina)
+        if(posts!=0) setPosts(posts)
+    }
+
+const clearCache = async()=>{
+        await cache.clearAll()
+        setLru([])
+        setFotosPerfil([])
+    }
+    useEffect(()=>{
+        if(lru.length>0 ){
+            setPosts([...lru, ...posts])
+            clearCache()
+        }
+    }, [refreshState])
+
     useEffect(() => {
         if (lru.length >= 1 && lru.length<=3 && onMessageGetFotoPerfil) {
             console.log('Passando foto para feed');
             
             const ultimoPost = lru[lru.length - 1]; // Obtém o último elemento do array
-            if (ultimoPost?.fotoPerfil) { // Verifica se 'fotoPerfil' existe
                 setFotosPerfil((prevFotosPerfil) => [
                     ...prevFotosPerfil,
                     ultimoPost.fotoPerfil,
@@ -91,47 +111,42 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                     ...fotosPerfil,
                     ultimoPost.fotoPerfil,
                 ]);
-            }
         }
     }, [lru]);
+
     const handleBuscarPosts = async()=>{
-        if(localDeRenderizacao){
-            setLoading(true)
-            switch (localDeRenderizacao.toLowerCase()){
-                case 'feed':
-                    let resultado = await buscarPostsPaginados(pagina)
-                    if(resultado!=0) setPosts([...posts, ...resultado])
-                    else setPosts([])
-                    setTemMais(resultado.length>=15)
-                    break
-                case 'colecao':
-                    resultado = await buscarColecao()
-                    if(resultado!=0) setPosts(resultado)
-                    else setPosts([])
-                    break
-                case 'pesquisa':
-                    setPosts(dataPost)
-                    break
-                case 'perfil':
-                    resultado = await buscarPostPorUserId(userId)
-                    if(resultado!=0) setPosts(resultado.reverse())
-                    else setPosts([])
-                    break
-                default:
-                    console.log('valor de renderização inválido')
-                    setPosts([])
-                    break
-                }
-            setLoading(false)
-        }else{
-            const resultado = await searchUtils.buscarTodosOsPosts()
-            if(resultado!=0){
-                 setPosts(resultado)
-            }
-            else{
+        setLoading(true)
+        switch (localDeRenderizacao.toLowerCase()){
+            case 'feed':
+                // let resultado = await buscarPostsPaginados(pagina)
+                // if(resultado!=0) setPosts([...posts, ...resultado])
+                // if(resultado!=0) setPosts(resultado)
+                // else setPosts([])
+                //pode ou nao ter mais, se tiver menos que 15 com certeza
+                //nao tem mais
+                //limite de retorno é 15
+                // setTemMais(resultado.length==15)
+                await handleGetPostFeed()
+                break
+            case 'colecao':
+                let resultado = await buscarColecao()
+                if(resultado!=0) setPosts(resultado)
+                else setPosts([])
+                break
+            case 'pesquisa':
+                setPosts(dataPost || [])
+                break
+            case 'perfil':
+                resultado = await buscarPostPorUserId(userId)
+                if(resultado!=0) setPosts(resultado.reverse())
+                else setPosts([])
+                break
+            default:
+                console.log('valor de renderização inválido')
                 setPosts([])
-            } 
-        }
+                break
+            }
+        setLoading(false)
     }
                     
     const handleEndReachedFeed = async() =>{
@@ -139,22 +154,14 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
         //     setPagina((prevPagina)=>prevPagina+1)
         //     const novosPosts = await buscarPostsPaginados(pagina);
         //     setPosts([...posts, ...novosPosts]);
-        //     setTemMais(novosPosts.length >= 15);
+        //     setTemMais(novosPosts.length == 15);
+        //     console.log('TESTEEEE')
         //     setLoading(false);
         // }
     }
 
     useEffect(()=>{
-        const handleRefresh = async()=>{
-            if(localDeRenderizacao=='feed' && lru.length>0){
-                setPosts([...lru, ...posts])
-                setLru([])
-                setFotosPerfil([])
-                await cache.clearAll()
-                
-            } else handleBuscarPosts()
-        }
-        handleRefresh()
+        handleBuscarPosts()
     }, [refreshState])
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>

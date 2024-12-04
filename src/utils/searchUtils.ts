@@ -6,7 +6,7 @@ export const buscarUsuario = async (query: string) =>{
         const resultado = await apis.search.buscarUsuario(query)
         return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'seguirUsuario', 'searchUtils', error.response?.status || false)
         return 0
     }
 }
@@ -15,7 +15,7 @@ export const buscarUsuarioPorCurso = async (curso: string) =>{
         const resultado = await apis.search.buscarUsuarioPorCurso(curso)
         return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'seguirUsuario', 'searchUtils', error.response?.status || false)
         return 0
     }
 }
@@ -24,7 +24,7 @@ export const buscarUsuarioPorCursoEQuery = async (curso: string, query: string) 
         const resultado = await apis.search.buscarUsuarioPorCursoEQuery(curso, query)
         return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'seguirUsuario', 'searchUtils', error.response?.status || false)
         return error.response.status
     }
 }
@@ -33,7 +33,7 @@ export const buscarPost = async (query: string) =>{
         const resultado = await apis.search.buscarPost(query)
         return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'seguirUsuario', 'searchUtils', error.response?.status || false)
         return error.response.status
     }
 }
@@ -42,7 +42,7 @@ export const buscarPostPorUserId = async (id: number) =>{
         const resultado = await apis.search.buscarPostPorUserId(id)
         return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'seguirUsuario', 'searchUtils', error.response?.status || false)
         return error.response.status
     }
 }
@@ -51,7 +51,7 @@ export const buscarTodosOsPosts = async () =>{
         const resultado = await apis.search.buscarTodosOsPosts()
         return resultado.data
     } catch (error: any) {
-        geralUtils.erro(error, 'seguirUsuario', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'seguirUsuario', 'searchUtils', error.response?.status || false)
         return 0
     }
 }
@@ -61,7 +61,7 @@ export const buscarPostsPaginados = async(page?: number)=>{
         const resultado = await apis.search.buscarPostsPaginados(page)
         return resultado.data
     } catch (error) {
-        geralUtils.erro(error, 'buscarPostsPaginados', 'usuarioUtils', error.response?.status || false)
+        geralUtils.erro(error, 'buscarPostsPaginados', 'searchUtils', error.response?.status || false)
         return 0
     }
 }
