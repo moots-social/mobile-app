@@ -1,8 +1,10 @@
 import axios from "axios";
 import {BASE_URL} from '@env'
 
+
 import { getTokenStorage, logoutUser } from "../utils/storageUtils"
 const baseURL = BASE_URL
+
 const apiSemToken = axios.create({
     baseURL,
     headers: {
@@ -85,6 +87,7 @@ export const searchApi = {
     buscarPost: (query: string) => api.get(`/search/post`, {params: {query: query}}),
     buscarPostPorUserId: (id: number) => api.get(`/search/post/${id}`),
     buscarTodosOsPosts: () => api.get('/search/post/all'),
+    buscarPostsPaginados: (page: number = 0) => api.get(`/search/post/pageable`, {params: {page}})
 }
 
 export const postApi = {

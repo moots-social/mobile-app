@@ -56,6 +56,15 @@ export const buscarTodosOsPosts = async () =>{
     }
 }
 
+export const buscarPostsPaginados = async(page?: number)=>{
+    try {
+        const resultado = await apis.search.buscarPostsPaginados(page)
+        return resultado.data
+    } catch (error) {
+        geralUtils.erro(error, 'buscarPostsPaginados', 'usuarioUtils', error.response?.status || false)
+        return 0
+    }
+}
 
 export default {
     buscarUsuario,

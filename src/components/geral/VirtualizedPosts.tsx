@@ -1,22 +1,40 @@
 import { VirtualizedList } from "@gluestack-ui/themed";
 import Post from "../post/Post";
 import { useEffect, useState } from "react";
-import searchUtils, { buscarPostPorUserId } from "../../utils/searchUtils";
+import searchUtils, { buscarPostPorUserId, buscarPostsPaginados } from "../../utils/searchUtils";
 import { buscarColecao } from "../../utils/usuarioUtils";
 import { TextoNegrito } from "./Texto";
 import { useSelector } from "react-redux";
 import {BASE_URL} from '@env'
 import EventSource from "react-native-sse";
-
+import { Cache } from "react-native-cache";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BareLoading } from "./Loading";
 interface IVirtualizedPostsProps{
     dataPost?: any[],
     localDeRenderizacao?: string,
     refreshState: boolean,
-    userId: number
+    userId: number,
+    onMessageEvent?: (posts: any)=>void,
+    onMessageGetFotoPerfil?: (fotos: string[]) => void
 }
 
-export default function VirtualizedPosts({dataPost, localDeRenderizacao, refreshState, userId, ...rest}: IVirtualizedPostsProps){
-    const [posts, setPosts] = useState<any[]>()
+const cache = new Cache({
+    namespace: 'posts',
+    policy: {
+        maxEntries: 15,
+        stdTTL: 1800
+    },
+    backend: AsyncStorage
+})
+//onMessageEvent: evento de quando o sse pegar algum post novo 
+export default function VirtualizedPosts({dataPost, localDeRenderizacao, refreshState, userId, onMessageEvent, onMessageGetFotoPerfil, ...rest}: IVirtualizedPostsProps){
+    const [posts, setPosts] = useState<any[]>([])
+    const [pagina, setPagina] = useState<number>(0)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [lru, setLru] = useState<any[]>([])
+    const [fotosPerfil, setFotosPerfil] = useState<string[]>([])
+    const [temMais, setTemMais] = useState<boolean>(true)
     const usuario = useSelector(state => state.usuario.user)
 
     useEffect(()=>{
@@ -24,32 +42,70 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
             const eventSource = new EventSource(`${BASE_URL}/post/stream-sse`)
             
             eventSource.addEventListener('open', ()=>{
-                console.log('CONEXÃO ABRIDA MEU VELHO')
+                console.log('SSE/AB')
             })
     
-            eventSource.addEventListener('message', (event) => {
-                console.log('NOVA MENSAGEM MEU PARCEIRINHO:', event.data);
+            eventSource.addEventListener('message', async(event) => {
+                console.log('SSE/NV:' + event.data);
                 const novoPost = JSON.parse(event.data)
-                setPosts((prevPosts) => [novoPost, ...(prevPosts || []), ])
+
+                await cache.set(String(novoPost.postId), novoPost)
+                const lruPostId = await AsyncStorage.getItem('posts:_lru')
+                if (lruPostId) {
+                    const formattedLru = JSON.parse(lruPostId)
+                    const lruPosts = await Promise.all(
+                        formattedLru.map(async (id: string) => {
+                            const post = await cache.get(id);
+                            return post;
+                        })
+                    );
+                    setLru(lruPosts)
+                     
+                }
             });
     
             eventSource.addEventListener('error', (event) => {
-                console.error('CONEXÃO CAIU MEU CAMPEÃO:', event);
+                console.error('SSE/INT: ' + event);
             });
     
             eventSource.open();
     
             return ()=>{
                 eventSource.close()
+                console.log('SSE/FE')
             }
         }
     }, [])
-
+    useEffect(() => {
+        if (lru.length >= 1 && lru.length<=3 && onMessageGetFotoPerfil) {
+            console.log('Passando foto para feed');
+            
+            const ultimoPost = lru[lru.length - 1]; // Obtém o último elemento do array
+            if (ultimoPost?.fotoPerfil) { // Verifica se 'fotoPerfil' existe
+                setFotosPerfil((prevFotosPerfil) => [
+                    ...prevFotosPerfil,
+                    ultimoPost.fotoPerfil,
+                ]);
+    
+                onMessageGetFotoPerfil([
+                    ...fotosPerfil,
+                    ultimoPost.fotoPerfil,
+                ]);
+            }
+        }
+    }, [lru]);
     const handleBuscarPosts = async()=>{
-        if(localDeRenderizacao && localDeRenderizacao.toLowerCase()!=='feed'){
+        if(localDeRenderizacao){
+            setLoading(true)
             switch (localDeRenderizacao.toLowerCase()){
+                case 'feed':
+                    let resultado = await buscarPostsPaginados(pagina)
+                    if(resultado!=0) setPosts([...posts, ...resultado])
+                    else setPosts([])
+                    setTemMais(resultado.length>=15)
+                    break
                 case 'colecao':
-                    let resultado = await buscarColecao()
+                    resultado = await buscarColecao()
                     if(resultado!=0) setPosts(resultado)
                     else setPosts([])
                     break
@@ -66,6 +122,7 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
                     setPosts([])
                     break
                 }
+            setLoading(false)
         }else{
             const resultado = await searchUtils.buscarTodosOsPosts()
             if(resultado!=0){
@@ -77,16 +134,33 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
         }
     }
                     
+    const handleEndReachedFeed = async() =>{
+        // if(!loading && temMais && localDeRenderizacao==='feed'){
+        //     setPagina((prevPagina)=>prevPagina+1)
+        //     const novosPosts = await buscarPostsPaginados(pagina);
+        //     setPosts([...posts, ...novosPosts]);
+        //     setTemMais(novosPosts.length >= 15);
+        //     setLoading(false);
+        // }
+    }
 
     useEffect(()=>{
-        handleBuscarPosts()
+        const handleRefresh = async()=>{
+            if(localDeRenderizacao=='feed' && lru.length>0){
+                setPosts([...lru, ...posts])
+                setLru([])
+                setFotosPerfil([])
+                await cache.clearAll()
+                
+            } else handleBuscarPosts()
+        }
+        handleRefresh()
     }, [refreshState])
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
     if(posts && posts.length<=0) return <TextoNegrito>Nenhuma publicação encontrada.</TextoNegrito>
-    return <VirtualizedList  contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
+    return <VirtualizedList onEndReached={handleEndReachedFeed} ListFooterComponent={loading && <BareLoading />} onEndReachedThreshold={0.5} contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
         <Post
-        key={item.postId}
         postId={item.postId} 
         descricaoPost={item.texto} 
         imagemPost={item.listImagens} 
