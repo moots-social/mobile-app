@@ -1,4 +1,4 @@
-import { Box, ScrollView} from '@gluestack-ui/themed';
+import { Box, Pressable, ScrollView} from '@gluestack-ui/themed';
 import LinearGradientMoots from '../../components/geral/LinearGradientMoots';
 import CabecalhoPerfil from '../../components/cabecalho/CabecalhoPerfil';
 import { StatusBar } from 'expo-status-bar'
@@ -11,7 +11,7 @@ import Animated, {useSharedValue, withTiming} from 'react-native-reanimated';
 import { TextoNegrito } from '../../components/geral/Texto';
 import { LazyIcon } from '../../components/geral/LazyImage';
 import { usuarioIcon } from '../../components/perfil/PerfilComponents';
-import { ArrowUp, Icon, MoveUp } from 'lucide-react-native';
+import { ArrowUp, CirclePlus, CirclePlusIcon, Icon, MoveUp } from 'lucide-react-native';
 export default function Feed({navigation}) {
   const scrollRef = useRef()
   const [desceuTela, setDesceuTela] = useState<boolean>(false)
@@ -39,11 +39,13 @@ export default function Feed({navigation}) {
       onRefresh()
       setFotosPerfil([])
     }
-    }
+  }
 
-  const handleGetFotoPerfil = (fotosPerfil: string[]) =>{
-      console.log(`${fotosPerfil.length} foto(s) recebida(s)`)
-      setFotosPerfil(fotosPerfil)
+  const handleGetFotoPerfil = (novasFotosPerfil: string[]) =>{
+    if(novasFotosPerfil.length>=1 && novasFotosPerfil.length<=3){
+      console.log(`${novasFotosPerfil.length} foto(s) recebida(s)`)
+      setFotosPerfil(novasFotosPerfil)
+    }
   }
   // if (isLoading) return <Loading isOpen={isLoading} />;
   return (
@@ -57,15 +59,15 @@ export default function Feed({navigation}) {
           </Box>
         </ScrollView>
         <BotaoNovoPost position="absolute" $base-top="85%" $md-top="90%" $base-right="5%" $md-right="6%" onPress={()=>navigation.navigate('novoPost', {onPostEnviado: onRefresh})}/>
-        {desceuTela && <Animated.View style={[{backgroundColor: '#27B1BF', justifyContent: 'center', alignItems:'center', borderRadius: 30, position: 'absolute', top: '5%', alignSelf: 'center'}, {opacity}]}>
-          <TextoNegrito color='$white' onPress={handlePressVoltarAoTopo} mt={2.5} mx={5} mb={fotosPerfil.length>=3 ? 0 : 2.5}>Voltar ao topo</TextoNegrito>
+        {desceuTela && <Animated.View  style={[{backgroundColor: '#27B1BF', justifyContent: 'center', alignItems:'center', borderRadius: 30, position: 'absolute', top: '5%', alignSelf: 'center', width: 150}, {opacity}]}>
+          <TextoNegrito color='$white' onPress={handlePressVoltarAoTopo} pt={2.5} px={5} pb={fotosPerfil.length>=1 ? 0 : 2.5}>Voltar ao topo</TextoNegrito>
           {fotosPerfil.length>0 && (
-            <Box flexDirection='row' alignItems="center" justifyContent='center' gap='$1'>
-              <MoveUp color='white' height={15}/>
+            <Pressable flexDirection='row' alignItems="center" justifyContent='center' gap='$1' w='100%' onPress={handlePressVoltarAoTopo}>
+              {/* <MoveUp color='white' height={15}/> */}
               {fotosPerfil.map((foto)=>(
-                <LazyIcon imagem={foto || usuarioIcon} style={{width: 20, height: 20, borderRadius: 30, marginBottom: 5}}/>
+                <LazyIcon imagem={foto || usuarioIcon} style={{width: 25, height: 25, borderRadius: 30, marginBottom: 5, borderWidth: 2, borderColor: 'white'}}/>
               ))}
-            </Box>
+            </Pressable>
           )}
         </Animated.View>}
       </LinearGradientMoots>

@@ -11,6 +11,7 @@ import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BareLoading } from "./Loading";
 import { usuarioIcon } from "../perfil/PerfilComponents";
+import { Dot } from "lucide-react-native";
 interface IVirtualizedPostsProps{
     dataPost?: any[],
     localDeRenderizacao: string,
@@ -35,7 +36,7 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
     const [loading, setLoading] = useState<boolean>(false)
     const [lru, setLru] = useState<any[]>([])
     const [fotosPerfil, setFotosPerfil] = useState<string[]>([])
-    const [temMais, setTemMais] = useState<boolean>(true)
+    const [endReached, setEndReached] = useState<boolean>(false)
     const usuario = useSelector(state => state.usuario.user)
 
     useEffect(()=>{
@@ -82,7 +83,11 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
 
     const handleGetPostFeed = async() =>{
         const posts = await buscarPostsPaginados(pagina)
-        if(posts!=0) setPosts(posts)
+        if(posts!=0 && !endReached) setPosts(posts)
+        else if(posts!=0 && endReached){
+            setPosts((prevPosts)=>[...prevPosts, posts])
+            setEndReached(false)
+        } 
     }
 
 const clearCache = async()=>{
@@ -90,6 +95,7 @@ const clearCache = async()=>{
         setLru([])
         setFotosPerfil([])
     }
+
     useEffect(()=>{
         if(lru.length>0 ){
             setPosts([...lru, ...posts])
@@ -101,16 +107,16 @@ const clearCache = async()=>{
         if (lru.length >= 1 && lru.length<=3 && onMessageGetFotoPerfil) {
             console.log('Passando foto para feed');
             
-            const ultimoPost = lru[lru.length - 1]; // Obtém o último elemento do array
+            const ultimoPost = lru[lru.length - 1]
                 setFotosPerfil((prevFotosPerfil) => [
                     ...prevFotosPerfil,
                     ultimoPost.fotoPerfil,
-                ]);
+                ])
     
                 onMessageGetFotoPerfil([
                     ...fotosPerfil,
                     ultimoPost.fotoPerfil,
-                ]);
+                ])
         }
     }, [lru]);
 
@@ -150,23 +156,18 @@ const clearCache = async()=>{
     }
                     
     const handleEndReachedFeed = async() =>{
-        // if(!loading && temMais && localDeRenderizacao==='feed'){
-        //     setPagina((prevPagina)=>prevPagina+1)
-        //     const novosPosts = await buscarPostsPaginados(pagina);
-        //     setPosts([...posts, ...novosPosts]);
-        //     setTemMais(novosPosts.length == 15);
-        //     console.log('TESTEEEE')
-        //     setLoading(false);
-        // }
+        if(!loading && localDeRenderizacao==='feed' && endReached){
+            setPagina((prevPagina)=>prevPagina+1)
+        }
     }
 
     useEffect(()=>{
         handleBuscarPosts()
-    }, [refreshState])
+    }, [refreshState, pagina])
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
     if(posts && posts.length<=0) return <TextoNegrito>Nenhuma publicação encontrada.</TextoNegrito>
-    return <VirtualizedList onEndReached={handleEndReachedFeed} ListFooterComponent={loading && <BareLoading />} onEndReachedThreshold={0.5} contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
+    return <VirtualizedList onEndReached={handleEndReachedFeed} maxToRenderPerBatch={15} ListFooterComponent={loading ? <BareLoading /> : <Dot color='grey'/>} onEndReachedThreshold={0.5} contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
         <Post
         postId={item.postId} 
         descricaoPost={item.texto} 
