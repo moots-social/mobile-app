@@ -1,10 +1,10 @@
-import { Box, Pressable, ScrollView, Text, useToast } from "@gluestack-ui/themed";
+import { Box, Image, Pressable, ScrollView, Text, useToast } from "@gluestack-ui/themed";
 import { FullRounded } from "../geral/Rounded";
 import { TextoNegrito } from "../geral/Texto";
 import { BotaoComentar, BotaoCurtirPost, BotaoSalvar } from "../botao/BotoesPostComentario";
 import { useNavigation } from "@react-navigation/native";
 import { MenuPost } from "./PostMenu";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import ImageView from "react-native-image-viewing";
 import { usuarioIcon } from "../perfil/PerfilComponents";
 import { DimensionValue } from "react-native";
@@ -37,7 +37,7 @@ interface IPostProps {
   likeUsers: string[]
 }
 
-export default function Post({
+const Post = memo(({
   descricaoPost='',
   imagemPost,
   imagemPerfil,
@@ -55,7 +55,7 @@ export default function Post({
   salvarPost,
   likeUsers,
   ...rest
-}: IPostProps) {
+}: IPostProps) => {
   
   const navigation = useNavigation();
   const toast = useToast()
@@ -74,7 +74,9 @@ export default function Post({
   const textoResumido = descricaoPost?.length > 0
   ? mostrarTextoCompleto ? descricaoPost : descricaoPost.substring(0, 100)
   : ""
+
   const handleExpandirFoto = (index: number) => {
+    console.log(index)
     setIndex(index);
     setIsVisible(true); 
   };
@@ -113,13 +115,17 @@ export default function Post({
         // setSalvou(false)
         abrirToast(toast, 'success', 'Publicação removida da coleção com sucesso.', '', 1000, false)
         setSalvou((prevSalvou) => !prevSalvou)
+        return
       }
+      setSalvou((prevSalvou) => !prevSalvou)
     }else{
       const res = await postUtils.salvarPost(postId)
       if(res==200){
         abrirToast(toast, 'success', 'Publicação salva com sucesso.', '', 1000, false)
         setSalvou((prevSalvou) => !prevSalvou)
+        return
       }
+      setSalvou((prevSalvou) => !prevSalvou)
     }
     const listaDeSalvosAtualizada = await buscarColecao()
     dispatch(setarUsuario({...usuario, colecaoSalvos: listaDeSalvosAtualizada}))
@@ -169,18 +175,24 @@ export default function Post({
                   </Pressable>
                 )}
                 <ScrollView flexDirection="row" horizontal showsHorizontalScrollIndicator={false} mt={10}>
-                    {imagemPost && imagemPost.map((imagem, index) =>  (imagem && (<Pressable $active-opacity={0.6} onPress={()=>handleExpandirFoto(index)}>
+                    {imagemPost && imagemPost.map((imagem, index) =>  (imagem && ( <Pressable $active-opacity={0.6} onPress={()=>handleExpandirFoto(index)}>
                                                         <LazyImage imagem={imagem} style={{marginRight: 10, borderRadius: 10, width: 200, height: 200}}/>
                                                     </Pressable>))
                                 )}
+        <ImageView
+          images={imagensFormatadas}
+          imageIndex={index}
+          visible={isVisible}
+          onRequestClose={() => setIsVisible(false)}
+          backgroundColor="#000"
+          presentationStyle="overFullScreen"
+        />
                 </ScrollView>
 
             <Box flexDirection="column" ml={5} justifyContent="center" w="80%" flexWrap="nowrap">
 
             <Box flexDirection="row" display="flex" mt={10}>
                 <Box flexDirection="row" w="95%" gap={10}>
-                  {/* {!clicouCurtiu ? <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/> : <BareLoading />} */}
-                  {/* {!clicouSalvou ? <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/> : <BareLoading />} */}
                   <BotaoCurtirPost onPress={handleCurtirPost} curtiu={curtiu}/>
                   <BotaoSalvar onPress={handleSalvarPost} salvou={salvou}/>
                 </Box>
@@ -193,15 +205,9 @@ export default function Post({
         </Box>
         </FullRounded>
     </Pressable>
-        <ImageView
-          images={imagensFormatadas}
-          imageIndex={index}
-          visible={isVisible}
-          onRequestClose={() => setIsVisible(false)}
-          backgroundColor="#000"
-          presentationStyle="overFullScreen"
-        />
   </>
     
   );
-}
+})
+
+export default Post

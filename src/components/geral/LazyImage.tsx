@@ -10,7 +10,7 @@ const iconPlaceholder = require('../../assets/PlaceholderIconMoots.png')
 
 export function LazyImage({imagem, placeholder, ...rest}: Partial<ILazyProps>){
     return <Image 
-            source={imagem}
+            source={{uri: imagem}}
             priority='low' 
             cachePolicy='memory-disk'
             alt=''

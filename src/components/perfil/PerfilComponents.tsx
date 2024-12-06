@@ -1,4 +1,4 @@
-import { Box, Image, Pressable, Text } from "@gluestack-ui/themed";
+import { Box, FlatList, Image, Pressable, Text } from "@gluestack-ui/themed";
 import { BotaoConfigurar, BotaoCurso, BotaoSeguir, BotaoListaSeguidores } from "./PerfilBotoes";
 import { TextoNegrito, Titulo } from "../geral/Texto";
 import { ScrollView } from "@gluestack-ui/themed-native-base";
@@ -106,11 +106,19 @@ export function PublicacoesBox({userId}){
 
 export function PerfilBox({objetoARenderizar, seguir}: IPerfilBox){
     return(
-        <ScrollView w="100%" display="flex">
+        <FlatList
+        data={[]}
+        ListHeaderComponent={
+          <>
             <FotoCapaBox fotoPerfilSource={objetoARenderizar.fotoPerfil || ''} fotoCapaSource={objetoARenderizar.fotoCapa || ''} />
             <TextoBox nomeCompleto={objetoARenderizar.nomeCompleto || ''} tag={objetoARenderizar.tag || ''} descricao={objetoARenderizar.descricao || ''}/>
             <BotoesPerfilBox curso={objetoARenderizar.curso || ''} seguir={seguir} getUsuario={objetoARenderizar}/>
             <PublicacoesBox userId={objetoARenderizar.userId}/>
-        </ScrollView>
+          </>
+        }
+        contentContainerStyle={{ width: '100%'}}
+        keyExtractor={(item, index) => `feed-item-${index}`}
+        renderItem={null}
+        />
     )
 }

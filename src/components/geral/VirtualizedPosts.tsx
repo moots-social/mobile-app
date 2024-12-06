@@ -37,7 +37,23 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
     const [lru, setLru] = useState<any[]>([])
     const [fotosPerfil, setFotosPerfil] = useState<string[]>([])
     const [endReached, setEndReached] = useState<boolean>(false)
+    const deveRenderizarFooter = localDeRenderizacao === 'feed' ? loading ? <BareLoading alignSelf='center'/> : <Dot color='grey'alignSelf='center'/> : ''
     const usuario = useSelector(state => state.usuario.user)
+
+    const renderPost = ({ item }: any) => (
+        <Post
+          postId={item.postId}
+          descricaoPost={item.texto}
+          imagemPost={item.listImagens}
+          imagemPerfil={item.fotoPerfil}
+          userId={item.userId}
+          nomeUsuario={item.nomeCompleto}
+          tagUsuario={item.tag}
+          likeUsers={item.likeUsers}
+          alignSelf="center"
+          mb={10}
+        />
+      );
 
     useEffect(()=>{
         if(localDeRenderizacao==='feed'){
@@ -85,7 +101,8 @@ export default function VirtualizedPosts({dataPost, localDeRenderizacao, refresh
         const posts = await buscarPostsPaginados(pagina)
         if(posts!=0 && !endReached) setPosts(posts)
         else if(posts!=0 && endReached){
-            setPosts((prevPosts)=>[...prevPosts, posts])
+            console.log('requisicao na pagina: ' + pagina)
+            setPosts((prevPosts)=>[...prevPosts, ...posts])
             setEndReached(false)
         } 
     }
@@ -154,11 +171,16 @@ const clearCache = async()=>{
             }
         setLoading(false)
     }
-                    
+    // !loading &&  &&  endReached
     const handleEndReachedFeed = async() =>{
-        if(!loading && localDeRenderizacao==='feed' && endReached){
-            setPagina((prevPagina)=>prevPagina+1)
-        }
+        if (!posts || posts.length === 0 || localDeRenderizacao!=='feed') return
+        setEndReached(true)
+        setPagina((prevPagina)=>prevPagina+1)
+        // setTimeout(()=>{
+        //     setLoading(false)
+        // }, 1000)
+        // if(localDeRenderizacao==='feed'){
+        // }
     }
 
     useEffect(()=>{
@@ -167,15 +189,20 @@ const clearCache = async()=>{
 
     if(!posts) return <TextoNegrito>Buscando publicações...</TextoNegrito>
     if(posts && posts.length<=0) return <TextoNegrito>Nenhuma publicação encontrada.</TextoNegrito>
-    return <VirtualizedList onEndReached={handleEndReachedFeed} maxToRenderPerBatch={15} ListFooterComponent={loading ? <BareLoading /> : <Dot color='grey'/>} onEndReachedThreshold={0.5} contentContainerStyle={{alignItems: 'center', paddingTop: 4}} w="100%" data={posts} initialNumToRender={4} keyExtractor={(item: any) => item.postId} getItem={(data, index)=> data[index]} getItemCount={() => posts.length} renderItem={({item}: any)=> (
-        <Post
-        postId={item.postId} 
-        descricaoPost={item.texto} 
-        imagemPost={item.listImagens} 
-        imagemPerfil={item.fotoPerfil} 
-        userId={item.userId} 
-        nomeUsuario={item.nomeCompleto} 
-        tagUsuario={item.tag} 
-        likeUsers={item.likeUsers} mb={10} mx='$5'/>
-    )} {...rest}/>
+    return <VirtualizedList nestedScrollEnabled
+        onEndReached={handleEndReachedFeed} 
+        ListFooterComponent={deveRenderizarFooter} 
+        onEndReachedThreshold={0.1} 
+        contentContainerStyle={{alignItems: 'center', paddingTop: 4}} 
+        w="100%" 
+        data={posts} 
+        initialNumToRender={15}
+        maxToRenderPerBatch={5}
+        updateCellsBatchingPeriod={50}
+        windowSize={5}
+        keyExtractor={(item: any) => String(item.postId)} 
+        getItem={(data, index)=> data[index]} 
+        getItemCount={() => posts.length} 
+        renderItem={renderPost} 
+        {...rest}/>
 } 

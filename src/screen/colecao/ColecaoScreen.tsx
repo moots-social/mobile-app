@@ -1,4 +1,4 @@
-import { Box, ScrollView,} from "@gluestack-ui/themed";
+import { Box, FlatList, ScrollView,} from "@gluestack-ui/themed";
 import CabecalhoPerfil from "../../components/cabecalho/CabecalhoPerfil";
 import LinearGradientMoots from "../../components/geral/LinearGradientMoots";
 import { useState } from "react";
@@ -17,12 +17,21 @@ export default function Colecao(){
 
   return(
       <LinearGradientMoots>
-            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-              <CabecalhoPerfil titulo="Sua coleção" mb={5} temBotaoVoltar={false}/>
-              <Box alignItems='center' mt={35}>
-                <VirtualizedPosts localDeRenderizacao="colecao" userId={0} refreshState={refreshing}/>
-              </Box>
-          </ScrollView>
+        <FlatList
+        data={[]}
+        ListHeaderComponent={
+          <>
+            <CabecalhoPerfil titulo="Sua coleção" mb={5} temBotaoVoltar={false}/>
+            <Box alignItems='center' mt={35}>
+              <VirtualizedPosts localDeRenderizacao="colecao" userId={0} refreshState={refreshing}/>
+            </Box>
+          </>
+        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        contentContainerStyle={{ paddingBottom: 15}}
+        keyExtractor={(item, index) => `feed-item-${index}`}
+        renderItem={null}
+        />
       </LinearGradientMoots>
   )
 }

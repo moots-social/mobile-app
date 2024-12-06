@@ -41,25 +41,11 @@ export default function NovoPost({navigation, route}){
                 abrirToast(toast, 'error', 'Digite algo ou selecione uma imagem para criar uma nova publicação.')
             }else{ 
                 const resultado = await enviarNovoPost(texto, uris)
-                if(resultado && resultado.resultado === 'Post enviado com sucesso.'){
-                    navigation.navigate('tabs')
-                    abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 2000, false)
-                    setImagens([])
-                    setUris([])
-                    setTexto('')
-                    console.log('sse will work')
-                } else {
-                    if(resultado===403){
-                        navigation.navigate('tabs')
-                        abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 2000, false)
-                        setImagens([])
-                        setUris([])
-                        onPostEnviado()
-                        console.log('sse wont work')
-
-                    }
-                    else throw new Error
-                }
+                navigation.navigate('tabs')
+                abrirToast(toast, 'success', 'Publicação enviada com sucesso.', '', 2000, false)
+                setImagens([])
+                setUris([])
+                onPostEnviado()
             }
         } catch (error) {
             abrirToast(toast, 'error', 'Algo deu errado. Tente novamente mais tarde.')

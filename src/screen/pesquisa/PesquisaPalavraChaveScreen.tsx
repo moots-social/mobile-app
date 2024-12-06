@@ -15,7 +15,10 @@ export default function PesquisaPalavraChave({navigation, route}: any){
     
     return(
         <LinearGradientMoots>
-            <ScrollView>
+            <FlatList
+            data={[]}
+            ListHeaderComponent={
+            <>
                 <Box flex={1}>
                     <BarraPesquisa extended={false} valorParam={valor} mb={20}/>
                     <RoundedTop bg="$white" pt={5} pb={20} alignItems="center" $base-minHeight={800} $md-minHeight={1200}>
@@ -38,6 +41,12 @@ export default function PesquisaPalavraChave({navigation, route}: any){
                         </Box>
                     </RoundedTop>
                 </Box>
+            </>
+            }
+            keyExtractor={(item, index) => `feed-item-${index}`}
+            renderItem={null}
+            />
+            <ScrollView>
             </ScrollView>
         </LinearGradientMoots>
     )
